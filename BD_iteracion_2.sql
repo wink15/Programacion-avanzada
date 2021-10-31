@@ -106,7 +106,7 @@ CREATE TABLE `persona` (
   `fecha_nacimiento` date NOT NULL,
   `telefono` varchar(45) NOT NULL,
   PRIMARY KEY (`id_persona`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,7 +115,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (1,'Santiago','Giordano','2000-01-16','2302637110'),(2,'Leonel','Piccioni','2020-09-20','3467600540');
+INSERT INTO `persona` VALUES (1,'Santiago','Giordano','2000-01-16','2302637110'),(2,'Leonel','Piccioni','2020-09-20','3467600540'),(3,'Joel','Dellamaggiore','2020-03-25','3535639496');
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,13 +127,13 @@ DROP TABLE IF EXISTS `personal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `personal` (
-  `idPersonal` int NOT NULL,
-  `cuit` int DEFAULT NULL,
+  `idPersonal` int NOT NULL AUTO_INCREMENT,
+  `cuit` bigint DEFAULT NULL,
   `persona` int DEFAULT NULL,
   PRIMARY KEY (`idPersonal`),
   KEY `fk_idPersona_personal` (`persona`),
   CONSTRAINT `fk_idPersona_personal` FOREIGN KEY (`persona`) REFERENCES `persona` (`id_persona`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,6 +142,7 @@ CREATE TABLE `personal` (
 
 LOCK TABLES `personal` WRITE;
 /*!40000 ALTER TABLE `personal` DISABLE KEYS */;
+INSERT INTO `personal` VALUES (10,20425110137,3);
 /*!40000 ALTER TABLE `personal` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,4 +258,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-25 21:36:00
+-- Dump completed on 2021-10-31 20:51:02
