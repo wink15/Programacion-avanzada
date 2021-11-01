@@ -37,6 +37,7 @@ public class PantallaGeneral extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         btnPersona = new javax.swing.JButton();
+        btnPersonal = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,6 +74,13 @@ public class PantallaGeneral extends javax.swing.JFrame {
             }
         });
 
+        btnPersonal.setText("Personal");
+        btnPersonal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPersonalActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -80,7 +88,10 @@ public class PantallaGeneral extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPersona)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnPersona)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnPersonal))
                     .addComponent(jLabel1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnProyecto)
@@ -102,7 +113,9 @@ public class PantallaGeneral extends javax.swing.JFrame {
                         .addComponent(jButton1))
                     .addComponent(btnProyecto))
                 .addGap(33, 33, 33)
-                .addComponent(btnPersona)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPersona)
+                    .addComponent(btnPersonal))
                 .addContainerGap(172, Short.MAX_VALUE))
         );
 
@@ -160,6 +173,16 @@ public class PantallaGeneral extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnPersonaActionPerformed
 
+    private void btnPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPersonalActionPerformed
+        try {
+            // TODO add your handling code here:
+            VistaPersonal vps= new VistaPersonal();
+            vps.inicializar();
+        } catch (SQLException ex) {
+            Logger.getLogger(PantallaGeneral.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnPersonalActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -197,6 +220,7 @@ public class PantallaGeneral extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPersona;
+    private javax.swing.JButton btnPersonal;
     private javax.swing.JButton btnProyecto;
     private javax.swing.JButton btnTipoProyecto;
     private javax.swing.JButton jButton1;
