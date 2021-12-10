@@ -165,6 +165,7 @@ public class Controlador implements ActionListener {
     
     //METODO ACTUALIZAR 
     public void actualizar() {
+        int ubi=0;
        //VALIDACION DE CAMPOS VACIOS NECESARIOS PARA ACTUALIZAR EL REGISTRO EN LA BD.  
        if (vista.txtId.getText().equals("")) {
             JOptionPane.showMessageDialog(vista, "Primero debe modificar un proyecto");
@@ -189,6 +190,14 @@ public class Controlador implements ActionListener {
                 int tipoProyecto =  vista.cboTipoProyecto.getSelectedIndex();
                 Integer cliente = vista.cboCliente.getSelectedIndex();
                 String observacion = vista.txtObservacion.getText();
+               String ubicacion = vista.comboProyecto.getSelectedItem().toString();
+               double monto = Integer.parseInt(vista.txtMonto.getText());
+                  if(ubicacion.equals("Nacional")){
+                ubi=1;
+            }else if (ubicacion.equals("Internacional")){
+                ubi=2;
+            }
+               
 
                 //SETEAMOS CADA VALOR EN LA INSTANCIA CREADA DE PROYECTO
                 p.setIdProyecto(id);
@@ -199,6 +208,8 @@ public class Controlador implements ActionListener {
                 p.setTipoProyecto(tipoProyecto);
                 p.setCliente(cliente);
                 p.setObservacion(observacion); 
+                p.setMonto(monto);
+                p.setUbicacion(ubi);
                 
                 //GUARDAMOS EN r EL RESULTADO DE LA ACTUALIZACION (1 COMPLETADA, 0 FALLIDA)
                 int r= dao.actualizar(p);
@@ -218,6 +229,7 @@ public class Controlador implements ActionListener {
     
     //METODO AGREGAR 
     public void agregar() {
+        int ubi=0;
         try {
             //SE PASAN LOS DATOS DESDE LOS CAMPOS DE LA PANTALLA A VARIABLES
             String nombre = vista.txtNombre.getText();
@@ -237,7 +249,13 @@ public class Controlador implements ActionListener {
             Integer tipoProyecto = (vista.cboTipoProyecto.getItemAt(vista.cboTipoProyecto.getSelectedIndex()).getIdTipoProyecto());
             Integer cliente = (vista.cboCliente.getItemAt(vista.cboCliente.getSelectedIndex()).getIdCliente());
             String observacion = vista.txtObservacion.getText();
-            
+             String ubicacion = vista.comboProyecto.getSelectedItem().toString();
+               double monto = Integer.parseInt(vista.txtMonto.getText());
+            if(ubicacion.equals("Nacional")){
+                ubi=1;
+            }else if (ubicacion.equals("Internacional")){
+                ubi=2;
+            }
             //SETEAMOS CADA VALOR EN LA INSTANCIA CREADA DE PROYECTO
             p.setNombre(nombre);
             p.setFechaInicio(fechaInicio);
@@ -246,6 +264,8 @@ public class Controlador implements ActionListener {
             p.setTipoProyecto(tipoProyecto);
             p.setCliente(cliente);
             p.setObservacion(observacion);
+               p.setMonto(monto);
+                p.setUbicacion(ubi);
             
             //GUARDAMOS EN r EL RESULTADO DE LA AGREGACION (1 COMPLETADA, 0 FALLIDA)
             int r = dao.agregar(p);
@@ -298,6 +318,7 @@ public class Controlador implements ActionListener {
     
     //METODO BUSCAR LOS PROYECTOS EXISTENTES EN LA BD
     public void buscar(JTable tabla) {
+         
         //SE CENTRAN LAS CELDAS DE LA TABLA
         centrarCeldas(tabla);
         //AL MODELO CREADO SE LE PASA EL MODELA DE LA TABLA
@@ -305,9 +326,12 @@ public class Controlador implements ActionListener {
         tabla.setModel(modelo);
         //SE CREA UN VECTOR DE PROYECTOS
         ArrayList<Proyecto> lista = dao.listar();
+       
         //SE CREA UN VECTOR DE 8 OBJETOS Y EN CADA UNO SE GUARDAN LOS DATOS QUE COMPONEN A CADA PROYECTO
-        Object[] objeto = new Object[8];
+        Object[] objeto = new Object[10];
+         System.out.println(lista.size());
         for (int i = 0; i < lista.size(); i++) {
+          
             objeto[0] = lista.get(i).getIdProyecto();
             objeto[1] = lista.get(i).getNombre();
             objeto[2] = lista.get(i).getFechaInicio();
@@ -316,6 +340,9 @@ public class Controlador implements ActionListener {
             objeto[5] = lista.get(i).getTipoProyecto();
             objeto[6] = lista.get(i).getCliente();
             objeto[7] = lista.get(i).getObservacion();
+            objeto[8] = lista.get(i).getMonto();
+           
+            objeto[9] = lista.get(i).getUbicacion();
             //SE AGREGAN LOS DATOS AL MODELO 
             modelo.addRow(objeto);
         }
