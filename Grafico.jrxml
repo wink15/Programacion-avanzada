@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Grafico" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a67ec83f-250e-4b96-849a-67178d3a5c03">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Proyecto"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT ubicaciondelproyecto.nombre , proyecto.ubicacion, COUNT(ubicacion) as cantidad1 FROM prog_av.proyecto inner join  prog_av.ubicaciondelproyecto on proyecto.ubicacion=ubicaciondelproyecto.id GROUP BY ubicacion HAVING COUNT(ubicacion)  ORDER BY cantidad1  DESC]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="ubicaciondelproyecto"/>
+	</field>
+	<field name="ubicacion" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="ubicacion"/>
+		<property name="com.jaspersoft.studio.field.label" value="ubicacion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="proyecto"/>
+	</field>
+	<field name="cantidad1" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="cantidad1"/>
+		<property name="com.jaspersoft.studio.field.label" value="cantidad1"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="40" y="20" width="504" height="50" uuid="7ab04a2e-9663-41e4-ac80-bbda461374ec"/>
+				<textElement>
+					<font fontName="Arial Black" size="18"/>
+				</textElement>
+				<text><![CDATA[CANTIDAD DE PROYECTOS SEGUN SU UBICACION]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="259" splitType="Stretch">
+			<pie3DChart>
+				<chart evaluationTime="Report">
+					<reportElement x="80" y="30" width="380" height="201" uuid="6a233fdc-6f4a-49b8-8bec-755af1f566a8"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset resetType="Report"/>
+					<keyExpression><![CDATA[$F{cantidad1}]]></keyExpression>
+					<valueExpression><![CDATA[$F{cantidad1}]]></valueExpression>
+					<labelExpression><![CDATA[$F{nombre}]]></labelExpression>
+				</pieDataset>
+				<pie3DPlot>
+					<plot/>
+					<itemLabel/>
+				</pie3DPlot>
+			</pie3DChart>
+		</band>
+	</detail>
+</jasperReport>
