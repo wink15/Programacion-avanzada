@@ -20,8 +20,8 @@ public class Api {
 
     public Api() {
     }
-     //private String  URL_API;
-  
+    //private String  URL_API;
+
     private String userId;
     private String id;
     private String title;
@@ -65,6 +65,5 @@ public class Api {
     public void setBody(String body) {
         this.body = body;
     }
-    
-    
+
 }

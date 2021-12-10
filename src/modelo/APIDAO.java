@@ -21,30 +21,32 @@ public class APIDAO {
 
     public APIDAO() {
     }
-       public ArrayList<Api> GetApi( int opcion, String n, String m){
+
+    public ArrayList<Api> GetApi(int opcion, int n, int m) {
         // url de la api
-          StringBuilder resultado = new StringBuilder();
-       
-          ArrayList<Api> liss = new ArrayList<>();
-        if ( opcion ==1){
-        String URL_API ="https://jsonplaceholder.typicode.com/posts/" + n;
-         try{
-            //inicio de la conexion 
-            URL url = new  URL(URL_API);
-            URLConnection conexion = url.openConnection();
-            //lectura del contenido
-            //clase concreta de la api de java
-            Reader r= new InputStreamReader(conexion.getInputStream());
-            // 
-            BufferedReader br =  new BufferedReader(r);
-            //va a contener cada una de las lineas del get 
-            String linea;
-            //mientras haya contenido para leer se va a mostrar en la pantalla.
-            while ( (linea = br.readLine()) != null){
-               resultado.append(linea); }
-            //dividimos con el split por comas
-            String[] partes = resultado.toString().split(",");
-            /*String [] aux = new String[4];
+        StringBuilder resultado = new StringBuilder();
+
+        ArrayList<Api> liss = new ArrayList<>();
+        if (opcion == 1) {
+            String URL_API = "https://jsonplaceholder.typicode.com/posts/" + n;
+            try {
+                //inicio de la conexion 
+                URL url = new URL(URL_API);
+                URLConnection conexion = url.openConnection();
+                //lectura del contenido
+                //clase concreta de la api de java
+                Reader r = new InputStreamReader(conexion.getInputStream());
+                // 
+                BufferedReader br = new BufferedReader(r);
+                //va a contener cada una de las lineas del get 
+                String linea;
+                //mientras haya contenido para leer se va a mostrar en la pantalla.
+                while ((linea = br.readLine()) != null) {
+                    resultado.append(linea);
+                }
+                //dividimos con el split por comas
+                String[] partes = resultado.toString().split(",");
+                /*String [] aux = new String[4];
             for (int i =0; i<partes.length;i++){
                // System.out.println("aa " + i);
                //ahora lo separamos por los : y guardamos la segunda parte en el vector
@@ -58,48 +60,44 @@ public class APIDAO {
             String id = aux[1];
             String title = aux[2];
             String body = aux[3];*/
-              Api a = new Api();
-              a= this.separarGet(partes);
-              liss.add(a);
-             }
-       
-          
-           
-        catch (Exception e){
-            
-        }
-        
-        } 
-        else if (opcion == 2){
-            int desde = Integer.parseInt(n);
-              int hasta = Integer.parseInt(m);
-            
-         for (int i = desde; i<=hasta ; i++)    {
-            StringBuilder resultado1 = new StringBuilder();
-            // System.out.println("entro al for");
-          String URL_API ="https://jsonplaceholder.typicode.com/posts/" + i;
-            try{
-            //inicio de la conexion 
-            URL url = new  URL(URL_API);
-            URLConnection conexion = url.openConnection();
-            //lectura del contenido
-            //clase concreta de la api de java
-            Reader r= new InputStreamReader(conexion.getInputStream());
-            // 
-            BufferedReader br =  new BufferedReader(r);
-            //va a contener cada una de las lineas del get 
-            String linea;
-            //mientras haya contenido para leer se va a mostrar en la pantalla.
-            while ( (linea = br.readLine()) != null){
-                 resultado1.append(linea);
-                
+                Api a = new Api();
+                a = this.separarGet(partes);
+                liss.add(a);
+            } catch (Exception e) {
+
             }
-             String[] partes2= {""};
-             partes2 = resultado1.toString().split(",");
-             Api a = new Api();
-             a = this.separarGet(partes2);
-             
-          /*  String [] aux = new String[4];
+
+        } else if (opcion == 2) {
+            int desde = n;
+            int hasta = m;
+
+            for (int i = desde; i <= hasta; i++) {
+                StringBuilder resultado1 = new StringBuilder();
+                // System.out.println("entro al for");
+                String URL_API = "https://jsonplaceholder.typicode.com/posts/" + i;
+                try {
+                 
+                    //inicio de la conexion 
+                    URL url = new URL(URL_API);
+                    URLConnection conexion = url.openConnection();
+                    //lectura del contenido
+                    //clase concreta de la api de java
+                    Reader r = new InputStreamReader(conexion.getInputStream());
+                    // 
+                    BufferedReader br = new BufferedReader(r);
+                    //va a contener cada una de las lineas del get 
+                    String linea;
+                    //mientras haya contenido para leer se va a mostrar en la pantalla.
+                    while ((linea = br.readLine()) != null) {
+                        resultado1.append(linea);
+
+                    }
+                    String[] partes2 = {""};
+                    partes2 = resultado1.toString().split(",");
+                    Api a = new Api();
+                    a = this.separarGet(partes2);
+
+                    /*  String [] aux = new String[4];
             for (int j =0; j<partes2.length;j++){
                // System.out.println("aa " + i);
                //ahora lo separamos por los : y guardamos la segunda parte en el vector
@@ -115,40 +113,38 @@ public class APIDAO {
             String title = aux[2];
             String body = aux[3];
              Api a = new Api(userId,id,title,body);*/
-              liss.add(a);
-        }
-        catch (Exception e){
-            
-        }
-         
-         
-         }
-              
-}return liss;
- 
-       }
-public Api separarGet(String[] partes){
-    String [] aux = new String[4];
-            for (int j =0; j<partes.length;j++){
-               // System.out.println("aa " + i);
-               //ahora lo separamos por los : y guardamos la segunda parte en el vector
-                String []aux2= partes[j].split(":");
-                //System.out.println("aber " + aux2[1]);
-               aux[j]=aux2[1];
-               // System.out.println("aux " + aux[i]);
-               // System.out.println(partes[j]);
+                    liss.add(a);
+                } catch (Exception e) {
+
+                }
+
             }
-            String userId = aux[0];
-               
-            String id = aux[1];
-            String title = aux[2];
-            String body = aux[3];
-             Api a = new Api(userId,id,title,body);
-    
+
+        }
+        return liss;
+
+    }
+
+    public Api separarGet(String[] partes) {
+        String[] aux = new String[4];
+        for (int j = 0; j < partes.length; j++) {
+            // System.out.println("aa " + i);
+            //ahora lo separamos por los : y guardamos la segunda parte en el vector
+            String[] aux2 = partes[j].split(":");
+            //System.out.println("aber " + aux2[1]);
+            aux[j] = aux2[1];
+            // System.out.println("aux " + aux[i]);
+            // System.out.println(partes[j]);
+        }
+        String userId = aux[0];
+
+        String id = aux[1];
+        String title = aux[2];
+        String body = aux[3];
+        Api a = new Api(userId, id, title, body);
+
         return a;
 
-
-}
-
+    }
 
 }
