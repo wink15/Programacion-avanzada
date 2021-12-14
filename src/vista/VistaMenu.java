@@ -5,11 +5,37 @@
  */
 package vista;
 
+import controlador.ControladorReporte;
 import java.awt.Color;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static javafx.scene.paint.Color.color;
+import modelo.Conexion;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
+
+import org.jfree.chart.StandardChartTheme;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
+import java.io.File;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import modelo.Clientes;
+import modelo.ClientesDAO;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  *
@@ -20,10 +46,21 @@ public class VistaMenu extends javax.swing.JFrame {
     /**
      * Creates new form VistaMenu
      */
-    public VistaMenu() {
-        initComponents();
-    }
 
+    public VistaMenu() {
+        initComponents();  
+     
+    }
+    
+   
+   public VistaMenu prueba(){
+        VistaMenu vm = new VistaMenu();
+        return vm;
+       
+       
+   }
+    
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,7 +85,11 @@ public class VistaMenu extends javax.swing.JFrame {
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        itemReporte = new javax.swing.JMenuItem();
+        itemGrafico = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem12 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -164,7 +205,31 @@ public class VistaMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu3.setText("Reportes");
+
+        itemReporte.setText("Generar listado proyectos");
+        itemReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemReporteActionPerformed(evt);
+            }
+        });
+        jMenu3.add(itemReporte);
+
+        itemGrafico.setText("Generar grafico proyectos");
+        itemGrafico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemGraficoActionPerformed(evt);
+            }
+        });
+        jMenu3.add(itemGrafico);
+
+        jMenuBar1.add(jMenu3);
+
         jMenu2.setText("Ayuda");
+
+        jMenuItem12.setText("Contacto");
+        jMenu2.add(jMenuItem12);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -209,14 +274,14 @@ public class VistaMenu extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
-           VistaPersonal per = new VistaPersonal();
+        VistaPersonal per = new VistaPersonal();
         try {
             per.inicializar();
         } catch (SQLException ex) {
             Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
+
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -227,7 +292,7 @@ public class VistaMenu extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
@@ -248,10 +313,147 @@ public class VistaMenu extends javax.swing.JFrame {
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
-        VistaApi va = new VistaApi();
+        VistaApi va  = new VistaApi();
         va.inicializar();
-        
+
     }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void itemReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemReporteActionPerformed
+        // TODO add your handling code here:
+      
+      ControladorReporte cr= new ControladorReporte( );
+        try {
+            cr.generarReporte();
+            /*  try {
+            Connection con;
+            Conexion conectar = new Conexion();
+            con = conectar.getConnection();
+
+            String reportPath = "C:\\Users\\Santiago\\JaspersoftWorkspace\\Prueba\\Reporte.jrxml";
+            // System.out.println(reportPath);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("logo", "src\\img\\gizmo.png");
+            map.put("contacto1", "src\\img\\contacto1.png");
+            map.put("contacto2", "src\\img\\contacto2.png");
+            map.put("ubicacion", "src\\img\\ubicacion.png");
+            JasperReport jr = JasperCompileManager.compileReport(reportPath);
+            JasperPrint jp = JasperFillManager.fillReport(jr, map, con);
+            JasperViewer.viewReport(jp);
+            con.close();
+            } catch (Exception ex) {
+            ex.printStackTrace();
+            }*/
+        } catch (JRException ex) {
+            Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_itemReporteActionPerformed
+
+    private void itemGraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGraficoActionPerformed
+        // TODO add your handling code here:
+        
+        ControladorReporte cr= new ControladorReporte( );
+        cr.generarGrafico();
+        /*  try {
+            Connection con;
+            Conexion conectar = new Conexion();
+            con = conectar.getConnection();
+            
+            String reportPath = "C:\\Users\\Santiago\\JaspersoftWorkspace\\Prueba\\GraficoReporte.jrxml";
+           // System.out.println(reportPath);
+            Map<String,Object>map= new HashMap<String,Object>();
+            map.put("logo", "src\\img\\gizmo.png");
+            map.put("contacto1", "src\\img\\contacto1.png");
+             map.put("contacto2", "src\\img\\contacto2.png");
+              map.put("ubicacion", "src\\img\\ubicacion.png");
+              
+            JasperReport jr = JasperCompileManager.compileReport(reportPath);
+            //StandardChartTheme.createLegacyTheme().apply(jr);
+           // ChartFactory.setChartTheme(StandardChartTheme.createJFreeTheme());
+            JasperPrint jp = JasperFillManager.fillReport(jr, map, con);
+            JasperViewer.viewReport(jp);
+            JasperExportManager.exportReportToPdfFile(jp,"grafico.pdf");
+            con.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }*/
+        
+       /* ResultSet rs = null;
+        Connection con;
+        Conexion conectar = new Conexion();
+        con = conectar.getConnection();
+        int numNac=0;
+         String consultaNacional = " SELECT COUNT(proyecto.ubicacion) as cantidad fROM prog_av.proyecto WHERE proyecto.ubicacion=1";
+        String consultaInternacional = " SELECT COUNT(proyecto.ubicacion) as cantidad fROM prog_av.proyecto WHERE proyecto.ubicacion=2";
+        
+        int numInt = 0;
+        try {
+        
+            PreparedStatement ps = con.prepareStatement(consultaNacional);
+             rs = ps.executeQuery();
+             while (rs.next()) {  
+                
+                 numNac=(rs.getInt("cantidad"));
+                
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+        try {
+            
+            PreparedStatement  ps = con.prepareStatement(consultaInternacional);
+             rs = ps.executeQuery();
+             while (rs.next()) {  
+                
+                 numInt=(rs.getInt("cantidad"));
+                
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+       
+
+      /*  DefaultPieDataset pieDataset = new DefaultPieDataset();
+        pieDataset.setValue("Nacional " + numNac , new Integer(numNac));
+        pieDataset.setValue("Internacional " +  numInt, new Integer(numInt));
+        // pieDataset.setValue("Kubuntu", new Integer(10));
+        // pieDataset.setValue("Otros", new Integer(5));
+        JFreeChart chart = ChartFactory.createPieChart(
+                "Proyectos",
+                pieDataset,
+                true,
+                true,
+                false);
+        try {
+            ChartUtilities.saveChartAsJPEG(new File("C:\\Users\\Santiago\\Documents\\reporte\\PieChart.jpg"), chart, 500,
+                    300);
+        } catch (Exception e) {
+            System.out.println("Error creando grafico.");
+        }*/
+        /* try {
+        String reportPath = "C:\\Users\\Santiago\\JaspersoftWorkspace\\Prueba\\GraficoReporte.jrxml";
+           // System.out.println(reportPath);
+            Map<String,Object>map= new HashMap<String,Object>();
+            map.put("logo", "src\\img\\gizmo.png");
+            map.put("contacto1", "src\\img\\contacto1.png");
+             map.put("contacto2", "src\\img\\contacto2.png");
+              map.put("ubicacion", "src\\img\\ubicacion.png");
+                map.put("grafico", "C:\\Users\\Santiago\\Documents\\reporte\\PieChart.jpg");
+            JasperReport jr = JasperCompileManager.compileReport(reportPath);
+            //StandardChartTheme.createLegacyTheme().apply(jr);
+           // ChartFactory.setChartTheme(StandardChartTheme.createJFreeTheme());
+            JasperPrint jp = JasperFillManager.fillReport(jr, map, con);
+            JasperViewer.viewReport(jp);
+           
+            con.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }*/
+    }//GEN-LAST:event_itemGraficoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -289,12 +491,16 @@ public class VistaMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JMenuItem itemGrafico;
+    public javax.swing.JMenuItem itemReporte;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
