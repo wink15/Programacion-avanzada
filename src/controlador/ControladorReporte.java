@@ -116,7 +116,7 @@ public class ControladorReporte implements ActionListener{
             map.put("contacto1", "src\\img\\contacto1.png");
              map.put("contacto2", "src\\img\\contacto2.png");
               map.put("ubicacion", "src\\img\\ubicacion.png");
-                map.put("grafico", "C:\\Users\\Santiago\\Documents\\reporte\\PieChart.jpg");
+                map.put("grafico", "src\\img\\GraficoTorta.jpg");
             JasperReport jr = JasperCompileManager.compileReport(reportPath);
             //StandardChartTheme.createLegacyTheme().apply(jr);
            // ChartFactory.setChartTheme(StandardChartTheme.createJFreeTheme());
@@ -178,7 +178,7 @@ public class ControladorReporte implements ActionListener{
                 true,
                 false);
         try {
-            ChartUtilities.saveChartAsJPEG(new File("C:\\Users\\Santiago\\Documents\\reporte\\PieChart.jpg"), chart, 500,
+            ChartUtilities.saveChartAsJPEG(new File("src\\img\\GraficoTorta.jpg"), chart, 500,
                     300);
         } catch (Exception e) {
             System.out.println("Error creando grafico.");
