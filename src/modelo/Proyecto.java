@@ -18,12 +18,31 @@ public class Proyecto {
     private String observacion;
     private int tipoProyecto;
     private int cliente;
+    private double monto;
+    private int ubicacion;
+   
+    public int getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion( int ubicacion) {
+       
+        this.ubicacion = ubicacion;
+    }
+
+    public double getMonto() {
+        return monto;
+    }
+
+    public void setMonto(double monto) {
+        this.monto = monto;
+    }
 
     //METODOS CONSTRUCTORES DE LA CLASE PROYECTO
     public Proyecto () { 
     }
     
-    public Proyecto(int idProyecto, String nombre, Date fechaInicio, Date  fechaConfirmacion, Date  fechaFin, String observacion, int tipoProyecto, int cliente) {
+    public Proyecto(int idProyecto, String nombre, Date fechaInicio, Date  fechaConfirmacion, Date  fechaFin, String observacion, int tipoProyecto, int cliente,double monto, int ubicacion) {
         this.idProyecto = idProyecto;
         this.nombre = nombre;
         this.fechaInicio = fechaInicio;
@@ -32,6 +51,8 @@ public class Proyecto {
         this.observacion = observacion;
         this.tipoProyecto = tipoProyecto;
         this.cliente = cliente;
+        this.monto= monto;
+        this.ubicacion= ubicacion;
     }
     
     //METODOS SETERS Y GETERS

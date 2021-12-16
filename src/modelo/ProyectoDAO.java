@@ -28,6 +28,7 @@ public class ProyectoDAO {
             ps = con.prepareStatement("select * from prog_av.proyecto");
             rs = ps.executeQuery();
             while (rs.next()) {
+               
                 //CADA REGISTRO QUE SE TRAE DE LA CONSULTA SE SETEA EN LA INSTANCIA CREADA
                 Proyecto p = new Proyecto();
                 p.setIdProyecto(rs.getInt(1));
@@ -38,7 +39,10 @@ public class ProyectoDAO {
                 p.setTipoProyecto(rs.getInt(6));
                 p.setCliente(rs.getInt(7));
                 p.setObservacion(rs.getString(8));
+                p.setMonto(rs.getDouble(9));
                 
+                p.setUbicacion(rs.getInt(10));
+                 
                 //SE GUARDAN LOS DATOS DEL PROYECTO EN EL ARRAY CREADO
                 datos.add(p);
             }
@@ -69,7 +73,7 @@ public class ProyectoDAO {
     public int agregar(Proyecto per) {
         int r=0;
         //SE DEFINE LA CONSULTA
-        String sql="insert into prog_av.proyecto(nombre,fechaInicio,fechaConfirmacion,fechaFin,tipoProyecto,cliente,observacion) values (?,?,?,?,?,?,?);";
+        String sql="insert into prog_av.proyecto(nombre,fechaInicio,fechaConfirmacion,fechaFin,tipoProyecto,cliente,observacion,monto,ubicacion) values (?,?,?,?,?,?,?,?,?);";
         try {
             //SE REALIZA LA CONEXION A LA BD
             con = conectar.getConnection();
@@ -83,6 +87,9 @@ public class ProyectoDAO {
             ps.setInt(5,per.getTipoProyecto());
             ps.setInt(6,per.getCliente());
             ps.setString(7,per.getObservacion());
+            ps.setDouble(8, per.getMonto());
+            ps.setInt(9, per.getUbicacion());
+
             
             
             r=ps.executeUpdate();
@@ -104,7 +111,7 @@ public class ProyectoDAO {
     public int actualizar(Proyecto per) {
         int r=0;
         //SE DEFINE LA CONSULTA
-        String sql="UPDATE prog_av.proyecto SET nombre = ?, fechaInicio = ?, fechaConfirmacion = ?, fechaFin = ?, tipoProyecto = ?, cliente = ?, observacion = ? WHERE idproyecto =  " + per.getIdProyecto() ;  
+        String sql="UPDATE prog_av.proyecto SET nombre = ?, fechaInicio = ?, fechaConfirmacion = ?, fechaFin = ?, tipoProyecto = ?, cliente = ?, observacion = ?, monto= ? , ubicacion= ? WHERE idproyecto =  " + per.getIdProyecto() ;  
         
         try {
             //SE REALIZA LA CONEXION A LA BD
@@ -119,6 +126,8 @@ public class ProyectoDAO {
             ps.setInt(5,per.getTipoProyecto());
             ps.setInt(6,per.getCliente());
             ps.setString(7,per.getObservacion());
+            ps.setDouble(8,per.getMonto());
+             ps.setInt(9, per.getUbicacion());
            
             //SE GUARDA EL RESULTADO DE LA CONSULTA
             r=ps.executeUpdate();
