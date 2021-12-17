@@ -34,10 +34,13 @@ import vista.VistaProyecto;
  */
 public class ControladorAsignarPerfilAProyecto implements ActionListener {
 
+    //VECTOR QUE CONTIENE LOS BOTONES PARA LAS CONSULTAS AL USUARIO
+    String[] botones = {"Aceptar", "Cancelar"};
     ProyectoDAO dao = new ProyectoDAO();
     ProyectoPerfil pp = new ProyectoPerfil();
     VistaPerfilProyec vista = new VistaPerfilProyec();
     DefaultTableModel modelo = new DefaultTableModel();
+    DefaultTableModel modelo2 = new DefaultTableModel();
     ProyectoPerfilDAO ppDao = new ProyectoPerfilDAO();
     PerfilDAO daope = new PerfilDAO();
     private int idTablaProy;
@@ -48,6 +51,8 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
         this.vista.btnAgg.addActionListener(this);
         this.vista.botonAggPerfil.addActionListener(this);
         this.vista.btnEliminar.addActionListener(this);
+        this.vista.btnAceptar.addActionListener(this);
+        this.vista.btnBuscarAPP.addActionListener(this);
 
     }
 
@@ -56,9 +61,10 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
         if (e.getSource() == vista.btnBuscar) {
 
             //SE LIMPIA LA TABLA
-            limpiarTabla();
+            // limpiarTabla();
             //SE BUSCAN LOS PROYECTO
             buscar(vista.tablaProyecto);
+            vista.btnBuscarAPP.setEnabled(false);
             //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
             //nuevo();
 
@@ -75,6 +81,7 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
             vista.comboPerfiles.setEnabled(true);
             vista.botonAggPerfil.setEnabled(true);
             vista.btnEliminar.setEnabled(true);
+            vista.btnAceptar.setEnabled(true);
             int fila = vista.tablaProyecto.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(vista, "Debe seleccionar un personal");
@@ -95,9 +102,54 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
             }
 
             //SE LIMPIA LA TABLA
-            // limpiarTabla();
+            //limpiarTabla();
         }
-        // int id = Integer.parseInt((String) vista.tabla.getValueAt(fila, 0).toString());
+        if (e.getSource() == vista.btnAceptar) {
+            limpiarTabla();
+            limpiarTablaAPP();
+            vista.comboPerfiles.setEnabled(false);
+            vista.botonAggPerfil.setEnabled(false);
+            vista.btnEliminar.setEnabled(false);
+            vista.btnAceptar.setEnabled(false);
+            vista.btnBuscarAPP.setEnabled(true);
+            vista.btnAgg.setEnabled(true);
+            vista.btnBuscar.setEnabled(true);
+
+        }
+        if (e.getSource() == vista.btnEliminar) {
+            eliminar();
+
+        }
+        if (e.getSource() == vista.btnBuscarAPP) {
+
+            buscarAPP(vista.tablaAPP);
+            vista.btnEliminar.setEnabled(true);
+            vista.btnAceptar.setEnabled(true);
+            vista.btnBuscar.setEnabled(false);
+            vista.btnAgg.setEnabled(false);
+
+        }
+
+    }
+
+    public void eliminar() {
+        int fila = vista.tablaAPP.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(vista, "Debe Seleccionar un perfil asignado");
+        } else {
+            //EN CASO DE QUE SE HAYA SELECCIONADO UN PROYECTO, SE LE CONSULTA SI REALMENTE DESEA ELIMINARLO
+            int variable = JOptionPane.showOptionDialog(null, "¿Deseas eliminar un perfil asignado?", "Eliminacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
+            if (variable == 0) {
+                //SE GUARDA EL ID DEL PROYECTO SELECCIONADO PARA PASARLO COMO PARAMETRO Y SER USADO EN LA CONSULTA A LA BD
+                int id = Integer.parseInt((String) vista.tablaAPP.getValueAt(fila, 0).toString());
+                //SE EJECUTA LA ELIMINACION DEL REGISTRO EN LA BD
+
+                ppDao.eliminar(id);
+                modelo2.removeRow(fila);
+                //SE LE AVISA AL USUARIO QUE EL REGISTRO FUE ELIMINADO
+                JOptionPane.showMessageDialog(vista, "Perfil asignado  eliminado");
+            }
+        }
     }
 
     public void agregar() {
@@ -144,6 +196,46 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
         tabla.setRowMargin(10);
     }
 
+    public void buscarAPP(JTable tabla) {
+
+        //AL MODELO CREADO SE LE PASA EL MODELA DE LA TABLA
+        modelo2 = (DefaultTableModel) tabla.getModel();
+        tabla.setModel(modelo2);
+        //SE CREA UN VECTOR DE PROYECTOS
+        ArrayList<ProyectoPerfil> lista = ppDao.listar();
+        ArrayList<Proyecto> listap = dao.listar();
+        ArrayList<Perfil> listaper = daope.listar();
+
+        //SE CREA UN VECTOR DE 8 OBJETOS Y EN CADA UNO SE GUARDAN LOS DATOS QUE COMPONEN A CADA PROYECTO
+        Object[] objeto = new Object[5];
+
+        for (int i = 0; i < lista.size(); i++) {
+
+            for (int j = 0; j < listap.size(); j++) {
+
+                for (int b = 0; b < listaper.size(); b++) {
+
+                    if (lista.get(i).getIdProyecto() == listap.get(j).getIdProyecto() && lista.get(i).getIdPerfil() == listaper.get(b).getId()) {
+                        objeto[0] = lista.get(i).getId();
+                        objeto[1] = lista.get(i).getIdProyecto();
+
+                        objeto[2] = listap.get(j).getNombre();
+                        objeto[3] = lista.get(i).getIdPerfil();
+
+                        objeto[4] = listaper.get(b).getNombre();
+
+                        //SE AGREGAN LOS DATOS AL MODELO 
+                        modelo2.addRow(objeto);
+                    }
+                }
+            }
+        }
+
+        //SE DEFINE EL NUMERO Y EL TAMAÑO DE CADA FILA
+        tabla.setRowHeight(35);
+        tabla.setRowMargin(10);
+    }
+
     void centrarCeldas(JTable tabla) {
         DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
         tcr.setHorizontalAlignment(SwingConstants.CENTER);
@@ -156,6 +248,14 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
         //RECORRE TODA LA TABLA Y REMUEVE CADA REGISTRO. 
         for (int i = 0; i < vista.tablaProyecto.getRowCount(); i++) {
             modelo.removeRow(i);
+            i = i - 1;
+        }
+    }
+
+    void limpiarTablaAPP() {
+        //RECORRE TODA LA TABLA Y REMUEVE CADA REGISTRO. 
+        for (int i = 0; i < vista.tablaAPP.getRowCount(); i++) {
+            modelo2.removeRow(i);
             i = i - 1;
         }
     }
@@ -194,8 +294,8 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
         //SE CENTRAN LAS CELDAS DE LA TABLA
         centrarCeldas(tabla);
         //AL MODELO CREADO SE LE PASA EL MODELA DE LA TABLA
-        modelo = (DefaultTableModel) tabla.getModel();
-        tabla.setModel(modelo);
+        modelo2 = (DefaultTableModel) tabla.getModel();
+        tabla.setModel(modelo2);
         //SE CREA UN VECTOR DE PROYECTOS
         ArrayList<ProyectoPerfil> lista = ppDao.listar();
         ArrayList<Proyecto> listap = dao.listar();
@@ -203,24 +303,30 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
 
         //SE CREA UN VECTOR DE 8 OBJETOS Y EN CADA UNO SE GUARDAN LOS DATOS QUE COMPONEN A CADA PROYECTO
         Object[] objeto = new Object[5];
-        
+        //COMO ANDUVO??? NO SE 
+        //for para recorer el app
         for (int i = 0; i < lista.size(); i++) {
-            for(int j = 0; j< listap.size(); j++){
-                for (int b=0; b<listaper.size();b++){
-            if (idProy == lista.get(i).getIdProyecto() && idPer == lista.get(i).getIdPerfil() && idProy == listap.get(j).getIdProyecto() && idPer == listaper.get(b).getId()) {
-                objeto[0] = lista.get(i).getId();
-                System.out.println(" aa " + lista.get(i).getId());
-                objeto[1] = lista.get(i).getIdProyecto();
-               // int aux = lista.get(i).getIdProyecto();
-                objeto[2] = listap.get(j).getNombre();
-                objeto[3] = lista.get(i).getIdPerfil();
-                //int aux2 = lista.get(i).getIdPerfil();
-                objeto[4] = listaper.get(b).getNombre();
+            //for para recorrer el proyecto
+            for (int j = 0; j < listap.size(); j++) {
+                //for para recorter los perfiles
+                for (int b = 0; b < listaper.size(); b++) {
+                    // el if solo se va a cumplir si el id del proyecto y del perfil son iguales tanto a lo obtenido en el listar del app y en los listar de proyecto y perfil
+                    if (idProy == lista.get(i).getIdProyecto() && idPer == lista.get(i).getIdPerfil() && idProy == listap.get(j).getIdProyecto() && idPer == listaper.get(b).getId()) {
+                        objeto[0] = lista.get(i).getId();
+                        System.out.println(" aa " + lista.get(i).getId());
+                        objeto[1] = lista.get(i).getIdProyecto();
+                        // int aux = lista.get(i).getIdProyecto();
+                        objeto[2] = listap.get(j).getNombre();
+                        objeto[3] = lista.get(i).getIdPerfil();
+                        //int aux2 = lista.get(i).getIdPerfil();
+                        objeto[4] = listaper.get(b).getNombre();
 
-                //SE AGREGAN LOS DATOS AL MODELO 
-                modelo.addRow(objeto);
+                        //SE AGREGAN LOS DATOS AL MODELO 
+                        modelo2.addRow(objeto);
+                    }
+                }
             }
-        }}}
+        }
 
         //SE DEFINE EL NUMERO Y EL TAMAÑO DE CADA FILA
         tabla.setRowHeight(35);
