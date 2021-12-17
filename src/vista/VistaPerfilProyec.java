@@ -6,7 +6,7 @@
 package vista;
 
 
-import controlador.ControladorAsingarPerfilAProyecto;
+import controlador.ControladorAsignarPerfilAProyecto;
 import java.sql.SQLException;
 import modelo.Perfil;
 
@@ -24,12 +24,13 @@ public class VistaPerfilProyec extends javax.swing.JFrame {
         comboPerfiles.setEnabled(false);
         botonAggPerfil.setEnabled(false);
         btnEliminar.setEnabled(false);
+        btnAceptar.setEnabled(false);
     }
  public void inicializar () throws SQLException{
             //SE CREA UNA INSTACINA DE LA VISTA
             VistaPerfilProyec vp = new VistaPerfilProyec();
             //SE CREA UNA INSTANCIA DEL CONTROLADOR
-            ControladorAsingarPerfilAProyecto con = new  ControladorAsingarPerfilAProyecto(vp);
+            ControladorAsignarPerfilAProyecto con = new  ControladorAsignarPerfilAProyecto(vp);
             //SE HACE VISIBLE LA VISTA
             
             vp.setVisible(true);
@@ -59,6 +60,8 @@ public class VistaPerfilProyec extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         comboPerfiles = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
+        btnAceptar = new javax.swing.JButton();
+        btnBuscarAPP = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(" Asignar perfil a proyecto");
@@ -77,7 +80,7 @@ public class VistaPerfilProyec extends javax.swing.JFrame {
 
         btnBuscar.setText("Buscar");
 
-        btnAgg.setText("Agg");
+        btnAgg.setText("Agregar");
         btnAgg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAggActionPerformed(evt);
@@ -93,7 +96,7 @@ public class VistaPerfilProyec extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 629, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(603, Short.MAX_VALUE)
+                .addContainerGap(602, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(btnBuscar)
@@ -114,6 +117,8 @@ public class VistaPerfilProyec extends javax.swing.JFrame {
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
         tablaAPP.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -124,11 +129,15 @@ public class VistaPerfilProyec extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tablaAPP);
 
-        botonAggPerfil.setText("Agg");
+        botonAggPerfil.setText("Agregar");
 
         btnEliminar.setText("Eliminar");
 
         jLabel1.setText("Perfiles");
+
+        btnAceptar.setText("Aceptar");
+
+        btnBuscarAPP.setText("Buscar");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -137,17 +146,21 @@ public class VistaPerfilProyec extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(154, 154, 154)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(btnBuscarAPP)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(comboPerfiles, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(96, 96, 96)
-                                .addComponent(botonAggPerfil))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(23, 23, 23)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 710, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(94, 94, 94)
+                                .addComponent(botonAggPerfil)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnAceptar))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 710, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 11, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -157,12 +170,19 @@ public class VistaPerfilProyec extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botonAggPerfil)
-                    .addComponent(comboPerfiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(botonAggPerfil)
+                            .addComponent(comboPerfiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(btnAceptar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBuscarAPP)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnEliminar)
@@ -234,8 +254,10 @@ public class VistaPerfilProyec extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton botonAggPerfil;
+    public javax.swing.JButton btnAceptar;
     public javax.swing.JButton btnAgg;
     public javax.swing.JButton btnBuscar;
+    public javax.swing.JButton btnBuscarAPP;
     public javax.swing.JButton btnEliminar;
     public javax.swing.JComboBox<Perfil> comboPerfiles;
     private javax.swing.JLabel jLabel1;
