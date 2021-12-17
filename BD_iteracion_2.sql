@@ -197,6 +197,30 @@ INSERT INTO `personal_perfil` VALUES (1,10,1),(2,10,2),(3,10,3),(4,12,3);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `personal_proyecto`
+--
+
+DROP TABLE IF EXISTS `personal_proyecto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `personal_proyecto` (
+  `idpersonal_proyecto` int NOT NULL AUTO_INCREMENT,
+  `proyecto` int NOT NULL,
+  `personal` int NOT NULL,
+  PRIMARY KEY (`idpersonal_proyecto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `personal_proyecto`
+--
+
+LOCK TABLES `personal_proyecto` WRITE;
+/*!40000 ALTER TABLE `personal_proyecto` DISABLE KEYS */;
+/*!40000 ALTER TABLE `personal_proyecto` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `proyecto`
 --
 
@@ -213,8 +237,11 @@ CREATE TABLE `proyecto` (
   `cliente` int NOT NULL,
   `observacion` varchar(200) NOT NULL,
   `monto` double(10,2) NOT NULL,
-  PRIMARY KEY (`idproyecto`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `ubicacion` int DEFAULT NULL,
+  PRIMARY KEY (`idproyecto`),
+  KEY `fk_ubicacion` (`ubicacion`),
+  CONSTRAINT `fk_ubicacion` FOREIGN KEY (`ubicacion`) REFERENCES `ubicaciondelproyecto` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -223,7 +250,7 @@ CREATE TABLE `proyecto` (
 
 LOCK TABLES `proyecto` WRITE;
 /*!40000 ALTER TABLE `proyecto` DISABLE KEYS */;
-INSERT INTO `proyecto` VALUES (1,'Proyecto n° 1','2021-09-22','2021-09-22','2021-09-22',0,0,'Proyecto terminado exitosamente!',0.00),(4,'Proyecto n° 2','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00),(5,'Proyecto n° 3','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00),(7,'Proyecto n° 4','2021-09-23','2021-09-22','2021-09-24',1,0,'nProyecto terminado exitosamente',0.00),(8,'Proyecto n° 5','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00),(9,'Proyecto n° 6','2021-09-29','2021-09-28','2021-09-30',6,1,'Proyecto en curso',0.00),(11,'Proyecto n° 7','2021-09-29','2021-09-28','2021-09-30',6,2,'Proyecto en curso',0.00),(12,'Proyecto n° 8','2021-09-29','2021-09-28','2021-09-30',2,1,'Proyecto en curso!',0.00);
+INSERT INTO `proyecto` VALUES (1,'Proyecto n° 1','2021-09-22','2021-09-22','2021-09-22',0,0,'Proyecto terminado exitosamente!',0.00,1),(4,'Proyecto n° 2','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00,2),(5,'Proyecto n° 3','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00,1),(7,'Proyecto n° 4','2021-09-23','2021-09-22','2021-09-24',1,0,'nProyecto terminado exitosamente',0.00,2),(8,'Proyecto n° 5','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00,1),(9,'Proyecto n° 6','2021-09-29','2021-09-28','2021-09-30',6,1,'Proyecto en curso',0.00,1),(11,'Proyecto n° 7','2021-09-29','2021-09-28','2021-09-30',6,2,'Proyecto en curso',0.00,NULL),(12,'Proyecto n° 8','2021-09-29','2021-09-28','2021-09-30',2,1,'Proyecto en curso!',0.00,NULL),(13,'Intento','2021-12-11','2021-12-10','2021-12-18',1,1,'aa',200.00,1);
 /*!40000 ALTER TABLE `proyecto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -299,7 +326,7 @@ CREATE TABLE `ubicaciondelproyecto` (
 
 LOCK TABLES `ubicaciondelproyecto` WRITE;
 /*!40000 ALTER TABLE `ubicaciondelproyecto` DISABLE KEYS */;
-INSERT INTO `ubicaciondelproyecto` VALUES (1,'Nacional','Proyecto realizado en Argentina',1),(2,'Exterior','Proyecto realizado fuera de Argentina',2);
+INSERT INTO `ubicaciondelproyecto` VALUES (1,'Nacional','Proyecto realizado en Argentina',1),(2,'Internacional','Proyecto realizado fuera de Argentina',2);
 /*!40000 ALTER TABLE `ubicaciondelproyecto` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -312,4 +339,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-09 14:21:47
+-- Dump completed on 2021-12-17 15:57:18
