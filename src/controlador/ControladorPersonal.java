@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -19,6 +21,7 @@ import modelo.PersonalDAO;
 import modelo.Persona;
 import modelo.PersonaDAO;
 import vista.VistaPersonal;
+import vista.Perfil_Personal;
 
 
 public class ControladorPersonal implements ActionListener {
@@ -35,6 +38,7 @@ public class ControladorPersonal implements ActionListener {
     VistaPersonal vista3 = new VistaPersonal();
     DefaultTableModel modelo = new DefaultTableModel();
     Personal personal = new Personal();
+    Perfil_Personal vistaPerfil = new Perfil_Personal ();
 
     //CREAMOS UN CONTROLADOR POR CADA VISTA EXISTENTE
     public ControladorPersonal(VistaPersonal v) {
@@ -44,6 +48,7 @@ public class ControladorPersonal implements ActionListener {
         this.vista3.btnBuscarPersonal.addActionListener(this);
         this.vista3.btnEliminarPersonal.addActionListener(this);
         this.vista3.btnModificarPersonal.addActionListener(this);
+        this.vista3.btnAgregarPerfil.addActionListener(this);
     }
 
     //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -96,6 +101,7 @@ public class ControladorPersonal implements ActionListener {
                 vista3.btnEliminarPersonal.setEnabled(false);
                 vista3.btnActualizarPersonal.setEnabled(true);
                 vista3.btnModificarPersonal.setEnabled(false);
+                vista3.btnAgregarPerfil.setEnabled(true);
 
                 //EN CASO DE QUE SI, SE PASAN LOS DATOS DE LA TABLA A VARIABLES
                 int id = Integer.parseInt((String) vista3.tablaPersonal.getValueAt(filaPersonal, 0).toString());
@@ -109,7 +115,7 @@ public class ControladorPersonal implements ActionListener {
             }
         }
 
-        //VISTA CLIENTE
+        
         if (e.getSource() == vista3.btnActualizarPersonal) {
             //SE ACTUALIZA EL PERSONAL
             actualizarPersonal();
@@ -123,6 +129,15 @@ public class ControladorPersonal implements ActionListener {
             vista3.btnEliminarPersonal.setEnabled(true);
             vista3.btnActualizarPersonal.setEnabled(false);
             vista3.btnModificarPersonal.setEnabled(true);
+            vista3.btnAgregarPerfil.setEnabled(false);
+        }
+        
+        if (e.getSource() == vista3.btnAgregarPerfil) {
+            try {
+                vistaPerfil.inicializar(vista3.txtIdPersona.getText(),vistaPerfil);
+            } catch (SQLException ex) {
+                Logger.getLogger(ControladorPersonal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -266,4 +281,6 @@ public class ControladorPersonal implements ActionListener {
             vista3.cboPersona.addItem(new Persona(listaPersona.get(i).getIdPersona(), listaPersona.get(i).getNombre(), listaPersona.get(i).getApellido(), listaPersona.get(i).getFechaNacimiento(), listaPersona.get(i).getTelefono()));
         }
     }
+    
+    
 }
