@@ -79,6 +79,20 @@ public class ProyectoPerfilDAO {
         //SE RETORNA EL RESULTADO DE LA AGREGACION DEL REGISTRO A LA BD
         return r;
     }
-    
+      public int eliminar(int id){
+        int r=0;
+        //SE DEFINE LA CONSULTA
+        String sql="delete from prog_av.proyecto_perfil where idproyecto_perfil= "+id;
+        try {
+            //SE REALIZA LA CONEXION A LA BD
+            con=conectar.getConnection();
+            //SE LLEVA A CABO LA CONSULTA
+            ps=con.prepareStatement(sql);
+            r= ps.executeUpdate();
+        } catch (Exception e) {
+        }
+        //SE DEVUELVE EL RESULTADO DE LA ELIMINACION DEL REGISTRO 
+        return r;
+    }
     
 }

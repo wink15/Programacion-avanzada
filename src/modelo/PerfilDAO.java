@@ -28,7 +28,7 @@ public class PerfilDAO {
     
 public ArrayList<Perfil> getPerfil() throws SQLException {
         con = conectar.getConnection();
-        ps = con.prepareStatement("select * from perfil");
+        ps = con.prepareStatement("select * from prog_av.perfil");
         rs = ps.executeQuery();
         ArrayList<Perfil> listaPerfil = new ArrayList<>();
         try {

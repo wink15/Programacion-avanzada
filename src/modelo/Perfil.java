@@ -14,6 +14,8 @@ public class Perfil {
     private String nombre;
     private String descripcion;
 
+   
+   
     public int getId() {
         return id;
     }
@@ -42,11 +44,21 @@ public class Perfil {
     }
 
     public Perfil(int id, String nombre, String descripcion) {
-        this.id = id;
+        this.id = id; 
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
     
     
-     
+       public Perfil(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+      
+    }
+        @Override
+    public String toString() {
+        return   id + "-" + nombre ;
+    }
+
+    
 }
