@@ -14,6 +14,7 @@ public class Perfil {
     private String nombre;
     private String descripcion;
 
+    
     public int getId() {
         return id;
     }
@@ -40,13 +41,20 @@ public class Perfil {
 
     public Perfil() {
     }
-
+    //Constructor perfil para llenar el combo
+    public Perfil (int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
     public Perfil(int id, String nombre, String descripcion) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
-    
+    //METODO TOSTRING PARA PODER VISUALIZAR EL PERFIL
+    public String toString () {
+        return id +"-"+ nombre; 
+    }
     
      
 }

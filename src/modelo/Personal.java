@@ -13,6 +13,9 @@ public class Personal  extends Persona{
     private int idPersonal;
     private int persona;
     private long CUIT;
+    private int perfil;
+
+    
 
     //METODOS SETERS Y GETERS
     public int getIdPersonal() {
@@ -40,6 +43,13 @@ public class Personal  extends Persona{
         if(tamaño.length()== 11){
             this.CUIT = CUIT;
         }
+    }
+    public int getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(int perfil) {
+        this.perfil = perfil;
     }
     
     //METODOS CONSTRUCTORES CLIENTES

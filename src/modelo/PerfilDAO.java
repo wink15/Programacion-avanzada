@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package modelo;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,15 +11,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.ClientesDAO;
-import modelo.Conexion;
 
 /**
  *
  * @author Santiago
  */
 public class PerfilDAO {
-     PreparedStatement ps;
+    PreparedStatement ps;
     ResultSet rs;
     Connection con;
     Conexion conectar = new Conexion();
@@ -28,7 +25,7 @@ public class PerfilDAO {
     
 public ArrayList<Perfil> getPerfil() throws SQLException {
         con = conectar.getConnection();
-        ps = con.prepareStatement("select * from perfil");
+        ps = con.prepareStatement("select * from prog_av.perfil");
         rs = ps.executeQuery();
         ArrayList<Perfil> listaPerfil = new ArrayList<>();
         try {
@@ -54,15 +51,15 @@ public ArrayList<Perfil> getPerfil() throws SQLException {
         ArrayList<Perfil> datos = new ArrayList<>();
         try {
             con = conectar.getConnection();
-            ps = con.prepareStatement("select * from perfil");
+            ps = con.prepareStatement("select prog_av.perfil.idperfil,prog_av.perfil.nombre from perfil");
             rs = ps.executeQuery();
             while (rs.next()) {
                Perfil per = new Perfil();
-                per.setId(rs.getInt(1));
-                per.setNombre(rs.getString(2));
-                per.setDescripcion(rs.getString(3));
+               per.setId(rs.getInt(1));
+               per.setNombre(rs.getString(2));
+                
+               datos.add(per);
                
-                datos.add(per);
             }
         } catch (Exception e) {
         }
@@ -84,36 +81,29 @@ public ArrayList<Perfil> getPerfil() throws SQLException {
 
     public int agregar(Perfil perfil) {
         int r = 0;
-        System.out.println("paso");
         String sql = "insert into perfil(nombre,descripcion) values (?,?);";
        
         try {
-            System.out.println("entro al try");
             con = conectar.getConnection();
             ps = con.prepareStatement(sql);
-            System.out.println("ps del try " + ps);
-
+        
             ps.setString(1, perfil.getNombre());
             ps.setString(2, perfil.getDescripcion());;
             
-            System.out.println("ps " + ps);
             r = ps.executeUpdate();
-            System.out.println("r " + r);
             if (r == 1) {
                 return 1;
             } else {
                 return 0;
             }
         } catch (Exception e) {
-            System.out.println("no entro al try");
         }
         return r;
     }
 
     public int actualizar(Perfil perfil) {
         int r = 0;
-        //String id = String.valueOf(per.getIdProyecto());
-
+        
         String sql = "UPDATE perfil SET nombre = ?, descripcion= ? WHERE idperfil=  " + perfil.getId();
         System.out.println("sql" + sql);
         try {
