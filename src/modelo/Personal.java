@@ -13,7 +13,7 @@ public class Personal  extends Persona{
     private int idPersonal;
     private int persona;
     private long CUIT;
-
+    private String nombreaux;
     //METODOS SETERS Y GETERS
     public int getIdPersonal() {
         return idPersonal;
@@ -55,16 +55,20 @@ public class Personal  extends Persona{
     }
 
     public Personal(int idPersonal, long CUIT, String nombre, String apellido, Date fechaNacimiento, String telefono) {
+ 
         super(nombre, apellido, fechaNacimiento, telefono);
+         //System.out.println("nombre " + nombre);
         this.idPersonal = idPersonal;
         this.CUIT = CUIT;
+        this.nombreaux=nombre;
     }
     
     public Personal (){     
     }
     
     //METODO TOSTRING PARA PODER VISUALIZAR EL PERSONAL
-    public String toString () {
-        return idPersonal + "-" + CUIT; 
+   public String toString () {
+        return  CUIT + "-" + super.toString(); 
     }
+   
 }

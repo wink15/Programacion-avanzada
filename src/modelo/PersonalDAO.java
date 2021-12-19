@@ -32,7 +32,9 @@ public class PersonalDAO {
                 //SE SETEAN LOS DATOS DEL CLIENTE EN LA INSTANCIA CLIENTE CREADA
                 Personal personal = new Personal();
                 personal.setIdPersonal(rs.getInt("idPersonal"));
-                personal.setCUIT(rs.getInt("cuit"));
+                personal.setCUIT(rs.getLong("cuit"));
+               // personal.setPersona(rs.getInt("persona"));
+              
                 //LOS DATOS DEL CLIENTE SE ALMACENAN EL EL ARRAY CREADO
                 listaPersonal.add(personal);
             }
