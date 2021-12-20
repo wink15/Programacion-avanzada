@@ -27,6 +27,7 @@ public class Api {
     private String title;
     private String body;
 
+    //CONSTRUCTOR 
     public Api(String userId, String id, String title, String body) {
         this.userId = userId;
         this.id = id;
@@ -34,6 +35,7 @@ public class Api {
         this.body = body;
     }
 
+    //GETTERS AND SETTERS
     public String getUserId() {
         return userId;
     }

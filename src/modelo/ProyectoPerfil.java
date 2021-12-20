@@ -10,7 +10,11 @@ package modelo;
  * @author Santiago
  */
 public class ProyectoPerfil {
+
     private int id;
+    private int idProyecto;
+    private int idPerfil;
+//GETTERS AND SETTERS
 
     public int getId() {
         return id;
@@ -19,8 +23,6 @@ public class ProyectoPerfil {
     public void setId(int id) {
         this.id = id;
     }
-    private int idProyecto;
-    private int idPerfil;
 
     public int getIdProyecto() {
         return idProyecto;
@@ -37,6 +39,7 @@ public class ProyectoPerfil {
     public void setIdPerfil(int idPerfil) {
         this.idPerfil = idPerfil;
     }
+//CONSTRUCTORES
 
     public ProyectoPerfil() {
     }
@@ -45,6 +48,5 @@ public class ProyectoPerfil {
         this.idProyecto = idProyecto;
         this.idPerfil = idPerfil;
     }
-    
-    
+
 }

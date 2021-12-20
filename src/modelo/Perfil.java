@@ -10,12 +10,12 @@ package modelo;
  * @author Santiago
  */
 public class Perfil {
+
     private int id;
     private String nombre;
     private String descripcion;
 
-   
-   
+    //GETTES AND SETTERS
     public int getId() {
         return id;
     }
@@ -40,25 +40,26 @@ public class Perfil {
         this.descripcion = descripcion;
     }
 
+    //CONTRUCTORES
     public Perfil() {
     }
 
     public Perfil(int id, String nombre, String descripcion) {
-        this.id = id; 
+        this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
-    
-    
-       public Perfil(int id, String nombre) {
+
+    public Perfil(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-      
-    }
-        @Override
-    public String toString() {
-        return   id + "-" + nombre ;
+
     }
 
-    
+    //METODO TO STRING PARA MOSTRARLOS
+    @Override
+    public String toString() {
+        return id + "-" + nombre;
+    }
+
 }

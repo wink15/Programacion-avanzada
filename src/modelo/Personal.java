@@ -8,12 +8,14 @@ package modelo;
 import java.sql.Date;
 import javax.swing.JOptionPane;
 
-public class Personal  extends Persona{
+public class Personal extends Persona {
+
     //ATRIBUTOS DEL PERSONAL
     private int idPersonal;
     private int persona;
     private long CUIT;
     private String nombreaux;
+
     //METODOS SETERS Y GETERS
     public int getIdPersonal() {
         return idPersonal;
@@ -35,40 +37,40 @@ public class Personal  extends Persona{
         this.persona = persona;
     }
 
-    public void setCUIT(long CUIT){
+    public void setCUIT(long CUIT) {
         String tamaño = Long.toString(CUIT);
-        if(tamaño.length()== 11){
+        if (tamaño.length() == 11) {
             this.CUIT = CUIT;
         }
     }
-    
-    //METODOS CONSTRUCTORES CLIENTES
+
+    //METODOS CONSTRUCTORES 
     public Personal(int idPersonal, long CUIT, int persona) {
         this.idPersonal = idPersonal;
         this.CUIT = CUIT;
         this.persona = persona;
     }
-    
-    public Personal (int idPersonal, long CUIT){
+
+    public Personal(int idPersonal, long CUIT) {
         this.idPersonal = idPersonal;
         this.CUIT = CUIT;
     }
 
     public Personal(int idPersonal, long CUIT, String nombre, String apellido, Date fechaNacimiento, String telefono) {
- 
+
         super(nombre, apellido, fechaNacimiento, telefono);
-         //System.out.println("nombre " + nombre);
+        //System.out.println("nombre " + nombre);
         this.idPersonal = idPersonal;
         this.CUIT = CUIT;
-        this.nombreaux=nombre;
+        this.nombreaux = nombre;
     }
-    
-    public Personal (){     
+
+    public Personal() {
     }
-    
+
     //METODO TOSTRING PARA PODER VISUALIZAR EL PERSONAL
-   public String toString () {
-        return  CUIT + "-" + super.toString(); 
+    public String toString() {
+        return CUIT + "-" + super.toString();
     }
-   
+
 }

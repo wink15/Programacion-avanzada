@@ -12,21 +12,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
 public class Conexion {
+
     //SE DEFINEN TODOS LOS PARAMETOS PARA LLEVAR A CABO LA CONEXION A LA BD
-    String url="jdbc:mysql://localhost:3306/prog_av?useSSL=false&useTimezone=true&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    String user="root",pass="wink";
+    String url = "jdbc:mysql://localhost:3306/prog_av?useSSL=false&useTimezone=true&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    String user = "root", pass = "1234";
     Connection con;
-    
+
     //METODO QUE EFECTUA Y DEVUELVE LA CONEXION CON LA BD
-    public Connection getConnection(){
+    public Connection getConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con=DriverManager.getConnection(url,user,pass);
+            con = DriverManager.getConnection(url, user, pass);
         } catch (Exception e) {
         }
         return con;
     }
 }
-

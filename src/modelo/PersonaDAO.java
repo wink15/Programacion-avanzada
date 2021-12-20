@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package modelo;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,38 +14,43 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PersonaDAO {
+
+    //SE REALIZA LA CONEXION CON LA BASE DE DATOS
     PreparedStatement ps;
     ResultSet rs;
     Connection con;
     Conexion conectar = new Conexion();
-    
-    
-    
+
+    //METODO PARA TRAER LOS DATOS DESDE LA BD
     public ArrayList<Persona> getPersona() throws SQLException {
         con = conectar.getConnection();
+        //SE LLEVA A CABO LA CONSULTA A LA BD
         ps = con.prepareStatement("select * from prog_av.persona");
         rs = ps.executeQuery();
+        //SE CREA UN ARRAY PERSONAS
         ArrayList<Persona> listaPersona = new ArrayList<>();
         try {
             while (rs.next()) {
                 Persona persona = new Persona();
-                
+                //SE SETEAN LOS DATOS  EN LA INSTANCIA CLIENTE CREADA
                 persona.setIdPersona(rs.getInt("id_persona"));
                 persona.setNombre(rs.getString("nombre"));
                 persona.setApellido(rs.getString("apellido"));
                 persona.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
                 persona.setTelefono(rs.getString("telefono"));
-                
-                
+
+                //LOS DATOS  SE ALMACENAN EL EL ARRAY CREADO
                 listaPersona.add(persona);
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //FINALMENTE DEVUELVE LA LISTA DE PERSONAS QUE SE TRAJO DESDE LA BD
         return listaPersona;
     }
 
+    //METODO QUE OBTIENE LLAS PERSONAS DESDE LA BD
     public ArrayList<Persona> listar() {
         ArrayList<Persona> datos = new ArrayList<>();
         try {
@@ -65,24 +71,29 @@ public class PersonaDAO {
         return datos;
 
     }
+    //METODO PARA ELIMINAR UNA PERSONA DE LA BD
 
     public int eliminar(int id) {
         int r = 0;
+        //SE DEFINE LA CONSULTA
         String sql = "delete from prog_av.persona where id_persona =" + id;
         try {
             con = conectar.getConnection();
+            //SE LLEVA A CABO LA CONSULTA
             ps = con.prepareStatement(sql);
             r = ps.executeUpdate();
         } catch (Exception e) {
         }
+        //SE DEVUELVE EL RESULTADO DE LA ELIMINACION DEL REGISTRO 
         return r;
     }
 
+    //METODO PARA AGREGAR UN REGISTRO A LA BD
     public int agregar(Persona persona) {
         int r = 0;
-        System.out.println("paso");
+        // System.out.println("paso");
         String sql = "insert into prog_av.persona(nombre,apellido,fecha_nacimiento,telefono) values (?,?,?,?);";
-       
+
         try {
             System.out.println("entro al try");
             con = conectar.getConnection();
@@ -93,7 +104,7 @@ public class PersonaDAO {
             ps.setString(2, persona.getApellido());
             ps.setDate(3, persona.getFechaNacimiento());
             ps.setString(4, persona.getTelefono());
-            
+
             System.out.println("ps " + ps);
             r = ps.executeUpdate();
             System.out.println("r " + r);

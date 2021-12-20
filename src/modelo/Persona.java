@@ -12,45 +12,19 @@ import java.sql.Date;
  * @author Santiago
  */
 public class Persona {
+
     private int idPersona;
-    private  String nombre;
-    private String  apellido;
-    private  Date fechaNacimiento;
+    private String nombre;
+    private String apellido;
+    private Date fechaNacimiento;
     private String telefono;
+//GETTERS AND SETTERS
 
     public String getTelefono() {
         return telefono;
     }
 
     public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public Persona() {
-    }
-    
-    public Persona (int idPersona){
-        this.idPersona = idPersona;
-    }
-
-    public Persona(int idPersona, String nombre, String apellido) {
-        this.idPersona = idPersona;
-        this.nombre = nombre;
-        this.apellido = apellido;
-    }
-    
-    public Persona(String nombre, String apellido, Date fechaNacimiento, String telefono) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.fechaNacimiento = fechaNacimiento;
-        this.telefono = telefono;
-    }
-    
-    public Persona(int idPersona, String nombre, String apellido, Date fechaNacimiento, String telefono) {
-        this.idPersona = idPersona;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.fechaNacimiento = fechaNacimiento;
         this.telefono = telefono;
     }
 
@@ -85,9 +59,38 @@ public class Persona {
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
-    
-     //METODO TOSTRING PARA VISUALIZAR LOS TIPOS DE PROYECTO
-    public String toString () {
-        return idPersona + "-" + nombre + "-" + apellido;
+
+//CONSTRUCTORES
+    public Persona() {
+    }
+
+    public Persona(int idPersona) {
+        this.idPersona = idPersona;
+    }
+
+    public Persona(int idPersona, String nombre, String apellido) {
+        this.idPersona = idPersona;
+        this.nombre = nombre;
+        this.apellido = apellido;
+    }
+
+    public Persona(String nombre, String apellido, Date fechaNacimiento, String telefono) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+    }
+
+    public Persona(int idPersona, String nombre, String apellido, Date fechaNacimiento, String telefono) {
+        this.idPersona = idPersona;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+    }
+
+    //METODO TOSTRING PARA VISUALIZAR LOS TIPOS DE PROYECTO
+    public String toString() {
+        return nombre + "-" + apellido;
     }
 }

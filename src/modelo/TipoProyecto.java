@@ -5,14 +5,14 @@
  */
 package modelo;
 
-
 public class TipoProyecto {
+
     //ATRIBUTOS DE LA CLASE TIPO PROYECTO
     private int idTipoProyecto;
     private String nombre;
     private String descripcion;
 
-   //METODOS SETER Y GETERS
+    //METODOS SETER Y GETERS
     public int getIdTipoProyecto() {
         return idTipoProyecto;
     }
@@ -36,24 +36,24 @@ public class TipoProyecto {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
+
     //METODOS CONTRUCTORES 
     public TipoProyecto(int idTipoProyecto, String nombre, String descripcion) {
         this.idTipoProyecto = idTipoProyecto;
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
-    
-    public TipoProyecto () {
+
+    public TipoProyecto() {
     }
-    
-    public TipoProyecto (int idTipoProyecto, String nombre){
+
+    public TipoProyecto(int idTipoProyecto, String nombre) {
         this.idTipoProyecto = idTipoProyecto;
         this.nombre = nombre;
     }
-    
+
     //METODO TOSTRING PARA VISUALIZAR LOS TIPOS DE PROYECTO
-    public String toString () {
+    public String toString() {
         return idTipoProyecto + "-" + nombre;
     }
 }

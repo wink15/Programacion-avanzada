@@ -10,9 +10,11 @@ package modelo;
  * @author Santiago
  */
 public class ProyectoPersonal {
+
     private int id;
     private int idProyecto;
     private int idPersonal;
+//GETTERS AND SETTERS
 
     public int getId() {
         return id;
@@ -37,6 +39,7 @@ public class ProyectoPersonal {
     public void setIdPersonal(int idPersonal) {
         this.idPersonal = idPersonal;
     }
+//CONSTRUCTORES
 
     public ProyectoPersonal(int idProyecto, int idPersonal) {
         this.idProyecto = idProyecto;
@@ -45,7 +48,5 @@ public class ProyectoPersonal {
 
     public ProyectoPersonal() {
     }
-    
-          
-    
+
 }

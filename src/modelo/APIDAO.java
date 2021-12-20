@@ -76,7 +76,7 @@ public class APIDAO {
                 // System.out.println("entro al for");
                 String URL_API = "https://jsonplaceholder.typicode.com/posts/" + i;
                 try {
-                 
+
                     //inicio de la conexion 
                     URL url = new URL(URL_API);
                     URLConnection conexion = url.openConnection();
@@ -132,6 +132,7 @@ public class APIDAO {
             //ahora lo separamos por los : y guardamos la segunda parte en el vector
             String[] aux2 = partes[j].split(":");
             //System.out.println("aber " + aux2[1]);
+            //SE GUARDA EN EL VECTOR AUX EL VALOR OBTENIDO DE LA API, PORQUE AL HACER EL SPLIT QUEDA DIVIDO EN "VARIABLE": VALOR 
             aux[j] = aux2[1];
             // System.out.println("aux " + aux[i]);
             // System.out.println(partes[j]);

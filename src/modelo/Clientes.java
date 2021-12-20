@@ -7,13 +7,14 @@ package modelo;
 
 import java.sql.Date;
 
-public class Clientes  extends Persona{
+public class Clientes extends Persona {
+
     //ATRIBUTOS DEL CLIENTE
     private int idCliente;
     private String razonSocial;
     private int persona;
 
-    //METODOS SETERS Y GETERS
+    //METODOS SETERS Y GETERS 
     public int getIdCliente() {
         return idCliente;
     }
@@ -37,15 +38,15 @@ public class Clientes  extends Persona{
     public void setRazonSocial(String razonSocial) {
         this.razonSocial = razonSocial;
     }
-    
+
     //METODOS CONSTRUCTORES CLIENTES
     public Clientes(int idCliente, String razonSocial, int persona) {
         this.idCliente = idCliente;
         this.razonSocial = razonSocial;
         this.persona = persona;
     }
-    
-    public Clientes (int idCliente, String razonSocial){
+
+    public Clientes(int idCliente, String razonSocial) {
         this.idCliente = idCliente;
         this.razonSocial = razonSocial;
     }
@@ -55,12 +56,12 @@ public class Clientes  extends Persona{
         this.idCliente = idCliente;
         this.razonSocial = razonSocial;
     }
-    
-    public Clientes (){     
+
+    public Clientes() {
     }
-    
+
     //METODO TOSTRING PARA PODER VISUALIZAR EL CLIENTE
-    public String toString () {
-        return idCliente + "-" + razonSocial; 
+    public String toString() {
+        return idCliente + "-" + razonSocial;
     }
 }

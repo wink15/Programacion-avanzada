@@ -7,8 +7,8 @@ package modelo;
 
 import java.sql.Date;
 
-
 public class Proyecto {
+
     //ATRIBUTOS DE LA CLASE PROYECTO
     private int idProyecto;
     private String nombre;
@@ -20,13 +20,31 @@ public class Proyecto {
     private int cliente;
     private double monto;
     private int ubicacion;
-   
+
+    //METODOS CONSTRUCTORES DE LA CLASE PROYECTO
+    public Proyecto() {
+    }
+
+    public Proyecto(int idProyecto, String nombre, Date fechaInicio, Date fechaConfirmacion, Date fechaFin, String observacion, int tipoProyecto, int cliente, double monto, int ubicacion) {
+        this.idProyecto = idProyecto;
+        this.nombre = nombre;
+        this.fechaInicio = fechaInicio;
+        this.fechaConfirmacion = fechaConfirmacion;
+        this.fechaFin = fechaFin;
+        this.observacion = observacion;
+        this.tipoProyecto = tipoProyecto;
+        this.cliente = cliente;
+        this.monto = monto;
+        this.ubicacion = ubicacion;
+    }
+
+    //METODOS SETERS Y GETERS
     public int getUbicacion() {
         return ubicacion;
     }
 
-    public void setUbicacion( int ubicacion) {
-       
+    public void setUbicacion(int ubicacion) {
+
         this.ubicacion = ubicacion;
     }
 
@@ -38,24 +56,6 @@ public class Proyecto {
         this.monto = monto;
     }
 
-    //METODOS CONSTRUCTORES DE LA CLASE PROYECTO
-    public Proyecto () { 
-    }
-    
-    public Proyecto(int idProyecto, String nombre, Date fechaInicio, Date  fechaConfirmacion, Date  fechaFin, String observacion, int tipoProyecto, int cliente,double monto, int ubicacion) {
-        this.idProyecto = idProyecto;
-        this.nombre = nombre;
-        this.fechaInicio = fechaInicio;
-        this.fechaConfirmacion = fechaConfirmacion;
-        this.fechaFin = fechaFin;
-        this.observacion = observacion;
-        this.tipoProyecto = tipoProyecto;
-        this.cliente = cliente;
-        this.monto= monto;
-        this.ubicacion= ubicacion;
-    }
-    
-    //METODOS SETERS Y GETERS
     public int getIdProyecto() {
         return idProyecto;
     }
@@ -72,19 +72,19 @@ public class Proyecto {
         this.nombre = nombre;
     }
 
-    public Date  getFechaInicio() {
+    public Date getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Date  fechaInicio) {
+    public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date  getFechaConfirmacion() {
+    public Date getFechaConfirmacion() {
         return fechaConfirmacion;
     }
 
-    public void setFechaConfirmacion(Date  fechaConfirmacion) {
+    public void setFechaConfirmacion(Date fechaConfirmacion) {
         this.fechaConfirmacion = fechaConfirmacion;
     }
 
@@ -92,7 +92,7 @@ public class Proyecto {
         return fechaFin;
     }
 
-    public void setFechaFin(Date  fechaFin) {
+    public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
     }
 
