@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -18,8 +20,8 @@ import modelo.Personal;
 import modelo.PersonalDAO;
 import modelo.Persona;
 import modelo.PersonaDAO;
+import vista.Perfil_Personal;
 import vista.VistaPersonal;
-
 
 public class ControladorPersonal implements ActionListener {
 
@@ -35,6 +37,7 @@ public class ControladorPersonal implements ActionListener {
     VistaPersonal vista3 = new VistaPersonal();
     DefaultTableModel modelo = new DefaultTableModel();
     Personal personal = new Personal();
+    Perfil_Personal vistaPerfil = new Perfil_Personal();
 
     //CREAMOS UN CONTROLADOR POR CADA VISTA EXISTENTE
     public ControladorPersonal(VistaPersonal v) {
@@ -44,6 +47,7 @@ public class ControladorPersonal implements ActionListener {
         this.vista3.btnBuscarPersonal.addActionListener(this);
         this.vista3.btnEliminarPersonal.addActionListener(this);
         this.vista3.btnModificarPersonal.addActionListener(this);
+        this.vista3.btnAgregarPerfil.addActionListener(this);
     }
 
     //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -96,10 +100,11 @@ public class ControladorPersonal implements ActionListener {
                 vista3.btnEliminarPersonal.setEnabled(false);
                 vista3.btnActualizarPersonal.setEnabled(true);
                 vista3.btnModificarPersonal.setEnabled(false);
+                vista3.btnAgregarPerfil.setEnabled(true);
 
                 //EN CASO DE QUE SI, SE PASAN LOS DATOS DE LA TABLA A VARIABLES
                 int id = Integer.parseInt((String) vista3.tablaPersonal.getValueAt(filaPersonal, 0).toString());
-                long CUIT = Long.parseLong((String)vista3.tablaPersonal.getValueAt(filaPersonal, 1).toString());
+                long CUIT = Long.parseLong((String) vista3.tablaPersonal.getValueAt(filaPersonal, 1).toString());
                 int persona = Integer.parseInt((String) vista3.tablaPersonal.getValueAt(filaPersonal, 2).toString());
 
                 //SE SETAN LOS DATOS DE LAS VARABLES A LOS CAMPOS DE LA VISTA
@@ -109,7 +114,6 @@ public class ControladorPersonal implements ActionListener {
             }
         }
 
-        //VISTA CLIENTE
         if (e.getSource() == vista3.btnActualizarPersonal) {
             //SE ACTUALIZA EL PERSONAL
             actualizarPersonal();
@@ -123,10 +127,17 @@ public class ControladorPersonal implements ActionListener {
             vista3.btnEliminarPersonal.setEnabled(true);
             vista3.btnActualizarPersonal.setEnabled(false);
             vista3.btnModificarPersonal.setEnabled(true);
+            vista3.btnAgregarPerfil.setEnabled(false);
+        }
+        if (e.getSource() == vista3.btnAgregarPerfil) {
+            try {
+                vistaPerfil.inicializar(vista3.txtIdPersona.getText(), vistaPerfil);
+            } catch (SQLException ex) {
+                Logger.getLogger(ControladorPersonal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
-    // METODOS DE LA VISTA DE CLIENTE
     public void buscarPersonal(JTable tabla) {
         // centrarCeldas(tabla);
         //EN EL MODELO CREADO SE GUARDA EL MODELO DE LA TABLA PERSONAL
@@ -152,20 +163,18 @@ public class ControladorPersonal implements ActionListener {
     //METODO PARA AGREGAR UN NUEVO PERSONAL
     public void agregarPersonal() {
         try {
-            //SE PASAN LOS VALORES DE LOS CAMPOS DE LA VISTA CLIENTE A VARIABLE
-            
+            //SE PASAN LOS VALORES DE LOS CAMPOS DE LA VISTA personal A VARIABLE
+
             long CUIT = Long.parseLong(vista3.txtCUIT.getText());
             Integer persona = (vista3.cboPersona.getItemAt(vista3.cboPersona.getSelectedIndex()).getIdPersona());
             //SE SETEAN ESOS DATOS EN LA INSTANCIA DE PERSONAL CREADA
             String tamaño = Long.toString(CUIT);
-            if(tamaño.length() == 11){
+            if (tamaño.length() == 11) {
                 personal.setCUIT(CUIT);
                 personal.setPersona(persona);
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(vista3, "CUIT incorrecto");
             }
-            
-            
 
             //SE TRAE EL RESULTADO DE LA AGREGACION A LA BD
             int r = daoPersonal.agregar(personal);
@@ -253,7 +262,6 @@ public class ControladorPersonal implements ActionListener {
         vista3.txtCUIT.requestFocus();
     }
 
-    //METODO QUE CARGA EL COMBO PERSONA EN LA VISTA CLIENTE
     public void llenarPersonaPersonal() throws SQLException {
         //SE CREA UNA INSTANCIA DE LA CLASE PersonaDAO
         PersonaDAO perDAO = new PersonaDAO();
@@ -264,6 +272,8 @@ public class ControladorPersonal implements ActionListener {
         //SE RECORRE LA LISTA TRAIDA DESDE LA BD Y SE AGREGA CADA REGISTRO AL COMBO
         for (int i = 0; i < listaPersona.size(); i++) {
             vista3.cboPersona.addItem(new Persona(listaPersona.get(i).getIdPersona(), listaPersona.get(i).getNombre(), listaPersona.get(i).getApellido(), listaPersona.get(i).getFechaNacimiento(), listaPersona.get(i).getTelefono()));
+            System.out.println(vista3.cboPersona.getItemAt(i));
         }
+
     }
 }

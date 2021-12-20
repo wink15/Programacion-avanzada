@@ -47,7 +47,8 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
     private int idTablaProy;
     private int bandera = 0;
     private int personal;
-     PersonaDAO per = new PersonaDAO();
+    PersonaDAO per = new PersonaDAO();
+    //CREAMOS UN CONTROLADOR POR CADA VISTA EXISTENTE EN DONDE SE LES PASA EL ACTION PARA PODER UTILIZARLOS
 
     public ControladorAsignarPersonalAProyecto(VistaPersonalProyecto v) {
         this.vista = v;
@@ -60,55 +61,55 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
         this.vista.comboOpcion.addActionListener(this);
 
     }
+    //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == vista.btnBuscar) {
 
-            //SE LIMPIA LA TABLA
-            // limpiarTabla();
             //SE BUSCAN LOS PROYECTO
             buscar(vista.tablaProyecto);
             vista.btnBuscarAPP.setEnabled(false);
             vista.btnAceptar.setEnabled(true);
-            //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
-            //nuevo();
 
         }
         if (e.getSource() == vista.btnAgg) {
 
-            //SE BUSCAN LOS PROYECTO
-            // buscar(vista.tablaProyecto);
+            //SE OBTIENE LA FILA SELECCIONADA
             int fila = vista.tablaProyecto.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(vista, "Debe seleccionar un personal");
             } else {
+                //SE HABILITAN TODOS LOS BOTENES QUE SE PUEDEN USAR UNA VEZ SELEECIONADO UN PROYECTO
                 vista.comboPersonal.setEnabled(true);
                 vista.botonAggPerfil.setEnabled(true);
                 vista.btnEliminar.setEnabled(true);
                 vista.btnAceptar.setEnabled(true);
                 vista.comboOpcion.setEnabled(true);
                 try {
+                    //SE LLENA EL COMBO
                     llenarPersonales();
                 } catch (SQLException ex) {
                     Logger.getLogger(ControladorAsignarPerfilAProyecto.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                // SE GUARDA EL ID DEL PROYECTO
                 this.idTablaProy = Integer.parseInt((String) vista.tablaProyecto.getValueAt(fila, 0).toString());
             }
         }
         if (e.getSource() == vista.comboOpcion) {
 
             try {
+                // METODO QUE SE ENCARGA DE SABER QUE OPCION SE SELEECIONO DEL COMBO
+
                 sugeridos();
             } catch (SQLException ex) {
                 Logger.getLogger(ControladorAsignarPersonalAProyecto.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
-        //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
-        //nuevo();
         if (e.getSource() == vista.botonAggPerfil) {
             //int perfil = (vista.comboPerfiles.getItemAt(vista.comboPerfiles.getSelectedIndex()).getId());
+            // METODO QUE SE USA PARA SABER SI UN PERSONAL YA FUE ASIGNADO
             if (comprobarPerfiles(idTablaProy, this.personal) == true) {
                 JOptionPane.showMessageDialog(null, "El personal seleccionado ya fue asiganado a dicho proyecto", "Error", JOptionPane.WARNING_MESSAGE);
             } else {
@@ -121,6 +122,7 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
             //limpiarTabla();
         }
         if (e.getSource() == vista.btnAceptar) {
+            // EL BOTON ACEPTAR SEUSA PARA FINALIZAR LA OPERACION POR ENDE VUELVE A DEFAULT LA PANTALLA
             limpiarTabla();
             limpiarTablaAPP();
             vista.comboPersonal.setEnabled(false);
@@ -157,10 +159,10 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
         if (fila == -1) {
             JOptionPane.showMessageDialog(vista, "Debe Seleccionar un personal asignado");
         } else {
-            //EN CASO DE QUE SE HAYA SELECCIONADO UN PROYECTO, SE LE CONSULTA SI REALMENTE DESEA ELIMINARLO
+            //EN CASO DE QUE SE HAYA SELECCIONADO UN PERSONAL, SE LE CONSULTA SI REALMENTE DESEA ELIMINARLO
             int variable = JOptionPane.showOptionDialog(null, "¿Deseas eliminar un personal asignado?", "Eliminacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
             if (variable == 0) {
-                //SE GUARDA EL ID DEL PROYECTO SELECCIONADO PARA PASARLO COMO PARAMETRO Y SER USADO EN LA CONSULTA A LA BD
+                //SE GUARDA EL ID DEL PERSONAL ASIGNADO SELECCIONADO PARA PASARLO COMO PARAMETRO Y SER USADO EN LA CONSULTA A LA BD
                 int id = Integer.parseInt((String) vista.tablaAPerP.getValueAt(fila, 0).toString());
                 //SE EJECUTA LA ELIMINACION DEL REGISTRO EN LA BD
                 ppDao.eliminar(id);
@@ -198,7 +200,7 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
         //SE CREA UN VECTOR DE PROYECTOS
         ArrayList<Proyecto> lista = dao.listar();
 
-        //SE CREA UN VECTOR DE 8 OBJETOS Y EN CADA UNO SE GUARDAN LOS DATOS QUE COMPONEN A CADA PROYECTO
+        //SE CREA UN VECTOR DE 2 OBJETOS Y EN CADA UNO SE GUARDAN LOS DATOS QUE COMPONEN A CADA PROYECTO
         Object[] objeto = new Object[2];
 
         for (int i = 0; i < lista.size(); i++) {
@@ -220,37 +222,40 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
         //AL MODELO CREADO SE LE PASA EL MODELA DE LA TABLA
         modelo2 = (DefaultTableModel) tabla.getModel();
         tabla.setModel(modelo2);
-        //SE CREA UN VECTOR DE PROYECTOS
+        //SE CREA UN VECTOR DE PROYECTOTS, PROYECTOS PERSONAL, PERSONA, Y PERSONAL
         ArrayList<ProyectoPersonal> lista = ppDao.listar();
         ArrayList<Proyecto> listap = dao.listar();
         ArrayList<Personal> listaper = daope.listar();
-         ArrayList<Persona> listaPersona = per.getPersona();
+        ArrayList<Persona> listaPersona = per.getPersona();
 
-        //SE CREA UN VECTOR DE 8 OBJETOS Y EN CADA UNO SE GUARDAN LOS DATOS QUE COMPONEN A CADA PROYECTO
+        //SE CREA UN VECTOR DE 6 OBJETOS Y EN CADA UNO SE GUARDAN LOS DATOS QUE COMPONEN A CADA VALOR DE LA TABALA
         Object[] objeto = new Object[6];
-
+        //SE RECORRE EL LISTADO DE LA TABLA INTERMEDIA
         for (int i = 0; i < lista.size(); i++) {
-
+            //SE RECORRE EL ISTADO DE PROYECTOS
             for (int j = 0; j < listap.size(); j++) {
-
+                //SE RECORRE EL LISTADO DE PERSONAL
                 for (int b = 0; b < listaper.size(); b++) {
-                    for (int k=0; k<listaPersona.size();k++){
-                    if (lista.get(i).getIdProyecto() == listap.get(j).getIdProyecto() && lista.get(i).getIdPersonal() == listaper.get(b).getIdPersonal() && listaper.get(b).getPersona()==listaPersona.get(k).getIdPersona()) {
-                        objeto[0] = lista.get(i).getId();
-                        objeto[1] = lista.get(i).getIdProyecto();
+                    //SE RECORRE EL LISTADO DE PERSONAS
+                    for (int k = 0; k < listaPersona.size(); k++) {
+                        // SE USA ESTE IF PARA PODER RELACIONAR LOS DATOS QUE ESTAN EN LA TABLA INTERMEDIA CON LOS DATOS DE LAS TABLAS DE LA BD CORRESPONDIESTES QUE LUEGO SE USAN PARA EMPAREJARLOS Y PODER OBETENER EL ID,NOMBRE,ETC
+                        if (lista.get(i).getIdProyecto() == listap.get(j).getIdProyecto() && lista.get(i).getIdPersonal() == listaper.get(b).getIdPersonal() && listaper.get(b).getPersona() == listaPersona.get(k).getIdPersona()) {
+                            objeto[0] = lista.get(i).getId();
+                            objeto[1] = lista.get(i).getIdProyecto();
 
-                        objeto[2] = listap.get(j).getNombre();
-                        objeto[3] = listaper.get(b).getCUIT();
+                            objeto[2] = listap.get(j).getNombre();
+                            objeto[3] = listaper.get(b).getCUIT();
 
-                        objeto[4] = listaPersona.get(k).getNombre();
-                         objeto[5] = listaPersona.get(k).getApellido();
+                            objeto[4] = listaPersona.get(k).getNombre();
+                            objeto[5] = listaPersona.get(k).getApellido();
 
-                        //SE AGREGAN LOS DATOS AL MODELO 
-                        modelo2.addRow(objeto);
+                            //SE AGREGAN LOS DATOS AL MODELO 
+                            modelo2.addRow(objeto);
+                        }
                     }
                 }
             }
-        }}
+        }
 
         //SE DEFINE EL NUMERO Y EL TAMAÑO DE CADA FILA
         tabla.setRowHeight(35);
@@ -282,19 +287,14 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
     }
 
     public void llenarPersonales() throws SQLException {
-   
-        //SE CREA UNA INSTANCIA DE LA CLASE TipoProyectoDAO
 
-        //SE GUARDA EN UN VECTOR TODOS LOS TIPOS DE PROYECTO DESDE LA BD
-        //SE VACIA EL CLOMBO TIPO PROYECTO
         ArrayList<Persona> listaPersona = per.getPersona();
         vista.comboPersonal.removeAllItems();
-        //SE RECORRE EL VECTOR DE LOS TIPOS DE PROYECTOS QUE SE TRAJO DESDE LA BD
+        //SE RECORRE EL VECTOR DE LAS PERSONALES QUE SE TRAJO DESDE LA BD
         for (int i = 0; i < listaPersonal.size(); i++) {
 
-            //CADA TIPO DE PROYECTO DE LA LISTA SE AGREGA AL COMBO
             for (int j = 0; j < listaPersona.size(); j++) {
-
+                //SE USA  ESTE IF PARA PODER EMPAREJAS EL PERSONAL CON LA PERSONA Y OBETERN SUS DATOS
                 if (listaPersonal.get(i).getPersona() == listaPersona.get(j).getIdPersona()) {
 
                     vista.comboPersonal.addItem(new Personal(listaPersonal.get(i).getIdPersonal(), listaPersonal.get(i).getCUIT(), listaPersona.get(j).getNombre(), listaPersona.get(j).getApellido(), listaPersona.get(j).getFechaNacimiento(), listaPersona.get(j).getTelefono()));
@@ -310,13 +310,13 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
         String opcionE2 = "Sugeridos";
         //   ArrayList<Personal> listaPersonal = daoPersonal.listar();
         if (opcion.equals(opcionE)) {
-            this.bandera = 1;
+            //SI LA OPCION ES TODOS ENTONCES USA EL LLENAR PERSONALES 
             llenarPersonales();
 
             // JLabel.setText("Estoy modificando el texto");
         } else if (opcionE2.equals(opcion)) {
 
-            this.bandera = 2;
+            // SI LA OPCION ES SUGERIDOS SE LLAMA A LA CONSULTA HECHA EN EL DAO QUE TRAE LOS PERFILES SUGERIDOS PARA EL PROYECTO
             vista.comboPersonal.removeAllItems();
             ArrayList<Persona> listaPersona = ppDao.sugeridos(idTablaProy);
             for (int i = 0; i < listaPersonal.size(); i++) {
@@ -364,13 +364,14 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
             for (int j = 0; j < listap.size(); j++) {
                 //for para recorter los perfiles
                 for (int b = 0; b < listaper.size(); b++) {
-                    // el if solo se va a cumplir si el id del proyecto y del perfil son iguales tanto a lo obtenido en el listar del app y en los listar de proyecto y perfil
+                    // el if solo se va a cumplir si el id del proyecto y del personal  son iguales tanto a lo obtenido en el listar del app y en los listar de proyecto y personal
                     if (idProy == lista.get(i).getIdProyecto() && idPer == lista.get(i).getIdPersonal() && idProy == listap.get(j).getIdProyecto() && idPer == listaper.get(b).getIdPersonal()) {
                         objeto[0] = lista.get(i).getId();
                         System.out.println(" aa " + lista.get(i).getId());
                         objeto[1] = lista.get(i).getIdProyecto();
 
                         objeto[2] = listap.get(j).getNombre();
+                        //SPLITEA LO QUE SE SELECCIONA EN EL COMBO 
                         String[] opcion = vista.comboPersonal.getSelectedItem().toString().split("-");
                         objeto[3] = opcion[0];
                         //int aux2 = lista.get(i).getIdPerfil();

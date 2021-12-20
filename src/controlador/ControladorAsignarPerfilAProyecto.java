@@ -45,6 +45,7 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
     PerfilDAO daope = new PerfilDAO();
     private int idTablaProy;
 
+    //CREAMOS UN CONTROLADOR POR CADA VISTA EXISTENTE EN DONDE SE LES PASA EL ACTION PARA PODER UTILIZARLOS
     public ControladorAsignarPerfilAProyecto(VistaPerfilProyec v) {
         this.vista = v;
         this.vista.btnBuscar.addActionListener(this);
@@ -55,18 +56,15 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
         this.vista.btnBuscarAPP.addActionListener(this);
 
     }
+//EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == vista.btnBuscar) {
 
-            //SE LIMPIA LA TABLA
-            // limpiarTabla();
             //SE BUSCAN LOS PROYECTO
             buscar(vista.tablaProyecto);
             vista.btnBuscarAPP.setEnabled(false);
-            //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
-            //nuevo();
 
         }
         if (e.getSource() == vista.btnAgg) {
@@ -78,25 +76,29 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
             }
             //SE BUSCAN LOS PROYECTO
             // buscar(vista.tablaProyecto);
-            vista.comboPerfiles.setEnabled(true);
-            vista.botonAggPerfil.setEnabled(true);
-            vista.btnEliminar.setEnabled(true);
-            vista.btnAceptar.setEnabled(true);
+
             int fila = vista.tablaProyecto.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(vista, "Debe seleccionar un personal");
             } else {
+                //SE HABILITAN LOS BOTONES QUE SE PUEDEN UTILIZAR UNA VEZ SELECCIONADO UN PROYECTO
+                vista.comboPerfiles.setEnabled(true);
+                vista.botonAggPerfil.setEnabled(true);
+                vista.btnEliminar.setEnabled(true);
+                vista.btnAceptar.setEnabled(true);
+                //SE GUARDA EL ID DEL PROYECTO SELECCIONADO
                 this.idTablaProy = Integer.parseInt((String) vista.tablaProyecto.getValueAt(fila, 0).toString());
             }
 
-            //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
-            //nuevo();
         }
         if (e.getSource() == vista.botonAggPerfil) {
+            //SE GUARDA EL ID DEL PERFIL SELECCIONADO 
             int perfil = (vista.comboPerfiles.getItemAt(vista.comboPerfiles.getSelectedIndex()).getId());
+            // SE LLAMA AL METODO COMPROBARPERFILES QUE SE ENCARGA DE VERIFICAR SI EL PERFIL YA FUE ASIGNADO AL PROYECTO
             if (comprobarPerfiles(idTablaProy, perfil) == true) {
                 JOptionPane.showMessageDialog(null, "El perfil seleccionado ya fue asiganado a dicho proyecto", "Error", JOptionPane.WARNING_MESSAGE);
             } else {
+                //EN CASO DE NO ESTAR YA ASIGNADO SE AGREGA Y SE LLENA LA TABAL
                 agregar();
                 llenarTablaPP(vista.tablaAPP, perfil, idTablaProy);
             }
@@ -105,6 +107,7 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
             //limpiarTabla();
         }
         if (e.getSource() == vista.btnAceptar) {
+            //EL BOTON ACEPTAR SE ENCARGA DE FINALIZAR TODO POR ENDE VUELVE AL DEFAULT LA PANTALLA
             limpiarTabla();
             limpiarTablaAPP();
             vista.comboPerfiles.setEnabled(false);
@@ -137,10 +140,10 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
         if (fila == -1) {
             JOptionPane.showMessageDialog(vista, "Debe Seleccionar un perfil asignado");
         } else {
-            //EN CASO DE QUE SE HAYA SELECCIONADO UN PROYECTO, SE LE CONSULTA SI REALMENTE DESEA ELIMINARLO
+            //EN CASO DE QUE SE HAYA SELECCIONADO UN PERFIL, SE LE CONSULTA SI REALMENTE DESEA ELIMINARLO
             int variable = JOptionPane.showOptionDialog(null, "¿Deseas eliminar un perfil asignado?", "Eliminacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
             if (variable == 0) {
-                //SE GUARDA EL ID DEL PROYECTO SELECCIONADO PARA PASARLO COMO PARAMETRO Y SER USADO EN LA CONSULTA A LA BD
+                //SE GUARDA EL ID DEL PERFIL SELECCIONADO PARA PASARLO COMO PARAMETRO Y SER USADO EN LA CONSULTA A LA BD
                 int id = Integer.parseInt((String) vista.tablaAPP.getValueAt(fila, 0).toString());
                 //SE EJECUTA LA ELIMINACION DEL REGISTRO EN LA BD
 
@@ -164,7 +167,6 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
         } else {
             JOptionPane.showMessageDialog(vista, "Error");
 
-            //POR ULTIMO SE LIMPIA LA TABLA EN LA QUE SE MUESTRAN LOS REGISTROS DE PROYECTO.
         } //limpiarTabla();
 
     }
@@ -206,15 +208,16 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
         ArrayList<Proyecto> listap = dao.listar();
         ArrayList<Perfil> listaper = daope.listar();
 
-        //SE CREA UN VECTOR DE 8 OBJETOS Y EN CADA UNO SE GUARDAN LOS DATOS QUE COMPONEN A CADA PROYECTO
+        //SE CREA UN VECTOR DE 8 OBJETOS Y EN CADA UNO SE GUARDAN LOS DATOS QUE COMPONEN A CADA PERFIL ASIGNADO AL PROYECTO
         Object[] objeto = new Object[5];
-
+        // SE RECORRE LOS PERFILES ASIGNADOS
         for (int i = 0; i < lista.size(); i++) {
-
+            //SE RECORRE LOS PROYECTOS
             for (int j = 0; j < listap.size(); j++) {
-
+                //SE RECORREN LOS PERFILES
                 for (int b = 0; b < listaper.size(); b++) {
-
+                    //SE USA ESTE IF PARA PODER OBTENER LOS NOMBRES DEL PROYECTO Y PERFIL CORRESPONDIENTE
+                    // PORQUE SE BUSCA EL PROYECTO Y EL PERFIL QUE SEAN IGUAL A LOS QUE ESTAN EN ALMACENADOS EN LA TABLA INTERMEDIA
                     if (lista.get(i).getIdProyecto() == listap.get(j).getIdProyecto() && lista.get(i).getIdPerfil() == listaper.get(b).getId()) {
                         objeto[0] = lista.get(i).getId();
                         objeto[1] = lista.get(i).getIdProyecto();
@@ -262,15 +265,15 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
 
     public void llenarPerfiles() throws SQLException {
 
-        //SE CREA UNA INSTANCIA DE LA CLASE TipoProyectoDAO
+        //SE CREA UNA INSTANCIA DE LA CLASE PERFILDAO
         PerfilDAO daoPerfil = new PerfilDAO();
-        //SE GUARDA EN UN VECTOR TODOS LOS TIPOS DE PROYECTO DESDE LA BD
+        //SE GUARDA EN UN VECTOR TODOS LOS PERFILES DESDE LA BD
         ArrayList<Perfil> listaPerfil = daoPerfil.getPerfil();
-        //SE VACIA EL CLOMBO TIPO PROYECTO
+        //SE VACIA EL CLOMBO PERFIL
         vista.comboPerfiles.removeAllItems();
-        //SE RECORRE EL VECTOR DE LOS TIPOS DE PROYECTOS QUE SE TRAJO DESDE LA BD
+        //SE RECORRE EL VECTOR DE LOS PERFILES QUE SE TRAJO DESDE LA BD
         for (int i = 0; i < listaPerfil.size(); i++) {
-            //CADA TIPO DE PROYECTO DE LA LISTA SE AGREGA AL COMBO
+            //CADA PERFIL DE LA LISTA SE AGREGA AL COMBO
 
             vista.comboPerfiles.addItem(new Perfil(listaPerfil.get(i).getId(), listaPerfil.get(i).getNombre()));
 
