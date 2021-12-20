@@ -48,20 +48,16 @@ public class VistaMenu extends javax.swing.JFrame {
     /**
      * Creates new form VistaMenu
      */
-
     public VistaMenu() {
-        initComponents();  
+        initComponents();
     }
-    
-   
-   public VistaMenu prueba(){
+
+    public VistaMenu prueba() {
         VistaMenu vm = new VistaMenu();
         return vm;
-       
-       
-   }
-    
-   
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -274,6 +270,7 @@ public class VistaMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Se inicializan todos los componentes de la pantalla proyecto
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         VistaProyecto vp = new VistaProyecto();
@@ -283,7 +280,7 @@ public class VistaMenu extends javax.swing.JFrame {
             Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+    //Se inicializan todos los componentes de la pantalla persona
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
         VistaPersona vpr = new VistaPersona();
@@ -293,7 +290,7 @@ public class VistaMenu extends javax.swing.JFrame {
             Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
-
+    //Se inicializan todos los componentes de la pantalla personal
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
         VistaPersonal per = new VistaPersonal();
@@ -305,7 +302,7 @@ public class VistaMenu extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_jMenuItem4ActionPerformed
-
+    //Se inicializan todos los componentes de la pantalla clientes
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         VistaClientes vc = new VistaClientes();
@@ -316,7 +313,7 @@ public class VistaMenu extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
+    //Se inicializan todos los componentes de la pantalla perfil
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // TODO add your handling code here:
         VistaPerfil vperf = new VistaPerfil();
@@ -326,24 +323,24 @@ public class VistaMenu extends javax.swing.JFrame {
             Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem6ActionPerformed
-
+    //Se inicializan todos los componentes de la pantalla tipo proyecto
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
         VistaTipoProyecto vtp = new VistaTipoProyecto();
         vtp.inicializar();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
-
+    //Se inicializan todos los componentes de la pantalla que utiliza la api
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
         VistaApi va  = new VistaApi();
         va.inicializar();
 
     }//GEN-LAST:event_jMenuItem7ActionPerformed
-
+    //Se inicializan todos los componentes de la pantalla del listado de proyectos
     private void itemReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemReporteActionPerformed
         // TODO add your handling code here:
-      
-      ControladorReporte cr= new ControladorReporte( );
+
+        ControladorReporte cr = new ControladorReporte();
         try {
             cr.generarReporte();
             /*  try {
@@ -371,11 +368,11 @@ public class VistaMenu extends javax.swing.JFrame {
             Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_itemReporteActionPerformed
-
+    //Se inicializan todos los componentes de la pantalla para generar el grafico de proyectos
     private void itemGraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGraficoActionPerformed
         // TODO add your handling code here:
-        
-        ControladorReporte cr= new ControladorReporte( );
+
+        ControladorReporte cr = new ControladorReporte();
         cr.generarGrafico();
         /*  try {
             Connection con;
@@ -400,8 +397,8 @@ public class VistaMenu extends javax.swing.JFrame {
         } catch (Exception ex) {
             ex.printStackTrace();
         }*/
-        
-       /* ResultSet rs = null;
+
+ /* ResultSet rs = null;
         Connection con;
         Conexion conectar = new Conexion();
         con = conectar.getConnection();
@@ -437,9 +434,7 @@ public class VistaMenu extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
         }*/
-       
-
-      /*  DefaultPieDataset pieDataset = new DefaultPieDataset();
+ /*  DefaultPieDataset pieDataset = new DefaultPieDataset();
         pieDataset.setValue("Nacional " + numNac , new Integer(numNac));
         pieDataset.setValue("Internacional " +  numInt, new Integer(numInt));
         // pieDataset.setValue("Kubuntu", new Integer(10));
@@ -456,7 +451,7 @@ public class VistaMenu extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("Error creando grafico.");
         }*/
-        /* try {
+ /* try {
         String reportPath = "C:\\Users\\Santiago\\JaspersoftWorkspace\\Prueba\\GraficoReporte.jrxml";
            // System.out.println(reportPath);
             Map<String,Object>map= new HashMap<String,Object>();
@@ -476,7 +471,7 @@ public class VistaMenu extends javax.swing.JFrame {
             ex.printStackTrace();
         }*/
     }//GEN-LAST:event_itemGraficoActionPerformed
-
+    //Se inicializan todos los componentes de la pantalla que se encarga de asiganr un perfil a un proyecto
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         // TODO add your handling code here:
         VistaPerfilProyec vpp = new VistaPerfilProyec();
@@ -489,10 +484,10 @@ public class VistaMenu extends javax.swing.JFrame {
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
         // TODO add your handling code here:
-        Perfil_Personal vpp= new Perfil_Personal();
+        Perfil_Personal vpp = new Perfil_Personal();
         //vpp.inicializar(id, vpp);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
-
+    //Se inicializan todos los componentes de la pantalla que se encarga de asiganr un personal a un proyecto
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
         // TODO add your handling code here:
         VistaPersonalProyecto vp = new VistaPersonalProyecto();
