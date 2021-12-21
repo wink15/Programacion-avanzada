@@ -75,6 +75,7 @@ public class VistaPersonal extends javax.swing.JFrame {
                 "ID", "CUIT", "Persona"
             }
         ));
+        tablaPersonal.setEnabled(false);
         jScrollPane1.setViewportView(tablaPersonal);
 
         jPanel2.setToolTipText("Datos");

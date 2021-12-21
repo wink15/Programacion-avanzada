@@ -69,6 +69,7 @@ public class VistaTipoProyecto extends javax.swing.JFrame {
                 "ID", "Nombre", "Descripcion"
             }
         ));
+        jtableTipo.setEnabled(false);
         jScrollPane1.setViewportView(jtableTipo);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("datos"));

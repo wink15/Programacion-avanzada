@@ -58,7 +58,7 @@ public class VistaClientes extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         cboPersona = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnBuscarClientes.setText("Buscar");
         btnBuscarClientes.addActionListener(new java.awt.event.ActionListener() {
@@ -75,6 +75,7 @@ public class VistaClientes extends javax.swing.JFrame {
                 "ID", "Razon Social", "Persona"
             }
         ));
+        tablaClientes.setEnabled(false);
         jScrollPane1.setViewportView(tablaClientes);
 
         jPanel2.setToolTipText("Datos");

@@ -79,9 +79,10 @@ public class VistaPerfil extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nombre", "Descripcion", "Title 4"
+                "ID", "Nombre", "Descripcion"
             }
         ));
+        tablaPerfil.setEnabled(false);
         jScrollPane1.setViewportView(tablaPerfil);
 
         btnBuscar.setText("Buscar");

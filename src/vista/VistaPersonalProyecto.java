@@ -131,6 +131,7 @@ public class VistaPersonalProyecto extends javax.swing.JFrame {
                 "ID", "ID Proyecto", "Nombre Proyecto", "Cuit", "Nombre ", "Apellido"
             }
         ));
+        tablaAPerP.setEnabled(false);
         jScrollPane2.setViewportView(tablaAPerP);
 
         botonAggPerfil.setText("Agregar");
