@@ -52,6 +52,7 @@ public class VistaTipoProyecto extends javax.swing.JFrame {
         btnModificarTipo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestión de Tipos de Proyecto");
         setBackground(new java.awt.Color(0, 153, 255));
 
         btnBuscarTipo.setText("Buscar");
@@ -69,7 +70,6 @@ public class VistaTipoProyecto extends javax.swing.JFrame {
                 "ID", "Nombre", "Descripcion"
             }
         ));
-        jtableTipo.setEnabled(false);
         jScrollPane1.setViewportView(jtableTipo);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("datos"));

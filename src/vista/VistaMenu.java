@@ -142,7 +142,7 @@ public class VistaMenu extends javax.swing.JFrame {
 
         jMenu4.setText("Proyecto");
 
-        jMenuItem1.setText("Gestion proyecto");
+        jMenuItem1.setText("Gestión de Proyectos");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -150,7 +150,7 @@ public class VistaMenu extends javax.swing.JFrame {
         });
         jMenu4.add(jMenuItem1);
 
-        jMenuItem8.setText("Asignar perfil a proyecto");
+        jMenuItem8.setText("Asignar Perfil a Proyecto");
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem8ActionPerformed(evt);
@@ -158,7 +158,7 @@ public class VistaMenu extends javax.swing.JFrame {
         });
         jMenu4.add(jMenuItem8);
 
-        jMenuItem10.setText("Asignar personal a proyecto");
+        jMenuItem10.setText("Asignar Personal a Proyecto");
         jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem10ActionPerformed(evt);
@@ -168,7 +168,7 @@ public class VistaMenu extends javax.swing.JFrame {
 
         jMenu1.add(jMenu4);
 
-        jMenuItem2.setText("Clientes");
+        jMenuItem2.setText("Gestión de Clientes");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -176,7 +176,7 @@ public class VistaMenu extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
 
-        jMenuItem3.setText("Persona");
+        jMenuItem3.setText("Gestión de Personas");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
@@ -184,7 +184,7 @@ public class VistaMenu extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem3);
 
-        jMenuItem4.setText("Personal");
+        jMenuItem4.setText("Gestión de Personales");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem4ActionPerformed(evt);
@@ -192,7 +192,7 @@ public class VistaMenu extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem4);
 
-        jMenuItem5.setText("Tipo proyecto");
+        jMenuItem5.setText("Gestión de Tipos de Proyecto");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem5ActionPerformed(evt);
@@ -200,7 +200,7 @@ public class VistaMenu extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem5);
 
-        jMenuItem6.setText("Perfil");
+        jMenuItem6.setText("Gestión de Perfiles");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem6ActionPerformed(evt);
@@ -220,7 +220,7 @@ public class VistaMenu extends javax.swing.JFrame {
 
         jMenu3.setText("Reportes");
 
-        itemReporte.setText("Generar listado proyectos");
+        itemReporte.setText("Generar Listado de Proyectos");
         itemReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemReporteActionPerformed(evt);
@@ -228,7 +228,7 @@ public class VistaMenu extends javax.swing.JFrame {
         });
         jMenu3.add(itemReporte);
 
-        itemGrafico.setText("Generar grafico proyectos");
+        itemGrafico.setText("Generar Grafico de Proyectos");
         itemGrafico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemGraficoActionPerformed(evt);
@@ -241,6 +241,11 @@ public class VistaMenu extends javax.swing.JFrame {
         jMenu2.setText("Ayuda");
 
         jMenuItem12.setText("Contacto");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem12);
 
         jMenuBar1.add(jMenu2);
@@ -334,25 +339,7 @@ public class VistaMenu extends javax.swing.JFrame {
         ControladorReporte cr = new ControladorReporte();
         try {
             cr.generarReporte();
-            /*  try {
-            Connection con;
-            Conexion conectar = new Conexion();
-            con = conectar.getConnection();
-
-            String reportPath = "C:\\Users\\Santiago\\JaspersoftWorkspace\\Prueba\\Reporte.jrxml";
-            // System.out.println(reportPath);
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("logo", "src\\img\\gizmo.png");
-            map.put("contacto1", "src\\img\\contacto1.png");
-            map.put("contacto2", "src\\img\\contacto2.png");
-            map.put("ubicacion", "src\\img\\ubicacion.png");
-            JasperReport jr = JasperCompileManager.compileReport(reportPath);
-            JasperPrint jp = JasperFillManager.fillReport(jr, map, con);
-            JasperViewer.viewReport(jp);
-            con.close();
-            } catch (Exception ex) {
-            ex.printStackTrace();
-            }*/
+            
         } catch (JRException ex) {
             Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -365,102 +352,7 @@ public class VistaMenu extends javax.swing.JFrame {
 
         ControladorReporte cr = new ControladorReporte();
         cr.generarGrafico();
-        /*  try {
-            Connection con;
-            Conexion conectar = new Conexion();
-            con = conectar.getConnection();
-            
-            String reportPath = "C:\\Users\\Santiago\\JaspersoftWorkspace\\Prueba\\GraficoReporte.jrxml";
-           // System.out.println(reportPath);
-            Map<String,Object>map= new HashMap<String,Object>();
-            map.put("logo", "src\\img\\gizmo.png");
-            map.put("contacto1", "src\\img\\contacto1.png");
-             map.put("contacto2", "src\\img\\contacto2.png");
-              map.put("ubicacion", "src\\img\\ubicacion.png");
-              
-            JasperReport jr = JasperCompileManager.compileReport(reportPath);
-            //StandardChartTheme.createLegacyTheme().apply(jr);
-           // ChartFactory.setChartTheme(StandardChartTheme.createJFreeTheme());
-            JasperPrint jp = JasperFillManager.fillReport(jr, map, con);
-            JasperViewer.viewReport(jp);
-            JasperExportManager.exportReportToPdfFile(jp,"grafico.pdf");
-            con.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }*/
-
- /* ResultSet rs = null;
-        Connection con;
-        Conexion conectar = new Conexion();
-        con = conectar.getConnection();
-        int numNac=0;
-         String consultaNacional = " SELECT COUNT(proyecto.ubicacion) as cantidad fROM prog_av.proyecto WHERE proyecto.ubicacion=1";
-        String consultaInternacional = " SELECT COUNT(proyecto.ubicacion) as cantidad fROM prog_av.proyecto WHERE proyecto.ubicacion=2";
         
-        int numInt = 0;
-        try {
-        
-            PreparedStatement ps = con.prepareStatement(consultaNacional);
-             rs = ps.executeQuery();
-             while (rs.next()) {  
-                
-                 numNac=(rs.getInt("cantidad"));
-                
-                
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
- 
-        try {
-            
-            PreparedStatement  ps = con.prepareStatement(consultaInternacional);
-             rs = ps.executeQuery();
-             while (rs.next()) {  
-                
-                 numInt=(rs.getInt("cantidad"));
-                
-                
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
- /*  DefaultPieDataset pieDataset = new DefaultPieDataset();
-        pieDataset.setValue("Nacional " + numNac , new Integer(numNac));
-        pieDataset.setValue("Internacional " +  numInt, new Integer(numInt));
-        // pieDataset.setValue("Kubuntu", new Integer(10));
-        // pieDataset.setValue("Otros", new Integer(5));
-        JFreeChart chart = ChartFactory.createPieChart(
-                "Proyectos",
-                pieDataset,
-                true,
-                true,
-                false);
-        try {
-            ChartUtilities.saveChartAsJPEG(new File("C:\\Users\\Santiago\\Documents\\reporte\\PieChart.jpg"), chart, 500,
-                    300);
-        } catch (Exception e) {
-            System.out.println("Error creando grafico.");
-        }*/
- /* try {
-        String reportPath = "C:\\Users\\Santiago\\JaspersoftWorkspace\\Prueba\\GraficoReporte.jrxml";
-           // System.out.println(reportPath);
-            Map<String,Object>map= new HashMap<String,Object>();
-            map.put("logo", "src\\img\\gizmo.png");
-            map.put("contacto1", "src\\img\\contacto1.png");
-             map.put("contacto2", "src\\img\\contacto2.png");
-              map.put("ubicacion", "src\\img\\ubicacion.png");
-                map.put("grafico", "C:\\Users\\Santiago\\Documents\\reporte\\PieChart.jpg");
-            JasperReport jr = JasperCompileManager.compileReport(reportPath);
-            //StandardChartTheme.createLegacyTheme().apply(jr);
-           // ChartFactory.setChartTheme(StandardChartTheme.createJFreeTheme());
-            JasperPrint jp = JasperFillManager.fillReport(jr, map, con);
-            JasperViewer.viewReport(jp);
-           
-            con.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }*/
     }//GEN-LAST:event_itemGraficoActionPerformed
     //Se inicializan todos los componentes de la pantalla que se encarga de asiganr un perfil a un proyecto
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
@@ -482,6 +374,12 @@ public class VistaMenu extends javax.swing.JFrame {
             Logger.getLogger(VistaMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        // TODO add your handling code here:
+        VistaContacto vcontacto = new VistaContacto();
+        vcontacto.setVisible(true);
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -86,6 +86,7 @@ public class VistaProyecto extends javax.swing.JFrame {
         cboCliente = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestión de Proyectos");
         setBackground(new java.awt.Color(0, 153, 255));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos"));
@@ -263,7 +264,6 @@ public class VistaProyecto extends javax.swing.JFrame {
                 "ID", "NOMBRE", "FECHA INICIO", "FECHA CONFIRMACION", "FECHA FIN", "TIPO DE PROYECTO", "CLIENTE", "OBSERVACION"
             }
         ));
-        tabla.setEnabled(false);
         jScrollPane1.setViewportView(tabla);
 
         btnBuscar.setText("Buscar");

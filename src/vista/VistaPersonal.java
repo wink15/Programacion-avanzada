@@ -59,6 +59,7 @@ public class VistaPersonal extends javax.swing.JFrame {
         btnAgregarPerfil = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestión de Personales");
 
         btnBuscarPersonal.setText("Buscar");
         btnBuscarPersonal.addActionListener(new java.awt.event.ActionListener() {
@@ -75,7 +76,6 @@ public class VistaPersonal extends javax.swing.JFrame {
                 "ID", "CUIT", "Persona"
             }
         ));
-        tablaPersonal.setEnabled(false);
         jScrollPane1.setViewportView(tablaPersonal);
 
         jPanel2.setToolTipText("Datos");

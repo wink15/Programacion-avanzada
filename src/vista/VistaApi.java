@@ -62,6 +62,7 @@ public class VistaApi extends javax.swing.JFrame {
         labelUnica = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("API");
 
         labelApi.setText("Rango ");
 
@@ -93,7 +94,6 @@ public class VistaApi extends javax.swing.JFrame {
             }
         ));
         tablaApi.setToolTipText("");
-        tablaApi.setEnabled(false);
         jScrollPane1.setViewportView(tablaApi);
 
         ComboxApi.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Busqueda unica", "Busqueda por rango" }));

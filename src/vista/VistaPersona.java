@@ -97,6 +97,7 @@ public class VistaPersona extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestión de Personas");
 
         jLabel1.setText("ID");
 
@@ -201,7 +202,6 @@ public class VistaPersona extends javax.swing.JFrame {
                 "ID", "Nombre", "Apellido", "Fecha Nacimiento", "Telefono"
             }
         ));
-        tablaPersona.setEnabled(false);
         jScrollPane3.setViewportView(tablaPersona);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);

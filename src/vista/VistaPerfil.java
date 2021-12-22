@@ -57,6 +57,7 @@ public class VistaPerfil extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestión de Perfiles");
 
         jLabel1.setText("ID");
 
@@ -82,7 +83,6 @@ public class VistaPerfil extends javax.swing.JFrame {
                 "ID", "Nombre", "Descripcion"
             }
         ));
-        tablaPerfil.setEnabled(false);
         jScrollPane1.setViewportView(tablaPerfil);
 
         btnBuscar.setText("Buscar");

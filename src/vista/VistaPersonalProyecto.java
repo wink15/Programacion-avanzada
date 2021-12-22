@@ -69,6 +69,7 @@ public class VistaPersonalProyecto extends javax.swing.JFrame {
         comboOpcion = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Asignar Personal a Proyecto");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -131,7 +132,6 @@ public class VistaPersonalProyecto extends javax.swing.JFrame {
                 "ID", "ID Proyecto", "Nombre Proyecto", "Cuit", "Nombre ", "Apellido"
             }
         ));
-        tablaAPerP.setEnabled(false);
         jScrollPane2.setViewportView(tablaAPerP);
 
         botonAggPerfil.setText("Agregar");
@@ -144,7 +144,7 @@ public class VistaPersonalProyecto extends javax.swing.JFrame {
 
         btnBuscarAPP.setText("Buscar");
 
-        comboOpcion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Sugeridos", " " }));
+        comboOpcion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Sugeridos" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

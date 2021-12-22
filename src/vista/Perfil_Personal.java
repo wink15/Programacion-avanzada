@@ -5,7 +5,7 @@
  */
 package vista;
 
-import controlador.ControlardorPerfil_Personal;
+import controlador.ControladorPerfil_Personal;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +27,7 @@ public class Perfil_Personal extends javax.swing.JFrame {
 
     public void inicializar (String id,vista.Perfil_Personal pp) throws SQLException {
         //SE CREA UNA INSTANCIA DEL CONTROLADOR
-        ControlardorPerfil_Personal con=new ControlardorPerfil_Personal(pp);
+        ControladorPerfil_Personal con=new ControladorPerfil_Personal(pp);
         //SE HACE VISIBLE LA VISTA
         this.setVisible(true);
         //SE DEFINE LA UBICACION DE LA VISTA
@@ -78,6 +78,7 @@ public class Perfil_Personal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Asignar Perfil a Personal");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos"));
 

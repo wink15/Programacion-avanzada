@@ -64,7 +64,7 @@ public class VistaPerfilProyec extends javax.swing.JFrame {
         btnBuscarAPP = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(" Asignar perfil a proyecto");
+        setTitle(" Asignar Perfil a Proyecto");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -127,7 +127,6 @@ public class VistaPerfilProyec extends javax.swing.JFrame {
                 "ID", "ID Proyecto", "Nombre Proyecto", "ID Perfil", "Nombre Perfil"
             }
         ));
-        tablaAPP.setEnabled(false);
         jScrollPane2.setViewportView(tablaAPP);
 
         botonAggPerfil.setText("Agregar");
