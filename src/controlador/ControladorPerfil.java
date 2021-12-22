@@ -50,6 +50,10 @@ public class ControladorPerfil implements ActionListener {
         this.vista3.btnBuscar.addActionListener(this);
         this.vista3.btnEliminar.addActionListener(this);
         this.vista3.btnModificar.addActionListener(this);
+        this.vista3.btnEliminar.setEnabled(false);
+        this.vista3.btnModificar.setEnabled(false);
+        this.vista3.btnActualizar.setEnabled(false);
+
     }
 
     //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -60,6 +64,9 @@ public class ControladorPerfil implements ActionListener {
             limpiarTabla();
             //SE BUSCAN TODOS LOSPERFILES DE LA BD
             buscarPerfil(vista3.tablaPerfil);
+            this.vista3.btnEliminar.setEnabled(true);
+            this.vista3.btnModificar.setEnabled(true);
+
         }
 
         if (e.getSource() == vista3.btnEliminar) {
@@ -205,6 +212,10 @@ public class ControladorPerfil implements ActionListener {
         //VALIDACION DE CAMPOS VACIOS NECESARIOS PARA ACTUALIZAR EL REGISTRO EN LA BD.  
         if (vista3.txtID.getText().equals("")) {
             JOptionPane.showMessageDialog(vista3, "Primero debe modificar un id");
+        } else if (vista3.txtNombre.getText().equals("")) {
+            JOptionPane.showMessageDialog(vista3, "El nombre no puede ir vacio");
+        } else if (this.esNumerico(vista3.txtNombre.getText()) == true) {
+            JOptionPane.showMessageDialog(vista3, "El nombre no puede contener numeros");
         } else {
             //EN CASO DE QUE TODOS LOS CAMPOS ESTAN COMPLETOS, SE LE CONSULTA AL CLIENTE SI ESTA SEGURO DE MODIFICAR EL PERFILE
             int variable = JOptionPane.showOptionDialog(null, "¿Deseas modificar un perfil?", "Perfil", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
@@ -241,6 +252,15 @@ public class ControladorPerfil implements ActionListener {
             modelo.removeRow(i);
             i = i - 1;
         }
+    }
+
+    public boolean esNumerico(String num) {
+        if (num.matches("[+-]?\\d*(\\.\\d+)?")) {
+            return true;
+        }
+
+        return false;
+
     }
 
     public void nuevoPerfil() {

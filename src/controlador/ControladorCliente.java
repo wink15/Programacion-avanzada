@@ -47,6 +47,8 @@ public class ControladorCliente implements ActionListener {
         this.vista3.btnBuscarClientes.addActionListener(this);
         this.vista3.btnEliminarClientes.addActionListener(this);
         this.vista3.btnModificarClientes.addActionListener(this);
+        this.vista3.btnEliminarClientes.setEnabled(false);
+        this.vista3.btnModificarClientes.setEnabled(false);
     }
 
     //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -57,6 +59,8 @@ public class ControladorCliente implements ActionListener {
             limpiarTablaCliente();
             //SE BUSCAN TODOS LOS CLIENTES DE LA BD
             buscarCliente(vista3.tablaClientes);
+            this.vista3.btnEliminarClientes.setEnabled(true);
+        this.vista3.btnModificarClientes.setEnabled(true);
         }
 
         if (e.getSource() == vista3.btnEliminarClientes) {

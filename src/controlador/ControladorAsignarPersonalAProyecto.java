@@ -54,6 +54,7 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
         this.vista = v;
         this.vista.btnBuscar.addActionListener(this);
         this.vista.btnAgg.addActionListener(this);
+        this.vista.btnAgg.setEnabled(false);
         this.vista.botonAggPerfil.addActionListener(this);
         this.vista.btnEliminar.addActionListener(this);
         this.vista.btnAceptar.addActionListener(this);
@@ -66,11 +67,12 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == vista.btnBuscar) {
-
+            limpiarTabla();
             //SE BUSCAN LOS PROYECTO
             buscar(vista.tablaProyecto);
             vista.btnBuscarAPP.setEnabled(false);
             vista.btnAceptar.setEnabled(true);
+            this.vista.btnAgg.setEnabled(true);
 
         }
         if (e.getSource() == vista.btnAgg) {
@@ -130,7 +132,7 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
             vista.btnEliminar.setEnabled(false);
             vista.btnAceptar.setEnabled(false);
             vista.btnBuscarAPP.setEnabled(true);
-            vista.btnAgg.setEnabled(true);
+            vista.btnAgg.setEnabled(false);
             vista.btnBuscar.setEnabled(true);
             vista.comboOpcion.setEnabled(false);
 

@@ -13,6 +13,12 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -56,6 +62,8 @@ public class Controlador implements ActionListener {
         this.vista.btnModificar.addActionListener(this);
         this.vista.btnEliminar.addActionListener(this);
         this.vista.btnActualizar.addActionListener(this);
+        this.vista.btnEliminar.setEnabled(false);
+        this.vista.btnModificar.setEnabled(false);
     }
 
     //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -68,6 +76,8 @@ public class Controlador implements ActionListener {
             buscar(vista.tabla);
             //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
             nuevo();
+            this.vista.btnEliminar.setEnabled(true);
+            this.vista.btnModificar.setEnabled(true);
         }
         if (e.getSource() == vista.btnEliminar) {
             //SE ELIMINA UN PROYECTO TANTO DE LA TABLA COMO DE LA BD
@@ -77,38 +87,39 @@ public class Controlador implements ActionListener {
             //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
             nuevo();
         }
-        if (e.getSource() == vista.btnAgregar) {
-            //SE VALIDA QUE ESTEN TODOS LOS CAMPOS COMPLETADOS
-            if (vista.txtNombre.getText().equals("") || vista.txtFechaInicio.getDate() == null || vista.txtFechaConfirmacion.getDate() == null || vista.txtFechaFin.getDate() == null || vista.txtObservacion.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
-            } else {
-                //SE VALIDAN LAS FECHA DEL PROYECTO
-                Date fechaactual = new Date(System.currentTimeMillis());
-                if (vista.txtFechaConfirmacion.getDate().getTime() >= fechaactual.getTime()) {
-                    if (vista.txtFechaInicio.getDate().getTime() >= vista.txtFechaConfirmacion.getDate().getTime()) {
-                        if (vista.txtFechaFin.getDate().getTime() >= vista.txtFechaInicio.getDate().getTime()) {
-                            int variable = JOptionPane.showOptionDialog(null, "¿Deseas agregar un proyecto?", "Agregacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
-                            //EN CASO DE QUE EL USUARIO DESEA REALMENTE AGREGAR UN PROYECTO
-                            if (variable == 0) {
-                                //SE AGREGA EL PROYECTO
-                                agregar();
-                                //SE BUSCAN LOS NUEVOS PROYECTOS DE LA BD
-                                buscar(vista.tabla);
-                                //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
-                                nuevo();
-                            } else {
-                                //DE LO CONTRARIO SE PREPARA TAMBIEN LA VISTA PARA UN NUEVO PROYECTO
-                                nuevo();
-                            }
+        if (vista.txtNombre.getText().equals("") || vista.txtFechaInicio.getDate() == null || vista.txtFechaConfirmacion.getDate() == null || vista.txtFechaFin.getDate() == null || vista.txtObservacion.getText().equals("")|| vista.txtMonto.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
+        }else if(this.esNumerico(vista.txtMonto.getText()) == false ){
+            JOptionPane.showMessageDialog(null, "El monto no debe contener letras");
+        } else {
+            //SE VALIDAN LAS FECHA DEL PROYECTO
+            LocalDate fechaActualLD = LocalDate.now();
+            java.util.Date fechaActual = Date.valueOf(fechaActualLD);
+            
+            if (vista.txtFechaConfirmacion.getDate().equals(fechaActual) || vista.txtFechaConfirmacion.getDate().after(fechaActual)) {
+                if (vista.txtFechaInicio.getDate().after(vista.txtFechaConfirmacion.getDate())) {
+                    if (vista.txtFechaFin.getDate().after(vista.txtFechaInicio.getDate())) {
+                        int variable = JOptionPane.showOptionDialog(null, "¿Deseas agregar un proyecto?", "Agregacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
+                        //EN CASO DE QUE EL USUARIO DESEA REALMENTE AGREGAR UN PROYECTO
+                        if (variable == 0) {
+                            //SE AGREGA EL PROYECTO
+                            agregar();
+                            //SE BUSCAN LOS NUEVOS PROYECTOS DE LA BD
+                            buscar(vista.tabla);
+                            //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
+                            nuevo();
                         } else {
-                            JOptionPane.showMessageDialog(null, "La fecha de fin debe ser mayor a la fecha de inicio.");
+                            //DE LO CONTRARIO SE PREPARA TAMBIEN LA VISTA PARA UN NUEVO PROYECTO
+                            nuevo();
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "La fecha de inicio debe ser mayor a la fecha de confirmacion.");
+                        JOptionPane.showMessageDialog(null, "La fecha de fin debe ser mayor a la fecha de inicio.");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "La fecha de confirmacion debe ser mayor o igual a la actual .");
+                    JOptionPane.showMessageDialog(null, "La fecha de inicio debe ser mayor a la fecha de confirmacion.");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "La fecha de confirmacion debe ser mayor o igual a la actual .");
             }
         }
         if (e.getSource() == vista.btnModificar) {
@@ -137,8 +148,8 @@ public class Controlador implements ActionListener {
                 //SE PASAN LOS DATOS DE LAS VARIABLES A LOS CAMPOS
                 vista.txtId.setText("" + id);
                 vista.txtNombre.setText(nombre);
-                vista.txtFechaInicio.setDate(fechaInicio);
-                vista.txtFechaConfirmacion.setDate(fechaConfirmacion);
+                vista.txtFechaConfirmacion.setDate(fechaInicio);
+                vista.txtFechaInicio.setDate(fechaConfirmacion);
                 vista.txtFechaFin.setDate(fechaFin);
                 vista.cboCliente.setSelectedItem(cliente);
                 vista.cboTipoProyecto.setSelectedItem(tipoProyecto);
@@ -176,10 +187,10 @@ public class Controlador implements ActionListener {
                 String idAux = vista.txtId.getText();
                 int id = Integer.valueOf(idAux);
                 String nombre = vista.txtNombre.getText();
-                java.util.Date date = vista.txtFechaInicio.getDate();
+                java.util.Date date = vista.txtFechaConfirmacion.getDate();
                 long aux1 = date.getTime();
                 java.sql.Date fechaInicio = new java.sql.Date(aux1);
-                java.util.Date date2 = vista.txtFechaConfirmacion.getDate();
+                java.util.Date date2 = vista.txtFechaInicio.getDate();
                 long aux2 = date2.getTime();
                 java.sql.Date fechaConfirmacion = new java.sql.Date(aux2);
                 java.util.Date date3 = vista.txtFechaFin.getDate();
@@ -231,11 +242,11 @@ public class Controlador implements ActionListener {
             //SE PASAN LOS DATOS DESDE LOS CAMPOS DE LA PANTALLA A VARIABLES
             String nombre = vista.txtNombre.getText();
 
-            java.util.Date date = vista.txtFechaInicio.getDate();
+            java.util.Date date = vista.txtFechaConfirmacion.getDate();
             long aux1 = date.getTime();
             java.sql.Date fechaInicio = new java.sql.Date(aux1);
 
-            java.util.Date date2 = vista.txtFechaConfirmacion.getDate();
+            java.util.Date date2 = vista.txtFechaInicio.getDate();
             long aux2 = date2.getTime();
             java.sql.Date fechaConfirmacion = new java.sql.Date(aux2);
 
@@ -305,8 +316,9 @@ public class Controlador implements ActionListener {
         //SE VACIAN TODOS LOS CAMPOS QUE PERMITEN AGREGAR UN NUEVO PROYECTO
         vista.txtId.setText("");
         vista.txtNombre.setText("");
-        vista.txtFechaInicio.setDate(null);
+        vista.txtMonto.setText("");
         vista.txtFechaConfirmacion.setDate(null);
+        vista.txtFechaInicio.setDate(null);
         vista.txtFechaFin.setDate(null);
         vista.txtObservacion.setText("");
         vista.txtNombre.requestFocus();
@@ -364,6 +376,15 @@ public class Controlador implements ActionListener {
             modelo.removeRow(i);
             i = i - 1;
         }
+    }
+
+    public boolean esNumerico(String num) {
+        if (num.matches("[+-]?\\d*(\\.\\d+)?")) {
+            return true;
+        }
+
+        return false;
+
     }
 
     //METODO PARA LLENAR EL COMBO CLIENTE

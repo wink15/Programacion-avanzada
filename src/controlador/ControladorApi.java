@@ -51,7 +51,7 @@ public class ControladorApi implements ActionListener {
         this.vista = v;
         this.vista.ComboxApi.addActionListener(this);
         this.vista.btnBuscar.addActionListener(this);
-
+        vista.btnBuscar.setVisible(false);
     }
 
     //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -91,6 +91,7 @@ public class ControladorApi implements ActionListener {
             vista.labelApi.setVisible(true);
             vista.labelUnica.setVisible(false);
             vista.unica.setVisible(false);
+            vista.btnBuscar.setVisible(true);
 
             // JLabel.setText("Estoy modificando el texto");
             //SI NO  ES LA OPCION POR RANGO ENTRA EN ESTE IF Y SETEA LO REQUERIDO PARA LA BUSQUEDA 
@@ -102,6 +103,16 @@ public class ControladorApi implements ActionListener {
             vista.desdeApi.setVisible(false);
             vista.hastaApi.setVisible(false);
             vista.labelApi.setVisible(false);
+            vista.btnBuscar.setVisible(true);
+        } else {
+            this.bandera = 0;
+            vista.btnBuscar.setVisible(false);
+            vista.labelUnica.setVisible(false);
+            vista.unica.setVisible(false);
+            vista.desdeApi.setVisible(false);
+            vista.hastaApi.setVisible(false);
+            vista.labelApi.setVisible(false);
+
         }
     }
 
@@ -111,7 +122,9 @@ public class ControladorApi implements ActionListener {
 
         if (this.bandera == 1) {
             //SI LO QUE SE OBTUVO DE LO INGRESADO POR EL USUARIO ES UN NUMERO ENTONCES ENTRA AL IF
-            if (this.esNumerico(vista.desdeApi.getText()) == true && this.esNumerico(vista.hastaApi.getText()) == true) {
+            if (vista.desdeApi.getText().isEmpty() || vista.hastaApi.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un numero", "Error", JOptionPane.WARNING_MESSAGE);
+            } else if (this.esNumerico(vista.desdeApi.getText()) == true && this.esNumerico(vista.hastaApi.getText()) == true) {
                 //SE GUARDAN LOS PARAMETROS INGRESADOS
                 int desde = Integer.parseInt(vista.desdeApi.getText());
                 int hasta = Integer.parseInt(vista.hastaApi.getText());
@@ -133,7 +146,9 @@ public class ControladorApi implements ActionListener {
                 JOptionPane.showMessageDialog(null, "El numero ingresado no es un numero", "Error", JOptionPane.WARNING_MESSAGE);
             }
         } else if (this.bandera == 2) {
-            if (this.esNumerico(vista.unica.getText()) == true) {
+            if (vista.unica.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un numero", "Error", JOptionPane.WARNING_MESSAGE);
+            } else if (this.esNumerico(vista.unica.getText()) == true) {
                 int id = Integer.parseInt(vista.unica.getText());
                 if (this.estaEnRango(id) == true) {
                     // EN CASO DE CUMPLIRSE LAS CONDICIONES SE LLAMA AL GETAPI Y EN ESTE CASO SE LE PASA LA OPCION 1 Y EL RANGO HASAT 0 PORQUE ES BUSQUEDA UNICA
@@ -145,6 +160,8 @@ public class ControladorApi implements ActionListener {
                 JOptionPane.showMessageDialog(null, "El numero ingresado no es un numero", "Error", JOptionPane.WARNING_MESSAGE);
             }
 
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar para la busqueda entre un rango y un unico resultado.. ", "Error", JOptionPane.WARNING_MESSAGE);
         }
 
         // centrarCeldas(tabla);

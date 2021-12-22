@@ -48,6 +48,8 @@ public class ControladorPersonal implements ActionListener {
         this.vista3.btnEliminarPersonal.addActionListener(this);
         this.vista3.btnModificarPersonal.addActionListener(this);
         this.vista3.btnAgregarPerfil.addActionListener(this);
+        this.vista3.btnEliminarPersonal.setEnabled(false);
+        this.vista3.btnModificarPersonal.setEnabled(false);
     }
 
     //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -58,6 +60,8 @@ public class ControladorPersonal implements ActionListener {
             limpiarTablaPersonal();
             //SE BUSCAN TODOS LOS PERSONALES DE LA BD
             buscarPersonal(vista3.tablaPersonal);
+            this.vista3.btnEliminarPersonal.setEnabled(true);
+            this.vista3.btnModificarPersonal.setEnabled(true);
         }
 
         if (e.getSource() == vista3.btnEliminarPersonal) {
@@ -135,6 +139,15 @@ public class ControladorPersonal implements ActionListener {
             } catch (SQLException ex) {
                 Logger.getLogger(ControladorPersonal.class.getName()).log(Level.SEVERE, null, ex);
             }
+            //SE PREPARA LA VISTA PARA UN NUEVO PERSONAL
+            vista3.txtIdPersona.setText("");
+            vista3.txtCUIT.setText("");
+            //SE HABILITAN LOS BOTONES
+            vista3.btnAgregarPersonal.setEnabled(true);
+            vista3.btnEliminarPersonal.setEnabled(true);
+            vista3.btnActualizarPersonal.setEnabled(false);
+            vista3.btnModificarPersonal.setEnabled(true);
+            vista3.btnAgregarPerfil.setEnabled(false);
         }
     }
 

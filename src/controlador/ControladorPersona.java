@@ -60,6 +60,10 @@ public class ControladorPersona implements ActionListener {
         this.vista.btnBuscar.addActionListener(this);
         this.vista.btnEliminar.addActionListener(this);
         this.vista.btnModificar.addActionListener(this);
+        this.vista.btnActualizar.setVisible(false);
+        this.vista.btnEliminar.setEnabled(false);
+        this.vista.btnModificar.setEnabled(false);
+        
     }
 
     //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -71,6 +75,8 @@ public class ControladorPersona implements ActionListener {
             limpiarTablaPersona();
             //SE BUSCAN TODOS LAS PERSONAS DE LA BD
             buscarPersona(vista.tablaPersona);
+            this.vista.btnEliminar.setEnabled(true);
+            this.vista.btnModificar.setEnabled(true);
         }
 
         if (e.getSource() == vista.btnEliminar) {
@@ -82,25 +88,25 @@ public class ControladorPersona implements ActionListener {
 
         if (e.getSource() == vista.btnAgregar) {
             //SE VALIDA QUE LOS CAMPOS NO ESTEN VACIOS
-            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            LocalDate ahora = LocalDate.now();
-
-            java.util.Date date = vista.fechaNacimiento.getDate();
-            LocalDate fechaNac = Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-            //  System.out.println(fechaNac);
-            Period edad = Period.between(fechaNac, ahora);
-
-            if (vista.txtNombre.getText().equals("") || vista.txtApellido.getText().equals("") || vista.fechaNacimiento.getDate() == null || vista.txtTelefono.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
-            }
-
+           
             boolean isNumeric = vista.txtTelefono.getText().matches("[+-]?\\d*(\\.\\d+)?");
-            if (vista.txtTelefono.getText().length() < 10 || vista.txtTelefono.getText().length() > 10 || isNumeric == false) {
-                JOptionPane.showMessageDialog(null, "Numero de telefono invalido");
+            Period edad = Period.ofYears(0);
+            if(vista.fechaNacimiento.getDate() != null){
+                DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+                LocalDate ahora = LocalDate.now();
+                java.util.Date date = vista.fechaNacimiento.getDate();
+                LocalDate fechaNac = Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+                edad = Period.between(fechaNac, ahora);
             }
-            if (edad.getYears() < 18) {
+            if (vista.txtNombre.getText().equals("") || vista.txtApellido.getText().equals("") || vista.txtTelefono.getText().equals("") || vista.fechaNacimiento.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
+            }else if(this.esSoloLetras(vista.txtApellido.getText()) == false || this.esSoloLetras(vista.txtNombre.getText()) == false || this.esSoloLetras(vista.txtTelefono.getText()) == true){
+                JOptionPane.showMessageDialog(null, "Verifique los tipo de datos ingresados en los campos");
+            }else if (vista.txtTelefono.getText().length() < 10 || vista.txtTelefono.getText().length() > 10 || isNumeric == false) {
+                JOptionPane.showMessageDialog(null, "Numero de telefono invalido");
+            }else if (edad.getYears() < 18) {
                 JOptionPane.showMessageDialog(null, "La persona que desea registar es menor de 18");
-            } else {
+            }else {
                 //SE CONSULTA AL USUARIO SI REALMENTE QUIERE AGREGAR UNA PERSONA
                 int variable = JOptionPane.showOptionDialog(null, "¿Deseas agregar una persona?", "Agregacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
 
@@ -129,6 +135,7 @@ public class ControladorPersona implements ActionListener {
                 vista.btnEliminar.setEnabled(false);
                 vista.btnActualizar.setEnabled(true);
                 vista.btnModificar.setEnabled(false);
+                this.vista.btnActualizar.setVisible(true);
 
                 //EN CASO DE QUE SI, SE PASAN LOS DATOS DE LA TABLA A VARIABLES
                 int id = Integer.parseInt((String) vista.tablaPersona.getValueAt(filaPersona, 0).toString());
@@ -189,33 +196,37 @@ public class ControladorPersona implements ActionListener {
     }
 
     public void agregarCliente() {
-        try {
-            //SE PASAN LOS VALORES DE LOS CAMPOS DE LA VISTA ERSONA A VARIABLES
+        if (vista.txtNombre.getText().equals("") || vista.txtApellido.getText().equals("") || vista.fechaNacimiento.getDate() == null || vista.txtTelefono.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
+        } else {
+            try {
+                //SE PASAN LOS VALORES DE LOS CAMPOS DE LA VISTA ERSONA A VARIABLES
 
-            String nombre = vista.txtNombre.getText();
-            String apellido = vista.txtApellido.getText();
+                String nombre = vista.txtNombre.getText();
+                String apellido = vista.txtApellido.getText();
 
-            java.util.Date date = vista.fechaNacimiento.getDate();
-            long aux1 = date.getTime();
-            java.sql.Date fechaNacimiento = new java.sql.Date(aux1);
-            String telefono = vista.txtTelefono.getText();
-            //SE SETEAN ESOS DATOS EN LA INSTANCIA DE PERSONA CREADA
+                java.util.Date date = vista.fechaNacimiento.getDate();
+                long aux1 = date.getTime();
+                java.sql.Date fechaNacimiento = new java.sql.Date(aux1);
+                String telefono = vista.txtTelefono.getText();
+                //SE SETEAN ESOS DATOS EN LA INSTANCIA DE PERSONA CREADA
 
-            per.setNombre(nombre);
-            per.setApellido(apellido);
-            per.setFechaNacimiento(fechaNacimiento);
-            per.setTelefono(telefono);
-            //SE TRAE EL RESULTADO DE LA AGREGACION A LA BD
-            int r = daoPersona.agregar(per);
+                per.setNombre(nombre);
+                per.setApellido(apellido);
+                per.setFechaNacimiento(fechaNacimiento);
+                per.setTelefono(telefono);
+                //SE TRAE EL RESULTADO DE LA AGREGACION A LA BD
+                int r = daoPersona.agregar(per);
 
-            if (r == 1) {
-                JOptionPane.showMessageDialog(vista, "Persona agregada con exito");
-            } else {
-                JOptionPane.showMessageDialog(vista, "Error al agregar una persona");
+                if (r == 1) {
+                    JOptionPane.showMessageDialog(vista, "Persona agregada con exito");
+                } else {
+                    JOptionPane.showMessageDialog(vista, "Error al agregar una persona");
+                }
+                //POR ULTIMO SE LIMPIA LA TABLA DE LA PERSONA
+                limpiarTablaPersona();
+            } catch (HeadlessException e) {
             }
-            //POR ULTIMO SE LIMPIA LA TABLA DE LA PERSONA
-            limpiarTablaPersona();
-        } catch (HeadlessException e) {
         }
     }
 
@@ -253,6 +264,10 @@ public class ControladorPersona implements ActionListener {
         }
         if (edad.getYears() < 18) {
             JOptionPane.showMessageDialog(null, "La persona que desea registar es menor de 18");
+        } else if (vista.txtNombre.getText() == "" || vista.txtApellido.getText() == "" || vista.txtTelefono.getText() == "") {
+            JOptionPane.showMessageDialog(null, "Debe rellenar los campos vacios");
+        } else if (this.esSoloLetras(vista.txtNombre.getText()) == false || this.esSoloLetras(vista.txtApellido.getText()) == false || this.esSoloLetras(vista.txtTelefono.getText()) == true) {
+            JOptionPane.showMessageDialog(null, "Debe verificar el tipo de dato de los campos que ha llenado");
         } else {
             //EN CASO DE QUE TODOS LOS CAMPOS ESTAN COMPLETOS, SE LE CONSULTA AL CLIENTE SI ESTA SEGURO DE MODIFICAR LA PERSONA
             int variable = JOptionPane.showOptionDialog(null, "¿Deseas modificar una persona?", "Persona", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
@@ -295,6 +310,25 @@ public class ControladorPersona implements ActionListener {
             modelo.removeRow(i);
             i = i - 1;
         }
+    }
+
+    public boolean esSoloLetras(String cadena) {
+        //Recorremos cada caracter de la cadena y comprobamos si son letras.
+        //Para comprobarlo, lo pasamos a mayuscula y consultamos su numero ASCII.
+        //Si está fuera del rango 65 - 90, es que NO son letras.
+        //Para ser más exactos al tratarse del idioma español, tambien comprobamos
+        //el valor 165 equivalente a la Ñ
+
+        for (int i = 0; i < cadena.length(); i++) {
+            char caracter = cadena.toUpperCase().charAt(i);
+            int valorASCII = (int) caracter;
+            if (valorASCII != 165 && (valorASCII < 65 || valorASCII > 90)) {
+                return false; //Se ha encontrado un caracter que no es letra
+            }
+        }
+
+        //Terminado el bucle sin que se hay retornado false, es que todos los caracteres son letras
+        return true;
     }
 
     public void nuevoPersona() {

@@ -43,6 +43,8 @@ public class ControladorTipoProyecto implements ActionListener {
         this.vista2.btnModificarTipo.addActionListener(this);
         this.vista2.btnEliminarTipo.addActionListener(this);
         this.vista2.btnActualizarTipo.addActionListener(this);
+        this.vista2.btnEliminarTipo.setEnabled(false);
+        this.vista2.btnModificarTipo.setEnabled(false);
     }
 
     //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -53,6 +55,8 @@ public class ControladorTipoProyecto implements ActionListener {
             limpiarTablaTipo();
             //SE BUSCAN TODOS LOS TIPOS DE PROYECTO DE LA BD
             buscarTipo(vista2.jtableTipo);
+            this.vista2.btnEliminarTipo.setEnabled(true);
+        this.vista2.btnModificarTipo.setEnabled(true);
         }
 
         if (e.getSource() == vista2.btnEliminarTipo) {
@@ -66,6 +70,8 @@ public class ControladorTipoProyecto implements ActionListener {
             //SE VALIDA QUE LOS CAMPOS NO ESTEN VACIOS
             if (vista2.txtNombreTipo.getText().equals("") || vista2.txtDescripcionTipo.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
+            }else if(this.esNumerico(vista2.txtNombreTipo.getText()) == true){
+                JOptionPane.showMessageDialog(null, "El nombre no puede incluir numeros");
             } else {
                 //SE CONSULTA AL USUARIO SI REALMENTE QUIERE AGREGAR UN TIPO DE PROYECTO
                 int variable = JOptionPane.showOptionDialog(null, "¿Deseas agregar un tipo de proyecto?", "Agregacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
@@ -236,6 +242,15 @@ public class ControladorTipoProyecto implements ActionListener {
         //POR ULTIMO SE VACIA LA TABLA DE TIPO DE PROYECTO
         limpiarTablaTipo();
     }
+    public boolean esNumerico(String num) {
+        if (num.matches("[+-]?\\d*(\\.\\d+)?")) {
+            return true;
+        }
+
+        return false;
+
+    }
+    
 
     //METODO PARA LIMPIAR LA TABLA TIPO DE PROYECTO
     void limpiarTablaTipo() {

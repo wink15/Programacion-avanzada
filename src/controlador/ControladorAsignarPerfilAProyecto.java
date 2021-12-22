@@ -50,10 +50,12 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
         this.vista = v;
         this.vista.btnBuscar.addActionListener(this);
         this.vista.btnAgg.addActionListener(this);
+        this.vista.btnAgg.setEnabled(false);
         this.vista.botonAggPerfil.addActionListener(this);
         this.vista.btnEliminar.addActionListener(this);
         this.vista.btnAceptar.addActionListener(this);
         this.vista.btnBuscarAPP.addActionListener(this);
+        
 
     }
 //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -61,10 +63,13 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == vista.btnBuscar) {
-
+            
+            limpiarTabla();
             //SE BUSCAN LOS PROYECTO
             buscar(vista.tablaProyecto);
             vista.btnBuscarAPP.setEnabled(false);
+            this.vista.btnAgg.setEnabled(true);
+            vista.btnAceptar.setEnabled(true);
 
         }
         if (e.getSource() == vista.btnAgg) {
@@ -115,7 +120,7 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
             vista.btnEliminar.setEnabled(false);
             vista.btnAceptar.setEnabled(false);
             vista.btnBuscarAPP.setEnabled(true);
-            vista.btnAgg.setEnabled(true);
+            vista.btnAgg.setEnabled(false);
             vista.btnBuscar.setEnabled(true);
 
         }
@@ -124,7 +129,7 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
 
         }
         if (e.getSource() == vista.btnBuscarAPP) {
-
+            limpiarTablaAPP();
             buscarAPP(vista.tablaAPP);
             vista.btnEliminar.setEnabled(true);
             vista.btnAceptar.setEnabled(true);
@@ -150,7 +155,7 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
                 ppDao.eliminar(id);
                 modelo2.removeRow(fila);
                 //SE LE AVISA AL USUARIO QUE EL REGISTRO FUE ELIMINADO
-                JOptionPane.showMessageDialog(vista, "Perfil asignado  eliminado");
+                JOptionPane.showMessageDialog(vista, "Perfil asignado eliminado");
             }
         }
     }
@@ -163,7 +168,7 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
         int r = ppDao.agregar(pp);
 
         if (r == 1) {
-            JOptionPane.showMessageDialog(vista, "Proyecto agregado con Exito.");
+            JOptionPane.showMessageDialog(vista, "Perfil agregado con Exito.");
         } else {
             JOptionPane.showMessageDialog(vista, "Error");
 
