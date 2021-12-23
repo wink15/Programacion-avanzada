@@ -6,8 +6,11 @@
 package modelo;
 
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ProyectoDAO {
@@ -26,6 +29,101 @@ public class ProyectoDAO {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
             ps = con.prepareStatement("select * from prog_av.proyecto");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                //CADA REGISTRO QUE SE TRAE DE LA CONSULTA SE SETEA EN LA INSTANCIA CREADA
+                Proyecto p = new Proyecto();
+                p.setIdProyecto(rs.getInt(1));
+                p.setNombre(rs.getString(2));
+                p.setFechaInicio(rs.getDate(3));
+                p.setFechaConfirmacion(rs.getDate(4));
+                p.setFechaFin(rs.getDate(5));
+                p.setTipoProyecto(rs.getInt(6));
+                p.setCliente(rs.getInt(7));
+                p.setObservacion(rs.getString(8));
+                p.setMonto(rs.getDouble(9));
+
+                p.setUbicacion(rs.getInt(10));
+
+                //SE GUARDAN LOS DATOS DEL PROYECTO EN EL ARRAY CREADO
+                datos.add(p);
+            }
+        } catch (Exception e) {
+        }
+        //FINALMENTE SE DEVUELVE EL ARRAY DE PROYECTOS
+        return datos;
+    }
+
+    public ArrayList<Proyecto> filtroBusqueda(String parametro, int opc) {
+        //SE CREA UN ARRAY DE PROYECTO
+        ArrayList<Proyecto> datos = new ArrayList<>();
+        try {
+            con = conectar.getConnection();
+            //SE EJECUTA LA CONSULTA A LA BD
+            if (opc == 1) {
+                ps = con.prepareStatement("select * from prog_av.proyecto");
+            } else if (opc == 2) {
+                System.out.println("entro");
+                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.idproyecto LIKE '%" +parametro+"%'");
+            } else {
+                ps = con.prepareStatement("select * from prog_av.proyecto where upper(nombre) LIKE '%" + parametro.toUpperCase() + "%'");
+            }
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                //CADA REGISTRO QUE SE TRAE DE LA CONSULTA SE SETEA EN LA INSTANCIA CREADA
+                Proyecto p = new Proyecto();
+                p.setIdProyecto(rs.getInt(1));
+                p.setNombre(rs.getString(2));
+                p.setFechaInicio(rs.getDate(3));
+                p.setFechaConfirmacion(rs.getDate(4));
+                p.setFechaFin(rs.getDate(5));
+                p.setTipoProyecto(rs.getInt(6));
+                p.setCliente(rs.getInt(7));
+                p.setObservacion(rs.getString(8));
+                p.setMonto(rs.getDouble(9));
+
+                p.setUbicacion(rs.getInt(10));
+
+                //SE GUARDAN LOS DATOS DEL PROYECTO EN EL ARRAY CREADO
+                datos.add(p);
+            }
+        } catch (Exception e) {
+        }
+        //FINALMENTE SE DEVUELVE EL ARRAY DE PROYECTOS
+        return datos;
+    }
+
+    public ArrayList<Proyecto> filtroBusquedaFechas(java.sql.Date parametro, java.sql.Date parametro2,int opc, int opc2) {
+        //SE CREA UN ARRAY DE PROYECTO
+        /* DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        String strDate = dateFormat.format(parametro);
+        java.sql.Date fechaInicio = new java.sql.Date(parametro);*/
+
+        // System.out.println(strDate);
+        ArrayList<Proyecto> datos = new ArrayList<>();
+        try {
+            con = conectar.getConnection();
+            //SE EJECUTA LA CONSULTA A LA BD
+            if(opc2==0){
+            if (opc == 1) {
+                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaInicio ='" + parametro + "'");
+            } else if (opc == 2) {
+                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaConfirmacion ='" + parametro + "'");
+            } else {
+                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaFin ='" + parametro + "'");
+            }}else{
+                 if (opc == 1) {
+                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaInicio BETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
+            } else if (opc == 2) {
+                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaConfirmacionBETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
+            } else {
+                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaFin BETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
+            }
+            }
+
             rs = ps.executeQuery();
             while (rs.next()) {
 
