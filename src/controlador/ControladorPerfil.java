@@ -41,6 +41,7 @@ public class ControladorPerfil implements ActionListener {
     VistaPerfil vista3 = new VistaPerfil();
     DefaultTableModel modelo = new DefaultTableModel();
     Perfil perfil = new Perfil();
+    private int bandera = 0;
 
     //CREAMOS UN CONTROLADOR POR CADA VISTA EXISTENTE
     public ControladorPerfil(VistaPerfil v) {
@@ -53,6 +54,7 @@ public class ControladorPerfil implements ActionListener {
         this.vista3.btnEliminar.setEnabled(false);
         this.vista3.btnModificar.setEnabled(false);
         this.vista3.btnActualizar.setEnabled(false);
+        this.vista3.comboBusqueda.addActionListener(this);
 
     }
 
@@ -66,6 +68,7 @@ public class ControladorPerfil implements ActionListener {
             buscarPerfil(vista3.tablaPerfil);
             this.vista3.btnEliminar.setEnabled(true);
             this.vista3.btnModificar.setEnabled(true);
+            
 
         }
 
@@ -136,15 +139,40 @@ public class ControladorPerfil implements ActionListener {
             vista3.btnActualizar.setEnabled(false);
             vista3.btnModificar.setEnabled(true);
         }
+        if (e.getSource() == vista3.comboBusqueda) {
+            String opc = vista3.comboBusqueda.getSelectedItem().toString();
+        
+            if (opc.equals("TODOS")) {
+
+                vista3.txtParametro.setEnabled(false);
+            } else {
+              
+                vista3.txtParametro.setEnabled(true);
+            }
+        }
     }
 
     public void buscarPerfil(JTable tabla) {
         // centrarCeldas(tabla);
         //EN EL MODELO CREADO SE GUARDA EL MODELO DE LA TABLA PERFILES
+        String opc = vista3.comboBusqueda.getSelectedItem().toString();
         modelo = (DefaultTableModel) tabla.getModel();
         tabla.setModel(modelo);
+        ArrayList<Perfil> listaPerfil = new ArrayList<>();
+
+        String parametro = vista3.txtParametro.getText();
+        // System.out.println(name);
         //SE CREA UN ARRAY CON LOS PERFILES QUE SE TRAEN DESDE LA BD
-        ArrayList<Perfil> listaPerfil = daoPerfil.listar();
+        if (opc.equals("TODOS")) {
+            listaPerfil = daoPerfil.listar2(parametro, 1);
+
+        } else if (opc.equals("ID")) {
+            listaPerfil = daoPerfil.listar2(parametro, 2);
+
+        } else {
+            listaPerfil = daoPerfil.listar2(parametro, 3);
+
+        }
         //SE CREA UN ARRAY OBJETO QUE ALMACENA LOS DATOS DE CADA PERFILE
         Object[] objeto = new Object[3];
         for (int i = 0; i < listaPerfil.size(); i++) {
