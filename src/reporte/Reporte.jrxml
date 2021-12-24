@@ -18,7 +18,7 @@
 	<parameter name="contacto2" class="java.lang.String"/>
 	<parameter name="ubicacion" class="java.lang.String"/>
 	<queryString language="SQL">
-		<![CDATA[select prog_av.proyecto.idproyecto,prog_av.proyecto.nombre,prog_av.proyecto.fechaInicio,proyecto.monto,prog_av.proyecto.fechaConfirmacion,prog_av.proyecto.fechaFin,prog_av.clientes.razonSocial,tipo_proyectO.nombre from prog_av.proyecto inner join prog_av.clientes on prog_av.proyecto.cliente= prog_av.clientes.idClientes inner join prog_av.tipo_proyecto on prog_av.proyecto.tipoProyecto=tipo_proyecto.idTipoProyecto
+		<![CDATA[select prog_av.proyecto.idproyecto,prog_av.proyecto.nombre,prog_av.proyecto.fechaInicio,proyecto.monto,prog_av.proyecto.fechaConfirmacion,prog_av.proyecto.fechaFin,prog_av.clientes.razonSocial,tipo_proyectO.nombre from prog_av.proyecto inner join prog_av.clientes on prog_av.proyecto.cliente= prog_av.clientes.idClientes inner join prog_av.tipo_proyecto on prog_av.proyecto.tipoProyecto=tipo_proyecto.idTipoProyecto WHERE tipo_proyecto.borrado = 0 AND proyecto.borrado = 0 AND clientes.borrado = 0
 ]]>
 	</queryString>
 	<field name="idproyecto" class="java.lang.Integer">

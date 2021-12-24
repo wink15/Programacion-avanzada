@@ -19,7 +19,7 @@
 	<parameter name="ubicacion" class="java.lang.String"/>
 	<parameter name="grafico" class="java.lang.String"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT ubicaciondelproyecto.nombre , proyecto.ubicacion, COUNT(ubicacion) as cantidad1 FROM prog_av.proyecto inner join  prog_av.ubicaciondelproyecto on proyecto.ubicacion=ubicaciondelproyecto.id GROUP BY ubicacion HAVING COUNT(ubicacion)  ORDER BY cantidad1  DESC]]>
+		<![CDATA[SELECT ubicaciondelproyecto.nombre , proyecto.ubicacion, COUNT(ubicacion) as cantidad1 FROM prog_av.proyecto inner join  prog_av.ubicaciondelproyecto on proyecto.ubicacion=ubicaciondelproyecto.id WHERE prog_av.proyecto.borrado = 0 GROUP BY ubicacion HAVING COUNT(ubicacion)  ORDER BY cantidad1  DESC]]>
 	</queryString>
 	<field name="nombre" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
