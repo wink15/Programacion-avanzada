@@ -31,7 +31,7 @@ public class PerfilDAO {
     public ArrayList<Perfil> getPerfil() throws SQLException {
         con = conectar.getConnection();
         //SE LLEVA A CABO LA CONSULTA A LA BD
-        ps = con.prepareStatement("select * from prog_av.perfil");
+        ps = con.prepareStatement("select * from prog_av.perfil WHERE borrado = 0");
         rs = ps.executeQuery();
         ArrayList<Perfil> listaPerfil = new ArrayList<>();
         try {
@@ -60,7 +60,7 @@ public class PerfilDAO {
         try {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
-            ps = con.prepareStatement("select * from perfil ");
+            ps = con.prepareStatement("select * from perfil WHERE borrado = 0");
             rs = ps.executeQuery();
             while (rs.next()) {
                 //CADA REGISTRO QUE SE TRAE DE LA CONSULTA SE SETEA EN LA INSTANCIA CREADA
@@ -86,10 +86,10 @@ public class PerfilDAO {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD IKE "%search%"
            if (opc==1){ 
-            ps = con.prepareStatement("select * from prog_av.perfil");} else if (opc==2){
-            ps = con.prepareStatement("select * from prog_av.perfil where perfil.idperfil LIKE'%"+parametro+"%'");}
+            ps = con.prepareStatement("select * from prog_av.perfil WHERE perfil.borrado = 0");} else if (opc==2){
+            ps = con.prepareStatement("select * from prog_av.perfil WHERE perfil.borrado = 0 AND perfil.idperfil LIKE'%"+parametro+"%'");}
             else {
-                  ps = con.prepareStatement("select * from prog_av.perfil where Upper(perfil.nombre) LIKE'%"+parametro.toUpperCase()+"%'");
+                  ps = con.prepareStatement("select * from prog_av.perfil WHERE perfil.borrado = 0 AND Upper(perfil.nombre) LIKE'%"+parametro.toUpperCase()+"%'");
             }
            
             rs = ps.executeQuery();
@@ -115,7 +115,7 @@ public class PerfilDAO {
     //METODO PARA ELIMINAR UN PERFIL DE LA BD
     public int eliminar(int id) {
         int r = 0;
-        String sql = "delete from perfil where idperfil =" + id;
+        String sql = "UPDATE perfil SET borrado = 1 where idperfil =" + id;
         try {
             //SE REALIZA LA CONEXION A LA BD
             con = conectar.getConnection();

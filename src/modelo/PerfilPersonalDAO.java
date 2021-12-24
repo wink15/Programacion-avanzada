@@ -58,7 +58,7 @@ public class PerfilPersonalDAO {
 
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
-            ps = con.prepareStatement("select prog_av.perfil.idperfil,prog_av.perfil.nombre from prog_av.perfil inner join prog_av.personal_perfil on idperfil = perfil where prog_av.personal_perfil.personal =" + idPersonal);
+            ps = con.prepareStatement("select prog_av.perfil.idperfil,prog_av.perfil.nombre from prog_av.perfil inner join prog_av.personal_perfil on idperfil = perfil where prog_av.personal_perfil.borrado = 0 AND prog_av.perfil.borrado = 0 AND prog_av.personal_perfil.personal =" + idPersonal);
             rs = ps.executeQuery();
             while (rs.next()) {
                 //CADA REGISTRO QUE SE TRAE DE LA CONSULTA SE SETEA EN LA INSTANCIA CREADA
@@ -78,7 +78,7 @@ public class PerfilPersonalDAO {
     public int eliminar(int idPersonal, int idPerfil) {
         int r = 0;
         //SE DEFINE LA CONSULTA
-        String sql = "delete from prog_av.personal_perfil where personal =" + idPersonal + " and perfil =" + idPerfil;
+        String sql = "UPDATE prog_av.personal_perfil SET borrado = 1 where personal =" + idPersonal + " and perfil =" + idPerfil;
         try {
             //SE REALIZA LA CONEXION A LA BD
             con = conectar.getConnection();

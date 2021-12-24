@@ -28,7 +28,7 @@ public class ProyectoDAO {
         try {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
-            ps = con.prepareStatement("select * from prog_av.proyecto");
+            ps = con.prepareStatement("select * from prog_av.proyecto WHERE borrado = 0");
             rs = ps.executeQuery();
             while (rs.next()) {
 
@@ -62,12 +62,12 @@ public class ProyectoDAO {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
             if (opc == 1) {
-                ps = con.prepareStatement("select * from prog_av.proyecto");
+                ps = con.prepareStatement("select * from prog_av.proyecto WHERE borrado = 0");
             } else if (opc == 2) {
                 System.out.println("entro");
-                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.idproyecto LIKE '%" +parametro+"%'");
+                ps = con.prepareStatement("select * from prog_av.proyecto WHERE borrado = 0 AND proyecto.idproyecto LIKE '%" +parametro+"%'");
             } else {
-                ps = con.prepareStatement("select * from prog_av.proyecto where upper(nombre) LIKE '%" + parametro.toUpperCase() + "%'");
+                ps = con.prepareStatement("select * from prog_av.proyecto WHERE borrado = 0 AND upper(nombre) LIKE '%" + parametro.toUpperCase() + "%'");
             }
 
             rs = ps.executeQuery();
@@ -109,18 +109,18 @@ public class ProyectoDAO {
             //SE EJECUTA LA CONSULTA A LA BD
             if(opc2==0){
             if (opc == 1) {
-                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaInicio ='" + parametro + "'");
+                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaInicio ='" + parametro + "'");
             } else if (opc == 2) {
-                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaConfirmacion ='" + parametro + "'");
+                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaConfirmacion ='" + parametro + "'");
             } else {
-                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaFin ='" + parametro + "'");
+                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaFin ='" + parametro + "'");
             }}else{
                  if (opc == 1) {
-                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaInicio BETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
+                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaInicio BETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
             } else if (opc == 2) {
-                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaConfirmacionBETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
+                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaConfirmacionBETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
             } else {
-                ps = con.prepareStatement("select * from prog_av.proyecto where proyecto.fechaFin BETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
+                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaFin BETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
             }
             }
 
@@ -154,7 +154,7 @@ public class ProyectoDAO {
     public int eliminar(int id) {
         int r = 0;
         //SE DEFINE LA CONSULTA
-        String sql = "delete from prog_av.proyecto where idproyecto=" + id;
+        String sql = "UPDATE prog_av.proyecto SET borrado = 1 where idproyecto=" + id;
         try {
             //SE REALIZA LA CONEXION A LA BD
             con = conectar.getConnection();

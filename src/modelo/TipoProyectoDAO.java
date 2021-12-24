@@ -25,7 +25,7 @@ public class TipoProyectoDAO {
     public ArrayList<TipoProyecto> getTipoProyecto() throws SQLException {
         con = conectar.getConnection();
         //SE LLEVA A CABO LA CONSULTA
-        ps = con.prepareStatement("select * from prog_av.tipo_Proyecto");
+        ps = con.prepareStatement("select * from prog_av.tipo_Proyecto WHERE borrado = 0");
         rs = ps.executeQuery();
         //SE CREA UN ARRAY DE TIPO DE PROYECTO
         ArrayList<TipoProyecto> listaTipoProyecto = new ArrayList<>();
@@ -51,7 +51,7 @@ public class TipoProyectoDAO {
         ArrayList<TipoProyecto> datos = new ArrayList<>();
         try {
             con = conectar.getConnection();
-            ps = con.prepareStatement("select * from prog_av.tipo_proyecto");
+            ps = con.prepareStatement("select * from prog_av.tipo_proyecto WHERE borrado = 0");
             rs = ps.executeQuery();
             while (rs.next()) {
                 TipoProyecto p = new TipoProyecto();
@@ -71,7 +71,7 @@ public class TipoProyectoDAO {
     public int eliminar(int id) {
         int r = 0;
         //SE DEFINE LA CONSULTA
-        String sql = "delete from prog_av.tipo_proyecto where idTipoProyecto=" + id;
+        String sql = "UPDATE prog_av.tipo_proyecto SET borrado = 1 where idTipoProyecto=" + id;
         try {
             //SE REALIZA LA CONEXION A LA BD
             con = conectar.getConnection();

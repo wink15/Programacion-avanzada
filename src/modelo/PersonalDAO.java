@@ -25,7 +25,7 @@ public class PersonalDAO {
     public ArrayList<Personal> getPersonal() throws SQLException {
         con = conectar.getConnection();
         //SE LLEVA A CABO LA CONSULTA A LA BD
-        ps = con.prepareStatement("select * from prog_av.personal");
+        ps = con.prepareStatement("select * from prog_av.personal WHERE borrado = 0");
         rs = ps.executeQuery();
         //SE CREA UN ARRAY PERSONAL 
         ArrayList<Personal> listaPersonal = new ArrayList<>();
@@ -54,7 +54,7 @@ public class PersonalDAO {
         try {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
-            ps = con.prepareStatement("select * from prog_av.personal");
+            ps = con.prepareStatement("select * from prog_av.personal WHERE borrado = 0");
             rs = ps.executeQuery();
             while (rs.next()) {
                 //CADA REGISTRO QUE SE TRAE DE LA CONSULTA SE SETEA EN LA INSTANCIA CREADA
@@ -76,7 +76,7 @@ public class PersonalDAO {
     public int eliminar(int id) {
         int r = 0;
         //SE DEFINE LA CONSULTA
-        String sql = "delete from prog_av.personal where idPersonal =" + id;
+        String sql = "UPDATE prog_av.personal SET borrado = 1 where idPersonal =" + id;
         try {
             //SE REALIZA LA CONEXION A LA BD
             con = conectar.getConnection();

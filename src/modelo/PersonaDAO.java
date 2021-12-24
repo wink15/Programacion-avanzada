@@ -25,7 +25,7 @@ public class PersonaDAO {
     public ArrayList<Persona> getPersona() throws SQLException {
         con = conectar.getConnection();
         //SE LLEVA A CABO LA CONSULTA A LA BD
-        ps = con.prepareStatement("select * from prog_av.persona");
+        ps = con.prepareStatement("select * from prog_av.persona WHERE borrado = 0");
         rs = ps.executeQuery();
         //SE CREA UN ARRAY PERSONAS
         ArrayList<Persona> listaPersona = new ArrayList<>();
@@ -55,7 +55,7 @@ public class PersonaDAO {
         ArrayList<Persona> datos = new ArrayList<>();
         try {
             con = conectar.getConnection();
-            ps = con.prepareStatement("select * from prog_av.persona");
+            ps = con.prepareStatement("select * from prog_av.persona WHERE borrado = 0");
             rs = ps.executeQuery();
             while (rs.next()) {
                 Persona persona = new Persona();
@@ -76,7 +76,7 @@ public class PersonaDAO {
     public int eliminar(int id) {
         int r = 0;
         //SE DEFINE LA CONSULTA
-        String sql = "delete from prog_av.persona where id_persona =" + id;
+        String sql = "UPDATE prog_av.persona SET borrado = 1 where id_persona =" + id;
         try {
             con = conectar.getConnection();
             //SE LLEVA A CABO LA CONSULTA

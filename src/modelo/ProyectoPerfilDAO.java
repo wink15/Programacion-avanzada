@@ -27,7 +27,7 @@ public class ProyectoPerfilDAO {
         try {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
-            ps = con.prepareStatement("select * from prog_av.proyecto_perfil");
+            ps = con.prepareStatement("select * from prog_av.proyecto_perfil WHERE borrado = 0");
             rs = ps.executeQuery();
             while (rs.next()) {
 
@@ -71,7 +71,7 @@ public class ProyectoPerfilDAO {
     public int eliminar(int id) {
         int r = 0;
         //SE DEFINE LA CONSULTA
-        String sql = "delete from prog_av.proyecto_perfil where idproyecto_perfil= " + id;
+        String sql = "UPDATE prog_av.proyecto_perfil SET borrado = 1 where idproyecto_perfil= " + id;
         try {
             //SE REALIZA LA CONEXION A LA BD
             con = conectar.getConnection();

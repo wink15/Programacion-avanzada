@@ -27,7 +27,7 @@ public class ProyectoPersonalDAO {
         try {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
-            ps = con.prepareStatement("select * from prog_av.personal_proyecto");
+            ps = con.prepareStatement("select * from prog_av.personal_proyecto WHERE borrado = 0");
             rs = ps.executeQuery();
             while (rs.next()) {
 
@@ -71,7 +71,7 @@ public class ProyectoPersonalDAO {
     public int eliminar(int id) {
         int r = 0;
         //SE DEFINE LA CONSULTA
-        String sql = "delete from prog_av.personal_proyecto where idpersonal_proyecto= " + id;
+        String sql = "UPDATE prog_av.personal_proyecto SET borrado = 1 where idpersonal_proyecto= " + id;
         try {
             //SE REALIZA LA CONEXION A LA BD
             con = conectar.getConnection();
@@ -91,7 +91,7 @@ public class ProyectoPersonalDAO {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
             //LA CONSULTA CONSISTE EN PRIMER LUGAR BUSCAR TODOS LOS PERFILES PARA ESE PROYECTO, EN SEGUNDO LUGAR  BUSCA EN LA TABLA PERSONAL A AQUELLOS QUE CONTENGAN ALGUNO DE LOS PERFILES QUE POSEE EL PROYECTO, Y POSTERIOR A ELLO BUSCA LAS PERSONAS QUE APARECEN EN DICHO FILTRADO, Y OBTIENE SU NOMBRE, APELLIDO E IDPERSONA
-            ps = con.prepareStatement("SELECT nombre, apellido ,id_persona FROM prog_av.persona WHERE id_persona = ANY (SELECT persona FROM prog_av.personal WHERE idPersonal = ANY (SELECT DISTINCT personal FROM prog_av.personal_perfil WHERE personal_perfil.perfil = ANY (SELECT perfil FROM prog_av.proyecto_perfil WHERE proyecto = " + idProy + " )));");
+            ps = con.prepareStatement("SELECT nombre, apellido ,id_persona FROM prog_av.persona WHERE borrado = 0 AND id_persona = ANY (SELECT persona FROM prog_av.personal WHERE borrado = 0 AND idPersonal = ANY (SELECT DISTINCT personal FROM prog_av.personal_perfil WHERE borrado = 0 AND personal_perfil.perfil = ANY (SELECT perfil FROM prog_av.proyecto_perfil WHERE borrado = 0 AND proyecto = " + idProy + " )));");
             rs = ps.executeQuery();
             while (rs.next()) {
 

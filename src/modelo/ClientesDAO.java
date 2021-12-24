@@ -25,7 +25,7 @@ public class ClientesDAO {
     public ArrayList<Clientes> getClientes() throws SQLException {
         con = conectar.getConnection();
         //SE LLEVA A CABO LA CONSULTA A LA BD
-        ps = con.prepareStatement("select * from prog_av.clientes");
+        ps = con.prepareStatement("select * from prog_av.clientes WHERE borrado = 0");
         rs = ps.executeQuery();
         //SE CREA UN ARRAY CLIENTES 
         ArrayList<Clientes> listaClientes = new ArrayList<>();
@@ -52,7 +52,7 @@ public class ClientesDAO {
         try {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
-            ps = con.prepareStatement("select * from prog_av.clientes");
+            ps = con.prepareStatement("select * from prog_av.clientes WHERE borrado = 0");
             rs = ps.executeQuery();
             while (rs.next()) {
                 //CADA REGISTRO QUE SE TRAE DE LA CONSULTA SE SETEA EN LA INSTANCIA CREADA
@@ -74,7 +74,7 @@ public class ClientesDAO {
     public int eliminar(int id) {
         int r = 0;
         //SE DEFINE LA CONSULTA
-        String sql = "delete from prog_av.clientes where idClientes =" + id;
+        String sql = "UPDATE prog_av.clientes SET borrado = 1 WHERE idClientes =" + id;
         try {
             //SE REALIZA LA CONEXION A LA BD
             con = conectar.getConnection();
