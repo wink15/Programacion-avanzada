@@ -146,9 +146,9 @@ public class ControladorReporte implements ActionListener {
         int numNac = 0;
         int numInt = 0;
         // CONSULTA QUE TRAE LA CANTIDAD DE PROYECTOS NACIONALES
-        String consultaNacional = " SELECT COUNT(proyecto.ubicacion) as cantidad fROM prog_av.proyecto WHERE proyecto.ubicacion=1";
+        String consultaNacional = " SELECT COUNT(proyecto.ubicacion) as cantidad fROM prog_av.proyecto WHERE proyecto.ubicacion=1 and proyecto.borrado=0";
         // CONSULTA QUE TRAE LA CANTIDAD DE PROYECTOS INTERNACIONALES
-        String consultaInternacional = " SELECT COUNT(proyecto.ubicacion) as cantidad fROM prog_av.proyecto WHERE proyecto.ubicacion=2";
+        String consultaInternacional = " SELECT COUNT(proyecto.ubicacion) as cantidad fROM prog_av.proyecto WHERE proyecto.ubicacion=2 and proyecto.borrado=0";
 
         try {
 
