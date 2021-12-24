@@ -88,6 +88,9 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
                 vista.btnEliminar.setEnabled(true);
                 vista.btnAceptar.setEnabled(true);
                 vista.comboOpcion.setEnabled(true);
+                vista.btnAgg.setEnabled(false);
+                vista.btnBuscar.setEnabled(false);
+                vista.tablaProyecto.setEnabled(false);
                 try {
                     //SE LLENA EL COMBO
                     llenarPersonales();
@@ -99,7 +102,7 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
             }
         }
         if (e.getSource() == vista.comboOpcion) {
-
+            vista.botonAggPerfil.setEnabled(true);
             try {
                 // METODO QUE SE ENCARGA DE SABER QUE OPCION SE SELEECIONO DEL COMBO
 
@@ -111,13 +114,15 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
 
         if (e.getSource() == vista.botonAggPerfil) {
             //int perfil = (vista.comboPerfiles.getItemAt(vista.comboPerfiles.getSelectedIndex()).getId());
+            int per=vista.comboPersonal.getItemAt(vista.comboPersonal.getSelectedIndex()).getIdPersonal();
             // METODO QUE SE USA PARA SABER SI UN PERSONAL YA FUE ASIGNADO
-            if (comprobarPerfiles(idTablaProy, this.personal) == true) {
+           
+            if (comprobarPerfiles(idTablaProy, per) == true) {
                 JOptionPane.showMessageDialog(null, "El personal seleccionado ya fue asiganado a dicho proyecto", "Error", JOptionPane.WARNING_MESSAGE);
             } else {
                 agregar();
-                System.out.println(this.personal);
-                llenarTablaPP(vista.tablaAPerP, this.personal, idTablaProy);
+                //System.out.println(this.personal);
+                llenarTablaPP(vista.tablaAPerP, per, idTablaProy);
             }
 
             //SE LIMPIA LA TABLA
@@ -135,6 +140,9 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
             vista.btnAgg.setEnabled(false);
             vista.btnBuscar.setEnabled(true);
             vista.comboOpcion.setEnabled(false);
+            vista.btnAgg.setEnabled(true);
+                vista.btnBuscar.setEnabled(true);
+                vista.tablaProyecto.setEnabled(true);
 
         }
         if (e.getSource() == vista.btnEliminar) {
@@ -311,25 +319,31 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
         String opcionE = "Todos";
         String opcionE2 = "Sugeridos";
         //   ArrayList<Personal> listaPersonal = daoPersonal.listar();
+        
         if (opcion.equals(opcionE)) {
             //SI LA OPCION ES TODOS ENTONCES USA EL LLENAR PERSONALES 
             llenarPersonales();
 
             // JLabel.setText("Estoy modificando el texto");
         } else if (opcionE2.equals(opcion)) {
-
+            
             // SI LA OPCION ES SUGERIDOS SE LLAMA A LA CONSULTA HECHA EN EL DAO QUE TRAE LOS PERFILES SUGERIDOS PARA EL PROYECTO
             vista.comboPersonal.removeAllItems();
             ArrayList<Persona> listaPersona = ppDao.sugeridos(idTablaProy);
+           if(listaPersona.size()!=0){
+               vista.botonAggPerfil.setEnabled(true);
             for (int i = 0; i < listaPersonal.size(); i++) {
                 for (int j = 0; j < listaPersona.size(); j++) {
+                  
                     if (listaPersona.get(j).getIdPersona() == listaPersonal.get(i).getPersona()) {
-
+                   
                         vista.comboPersonal.addItem(new Personal(listaPersonal.get(i).getIdPersonal(), listaPersonal.get(i).getCUIT(), listaPersona.get(j).getNombre(), listaPersona.get(j).getApellido(), listaPersona.get(j).getFechaNacimiento(), listaPersona.get(j).getTelefono()));
+                        
                     }
                 }
             }
-        }
+        }else {JOptionPane.showMessageDialog(null, "No hay sugeridos para este proyecto", "Error", JOptionPane.WARNING_MESSAGE);
+           vista.botonAggPerfil.setEnabled(false);}}
 
     }
 
@@ -337,6 +351,7 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
         ArrayList<ProyectoPersonal> lista = ppDao.listar();
 
         for (int i = 0; i < lista.size(); i++) {
+            
             if (idProy == lista.get(i).getIdProyecto() && idPer == lista.get(i).getIdPersonal()) {
                 return true;
 
@@ -369,7 +384,7 @@ public class ControladorAsignarPersonalAProyecto implements ActionListener {
                     // el if solo se va a cumplir si el id del proyecto y del personal  son iguales tanto a lo obtenido en el listar del app y en los listar de proyecto y personal
                     if (idProy == lista.get(i).getIdProyecto() && idPer == lista.get(i).getIdPersonal() && idProy == listap.get(j).getIdProyecto() && idPer == listaper.get(b).getIdPersonal()) {
                         objeto[0] = lista.get(i).getId();
-                        System.out.println(" aa " + lista.get(i).getId());
+                      //  System.out.println(" aa " + lista.get(i).getId());
                         objeto[1] = lista.get(i).getIdProyecto();
 
                         objeto[2] = listap.get(j).getNombre();

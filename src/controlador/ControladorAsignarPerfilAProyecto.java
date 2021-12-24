@@ -73,7 +73,8 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
 
         }
         if (e.getSource() == vista.btnAgg) {
-
+            vista.btnAgg.setEnabled(false);
+            vista.btnBuscar.setEnabled(false);
             try {
                 llenarPerfiles();
             } catch (SQLException ex) {
@@ -122,6 +123,7 @@ public class ControladorAsignarPerfilAProyecto implements ActionListener {
             vista.btnBuscarAPP.setEnabled(true);
             vista.btnAgg.setEnabled(false);
             vista.btnBuscar.setEnabled(true);
+            vista.btnAgg.setEnabled(true);
 
         }
         if (e.getSource() == vista.btnEliminar) {
