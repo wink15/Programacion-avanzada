@@ -54,13 +54,13 @@ public class PerfilDAO {
     }
     //METODO QUE OBTIENE LOS PERFILES DESDE LA BD
 
-    public ArrayList<Perfil> listar() {
+    public ArrayList<Perfil> listar( ) {
         //SE CREA UN ARRAY DE PERFIL
         ArrayList<Perfil> datos = new ArrayList<>();
         try {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
-            ps = con.prepareStatement("select * from perfil");
+            ps = con.prepareStatement("select * from perfil ");
             rs = ps.executeQuery();
             while (rs.next()) {
                 //CADA REGISTRO QUE SE TRAE DE LA CONSULTA SE SETEA EN LA INSTANCIA CREADA
@@ -77,7 +77,40 @@ public class PerfilDAO {
         //FINALMENTE SE DEVUELVE EL ARRAY DE DATOOS
         return datos;
 
+    } 
+    public ArrayList<Perfil> listar2( String parametro, int opc) {
+        //SE CREA UN ARRAY DE PERFIL
+        ArrayList<Perfil> datos = new ArrayList<>();
+    
+        try {
+            con = conectar.getConnection();
+            //SE EJECUTA LA CONSULTA A LA BD IKE "%search%"
+           if (opc==1){ 
+            ps = con.prepareStatement("select * from prog_av.perfil");} else if (opc==2){
+            ps = con.prepareStatement("select * from prog_av.perfil where perfil.idperfil LIKE'%"+parametro+"%'");}
+            else {
+                  ps = con.prepareStatement("select * from prog_av.perfil where Upper(perfil.nombre) LIKE'%"+parametro.toUpperCase()+"%'");
+            }
+           
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                
+                //CADA REGISTRO QUE SE TRAE DE LA CONSULTA SE SETEA EN LA INSTANCIA CREADA
+                Perfil per = new Perfil();
+                per.setId(rs.getInt(1));
+                per.setNombre(rs.getString(2));
+                per.setDescripcion(rs.getString(3));
+                //SE GUARDAN LOS DATOS DEL PERFIL EN EL ARRAY CREADO
+                datos.add(per);
+            }
+
+        } catch (Exception e) {
+        }
+        //FINALMENTE SE DEVUELVE EL ARRAY DE DATOOS
+        return datos;
+
     }
+
 
     //METODO PARA ELIMINAR UN PERFIL DE LA BD
     public int eliminar(int id) {
