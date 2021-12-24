@@ -26,10 +26,11 @@ CREATE TABLE `clientes` (
   `idClientes` int NOT NULL AUTO_INCREMENT,
   `razonSocial` varchar(45) DEFAULT NULL,
   `persona` int DEFAULT NULL,
+  `borrado` int DEFAULT '0',
   PRIMARY KEY (`idClientes`),
   KEY `fk_idPersona_cliente` (`persona`),
   CONSTRAINT `fk_idPersona_cliente` FOREIGN KEY (`persona`) REFERENCES `persona` (`id_persona`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +39,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (1,'Leandro Martinez',2),(2,'Nicolas Rodriguez',1);
+INSERT INTO `clientes` VALUES (1,'Corp SA',1,0),(2,'La Firma SRL',1,0);
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,8 +104,9 @@ CREATE TABLE `perfil` (
   `idperfil` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) DEFAULT NULL,
   `descripcion` varchar(45) DEFAULT NULL,
+  `borrado` int DEFAULT '0',
   PRIMARY KEY (`idperfil`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +115,7 @@ CREATE TABLE `perfil` (
 
 LOCK TABLES `perfil` WRITE;
 /*!40000 ALTER TABLE `perfil` DISABLE KEYS */;
-INSERT INTO `perfil` VALUES (1,'Perfil A','Este es el perfil x el cual consiste en A'),(2,'Perfil B','Este es el perfil B que consiste en'),(3,'Perfil C','Este es el perfil Y que consiste en'),(4,'Perfil D','Este es el perfil D que consiste en');
+INSERT INTO `perfil` VALUES (1,'Perfil A','Este es el perfil x el cual consiste en A',0),(2,'Perfil B','Este es el perfil B que consiste en',0),(3,'Perfil C','Este es el perfil Y que consiste en',0),(4,'Perfil D','Este es el perfil D',0);
 /*!40000 ALTER TABLE `perfil` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,8 +132,9 @@ CREATE TABLE `persona` (
   `apellido` varchar(45) NOT NULL,
   `fecha_nacimiento` date NOT NULL,
   `telefono` varchar(45) NOT NULL,
+  `borrado` int DEFAULT '0',
   PRIMARY KEY (`id_persona`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,7 +143,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (1,'Santiago','Giordano','2000-01-16','2302637110'),(2,'Leonel','Piccioni','2020-09-20','3467600540'),(3,'Joel','Dellamaggiore','2020-03-25','3535639496');
+INSERT INTO `persona` VALUES (1,'Santiago','Giordano','2000-01-16','2302637110',0),(2,'Leonel','Piccioni','2020-09-20','3467600540',0),(3,'Joel','Dellamaggiore','2020-03-25','3535639496',0),(6,'asdasd','asdasdas','2001-12-21','3535639496',0);
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,10 +158,11 @@ CREATE TABLE `personal` (
   `idPersonal` int NOT NULL AUTO_INCREMENT,
   `cuit` bigint DEFAULT NULL,
   `persona` int DEFAULT NULL,
+  `borrado` int DEFAULT '0',
   PRIMARY KEY (`idPersonal`),
   KEY `fk_idPersona_personal` (`persona`),
   CONSTRAINT `fk_idPersona_personal` FOREIGN KEY (`persona`) REFERENCES `persona` (`id_persona`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +171,7 @@ CREATE TABLE `personal` (
 
 LOCK TABLES `personal` WRITE;
 /*!40000 ALTER TABLE `personal` DISABLE KEYS */;
-INSERT INTO `personal` VALUES (10,20425110137,3),(12,20423378094,1),(13,20414141414,2);
+INSERT INTO `personal` VALUES (10,20425110137,2,0),(12,20423378094,1,0);
 /*!40000 ALTER TABLE `personal` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,8 +186,9 @@ CREATE TABLE `personal_perfil` (
   `idpersonal_perfil` int NOT NULL AUTO_INCREMENT,
   `personal` int DEFAULT NULL,
   `perfil` int DEFAULT NULL,
+  `borrado` int DEFAULT '0',
   PRIMARY KEY (`idpersonal_perfil`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,7 +197,6 @@ CREATE TABLE `personal_perfil` (
 
 LOCK TABLES `personal_perfil` WRITE;
 /*!40000 ALTER TABLE `personal_perfil` DISABLE KEYS */;
-INSERT INTO `personal_perfil` VALUES (1,10,1),(2,10,2),(3,10,3),(4,12,3);
 /*!40000 ALTER TABLE `personal_perfil` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,8 +211,9 @@ CREATE TABLE `personal_proyecto` (
   `idpersonal_proyecto` int NOT NULL AUTO_INCREMENT,
   `proyecto` int NOT NULL,
   `personal` int NOT NULL,
+  `borrado` int DEFAULT '0',
   PRIMARY KEY (`idpersonal_proyecto`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -217,6 +222,7 @@ CREATE TABLE `personal_proyecto` (
 
 LOCK TABLES `personal_proyecto` WRITE;
 /*!40000 ALTER TABLE `personal_proyecto` DISABLE KEYS */;
+INSERT INTO `personal_proyecto` VALUES (3,5,10,0);
 /*!40000 ALTER TABLE `personal_proyecto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -238,10 +244,11 @@ CREATE TABLE `proyecto` (
   `observacion` varchar(200) NOT NULL,
   `monto` double(10,2) NOT NULL,
   `ubicacion` int DEFAULT NULL,
+  `borrado` int DEFAULT '0',
   PRIMARY KEY (`idproyecto`),
   KEY `fk_ubicacion` (`ubicacion`),
   CONSTRAINT `fk_ubicacion` FOREIGN KEY (`ubicacion`) REFERENCES `ubicaciondelproyecto` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -250,7 +257,7 @@ CREATE TABLE `proyecto` (
 
 LOCK TABLES `proyecto` WRITE;
 /*!40000 ALTER TABLE `proyecto` DISABLE KEYS */;
-INSERT INTO `proyecto` VALUES (1,'Proyecto n° 1','2021-09-22','2021-09-22','2021-09-22',0,0,'Proyecto terminado exitosamente!',0.00,1),(4,'Proyecto n° 2','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00,2),(5,'Proyecto n° 3','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00,1),(7,'Proyecto n° 4','2021-09-23','2021-09-22','2021-09-24',1,0,'nProyecto terminado exitosamente',0.00,2),(8,'Proyecto n° 5','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00,1),(9,'Proyecto n° 6','2021-09-29','2021-09-28','2021-09-30',6,1,'Proyecto en curso',0.00,1),(11,'Proyecto n° 7','2021-09-29','2021-09-28','2021-09-30',6,2,'Proyecto en curso',0.00,NULL),(12,'Proyecto n° 8','2021-09-29','2021-09-28','2021-09-30',2,1,'Proyecto en curso!',0.00,NULL),(13,'Intento','2021-12-11','2021-12-10','2021-12-18',1,1,'aa',200.00,1);
+INSERT INTO `proyecto` VALUES (1,'Proyecto n° 1','2021-09-22','2021-09-22','2021-09-22',0,0,'Proyecto terminado exitosamente!',0.00,1,0),(4,'Proyecto n° 2','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00,2,0),(5,'Proyecto n° 3','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00,1,0),(7,'Proyecto n° 4','2021-09-23','2021-09-22','2021-09-24',1,0,'nProyecto terminado exitosamente',0.00,2,0),(8,'Proyecto n° 5','2021-09-22','2021-09-21','2021-09-23',1,1,'Proyecto terminado exitosamente',0.00,1,0),(9,'Proyecto n° 6','2021-09-29','2021-09-28','2021-09-30',6,1,'Proyecto en curso',0.00,1,0),(11,'Proyecto n° 7','2021-09-29','2021-09-28','2021-09-30',6,2,'Proyecto en curso',0.00,NULL,0),(12,'Proyecto n° 8','2021-09-29','2021-09-28','2021-09-30',2,1,'Proyecto en curso!',0.00,NULL,0),(13,'Intento','2021-12-11','2021-12-10','2021-12-18',1,1,'aa',200.00,1,0),(15,'aaaaaa','2021-12-22','2021-12-22','2021-12-30',1,1,'a',21.00,1,0),(16,'AASA','2021-12-22','2021-12-22','2021-12-22',1,1,'a',123.00,1,1);
 /*!40000 ALTER TABLE `proyecto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,8 +272,9 @@ CREATE TABLE `proyecto_perfil` (
   `idproyecto_perfil` int NOT NULL AUTO_INCREMENT,
   `proyecto` int DEFAULT NULL,
   `perfil` int DEFAULT NULL,
+  `borrado` int DEFAULT '0',
   PRIMARY KEY (`idproyecto_perfil`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -275,7 +283,7 @@ CREATE TABLE `proyecto_perfil` (
 
 LOCK TABLES `proyecto_perfil` WRITE;
 /*!40000 ALTER TABLE `proyecto_perfil` DISABLE KEYS */;
-INSERT INTO `proyecto_perfil` VALUES (1,5,1),(2,5,2),(3,5,3),(4,9,1),(5,7,2);
+INSERT INTO `proyecto_perfil` VALUES (1,5,1,0),(2,5,2,0),(3,5,3,0),(4,9,1,0),(5,7,2,0),(6,14,1,0),(7,14,3,0),(8,15,1,0),(9,15,2,0),(10,15,3,0),(11,5,4,0);
 /*!40000 ALTER TABLE `proyecto_perfil` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -290,8 +298,9 @@ CREATE TABLE `tipo_proyecto` (
   `idTipoProyecto` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) DEFAULT NULL,
   `descripcion` varchar(200) DEFAULT NULL,
+  `borrado` int DEFAULT '0',
   PRIMARY KEY (`idTipoProyecto`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -300,7 +309,7 @@ CREATE TABLE `tipo_proyecto` (
 
 LOCK TABLES `tipo_proyecto` WRITE;
 /*!40000 ALTER TABLE `tipo_proyecto` DISABLE KEYS */;
-INSERT INTO `tipo_proyecto` VALUES (1,'ciencia','Tipo de proyecto asociado a las ciencias sociales y naturales '),(6,'matematica','Tipo de proyecto asociado a las matematicas'),(9,'Mecanicaa','Tipo de proceso asociado a la mecanica automotriz ');
+INSERT INTO `tipo_proyecto` VALUES (1,'ciencia','Tipo de proyecto asociado a las ciencias sociales y naturales ',0),(6,'matematica','Tipo de proyecto asociado a las matematicas',0),(9,'Mecanicaa','Tipo de proceso asociado a la mecanica automotriz ',0);
 /*!40000 ALTER TABLE `tipo_proyecto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -339,4 +348,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-17 15:57:18
+-- Dump completed on 2021-12-24  1:12:20
