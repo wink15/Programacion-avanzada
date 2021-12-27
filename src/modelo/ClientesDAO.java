@@ -86,6 +86,21 @@ public class ClientesDAO {
         //SE DEVUELVE EL RESULTADO DE LA ELIMINACION DEL REGISTRO 
         return r;
     }
+    //METODO PARA CONSULTAR ANTES DE ELIMINAR UN CLIENTE DE LA BD REFERIDO AL PROYECTO
+    public int consultaEliminacion(int id) {
+        int consultaEliminacion = 0;
+        
+        try {
+            con = conectar.getConnection();
+            ps = con.prepareStatement("SELECT COUNT(nombre) as estaEnAlgunProyecto FROM prog_av.proyecto WHERE borrado = 0 AND cliente =" + id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                consultaEliminacion = rs.getInt("estaEnAlgunProyecto");
+            }
+        } catch (Exception e) {
+        }
+        return consultaEliminacion;
+    }
 
     //METODO PARA AGREGAR UN REGISTRO A LA BD
     public int agregar(Clientes clie) {

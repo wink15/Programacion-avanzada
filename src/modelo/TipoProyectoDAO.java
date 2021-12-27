@@ -83,6 +83,22 @@ public class TipoProyectoDAO {
         //SE RETORNA EL RESULTADO DE LA ELIMINACION 
         return r;
     }
+    
+    //METODO PARA CONSULTAR ANTES DE ELIMINAR UN TIPO DE PROYECTO DE LA BD REFERIDO AL PROYECTO
+    public int consultaEliminacion(int id) {
+        int consultaEliminacion = 0;
+        
+        try {
+            con = conectar.getConnection();
+            ps = con.prepareStatement("SELECT COUNT(nombre) as estaEnAlgunProyecto FROM prog_av.proyecto WHERE tipoProyecto =" + id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                consultaEliminacion = rs.getInt("estaEnAlgunProyecto");
+            }
+        } catch (Exception e) {
+        }
+        return consultaEliminacion;
+    }
 
     //METODO PARA AGREGAR UN TIPO DE PROYECTO A LA BD
     public int agregar(TipoProyecto tipo) {

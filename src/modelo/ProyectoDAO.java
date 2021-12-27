@@ -202,6 +202,38 @@ public class ProyectoDAO {
         //SE RETORNA EL RESULTADO DE LA AGREGACION DEL REGISTRO A LA BD
         return r;
     }
+    
+    //METODO PARA CONSULTAR ANTES DE ELIMINAR UN PROYECTO DE LA BD REFERIDO AL PERSONAL_PROYECTO
+    public int consultaEliminacionPersonalProyecto(int id) {
+        int consultaEliminacionPersonalProyecto = 0;
+        
+        try {
+            con = conectar.getConnection();
+            ps = con.prepareStatement("SELECT COUNT(proyecto) as estaUtilizado FROM prog_av.personal_proyecto WHERE borrado = 0 AND proyecto =" + id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                consultaEliminacionPersonalProyecto = rs.getInt("estaUtilizado");
+            }
+        } catch (Exception e) {
+        }
+        return consultaEliminacionPersonalProyecto;
+    }
+    
+    //METODO PARA CONSULTAR ANTES DE ELIMINAR UN PROYECTO DE LA BD REFERIDO AL PROYECTO_PERFIL
+    public int consultaEliminacionPerfilProyecto(int id) {
+        int consultaEliminacionPerfilProyecto = 0;
+        
+        try {
+            con = conectar.getConnection();
+            ps = con.prepareStatement("SELECT COUNT(proyecto) as estaUtilizado FROM prog_av.proyecto_perfil WHERE borrado = 0 AND proyecto =" + id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                consultaEliminacionPerfilProyecto = rs.getInt("estaUtilizado");
+            }
+        } catch (Exception e) {
+        }
+        return consultaEliminacionPerfilProyecto;
+    }
 
     //METODO PARA ACTUALIZA UN PROYECTO DE LA BD
     public int actualizar(Proyecto per) {

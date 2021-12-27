@@ -118,6 +118,54 @@ public class PersonaDAO {
         }
         return r;
     }
+    
+    //METODO PARA CONSULTAR ANTES DE ELIMINAR UNA PERSONA DE LA BD REFERIDO AL CLIENTE
+    public int consultaEliminacionCliente(int id) {
+        int consultaEliminacionCliente = 0;
+        
+        try {
+            con = conectar.getConnection();
+            ps = con.prepareStatement("SELECT COUNT(persona) as estaUtilizado FROM prog_av.clientes WHERE borrado = 0 AND persona =" + id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                consultaEliminacionCliente = rs.getInt("estaUtilizado");
+            }
+        } catch (Exception e) {
+        }
+        return consultaEliminacionCliente;
+    }
+    
+    //METODO PARA CONSULTAR ANTES DE ELIMINAR UNA PERSONA DE LA BD REFERIDO AL PERSONAL
+    public int consultaEliminacionPersonal(int id) {
+        int consultaEliminacionPersonal = 0;
+        
+        try {
+            con = conectar.getConnection();
+            ps = con.prepareStatement("SELECT COUNT(persona) as estaUtilizado FROM prog_av.personal WHERE borrado = 0 AND persona =" + id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                consultaEliminacionPersonal = rs.getInt("estaUtilizado");
+            }
+        } catch (Exception e) {
+        }
+        return consultaEliminacionPersonal;
+    }
+
+    //METODO PARA CONSULTAR ANTES DE ELIMINAR UNA PERSONA DE LA BD REFERIDO AL NOCLIENTE
+    public int consultaEliminacionNoCliente(int id) {
+        int consultaEliminacionNoCliente = 0;
+        
+        try {
+            con = conectar.getConnection();
+            ps = con.prepareStatement("SELECT COUNT(persona) as estaUtilizado FROM prog_av.nocliente WHERE persona =" + id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                consultaEliminacionNoCliente = rs.getInt("estaUtilizado");
+            }
+        } catch (Exception e) {
+        }
+        return consultaEliminacionNoCliente;
+    }
 
     public int actualizar(Persona persona) {
         int r = 0;

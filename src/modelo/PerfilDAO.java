@@ -160,7 +160,36 @@ public class PerfilDAO {
         //SE RETORNA EL RESULTADO DE LA AGREGACION DEL REGISTRO A LA BD
         return r;
     }
-
+    //METODO PARA CONSULTAR ANTES DE ELIMINAR UN PERFIL DE LA BD REFERIDO AL PERSONAL
+    public int consultaEliminacionPersonalPerfil(int id) {
+        int consultaEliminacionPersonalPerfil = 0;
+        
+        try {
+            con = conectar.getConnection();
+            ps = con.prepareStatement("SELECT COUNT(personal) as estaUtilizado FROM prog_av.personal_perfil WHERE borrado = 0 AND perfil =" + id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                consultaEliminacionPersonalPerfil = rs.getInt("estaUtilizado");
+            }
+        } catch (Exception e) {
+        }
+        return consultaEliminacionPersonalPerfil;
+    }
+    //METODO PARA CONSULTAR ANTES DE ELIMINAR UN PERFIL DE LA BD REFERIDO AL PROYECTO
+    public int consultaEliminacionProyectoPerfil(int id) {
+        int consultaEliminacionProyectoPerfil = 0;
+        
+        try {
+            con = conectar.getConnection();
+            ps = con.prepareStatement("SELECT COUNT(personal) as estaUtilizado FROM prog_av.proyecto_perfil WHERE borrado = 0 AND perfil =" + id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                consultaEliminacionProyectoPerfil = rs.getInt("estaUtilizado");
+            }
+        } catch (Exception e) {
+        }
+        return consultaEliminacionProyectoPerfil;
+    }
     public int actualizar(Perfil perfil) {
         int r = 0;
         //String id = String.valueOf(per.getIdProyecto());
