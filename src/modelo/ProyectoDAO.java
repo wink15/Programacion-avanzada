@@ -62,10 +62,11 @@ public class ProyectoDAO {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
             if (opc == 1) {
-                ps = con.prepareStatement("select * from prog_av.proyecto WHERE borrado = 0");
+                ps = con.prepareStatement("select * from prog_av.proyecto WHERE borrado = 0 ");
             } else if (opc == 2) {
-                System.out.println("entro");
-                ps = con.prepareStatement("select * from prog_av.proyecto WHERE borrado = 0 AND proyecto.idproyecto LIKE '%" +parametro+"%'");
+
+                System.out.println("entro" + parametro);
+                ps = con.prepareStatement("select * from prog_av.proyecto WHERE borrado = 0 AND proyecto.idproyecto LIKE '%" + parametro + "%'");
             } else {
                 ps = con.prepareStatement("select * from prog_av.proyecto WHERE borrado = 0 AND upper(nombre) LIKE '%" + parametro.toUpperCase() + "%'");
             }
@@ -96,7 +97,7 @@ public class ProyectoDAO {
         return datos;
     }
 
-    public ArrayList<Proyecto> filtroBusquedaFechas(java.sql.Date parametro, java.sql.Date parametro2,int opc, int opc2) {
+    public ArrayList<Proyecto> filtroBusquedaFechas(java.sql.Date parametro, java.sql.Date parametro2, int opc, int opc2) {
         //SE CREA UN ARRAY DE PROYECTO
         /* DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
         String strDate = dateFormat.format(parametro);
@@ -107,21 +108,81 @@ public class ProyectoDAO {
         try {
             con = conectar.getConnection();
             //SE EJECUTA LA CONSULTA A LA BD
-            if(opc2==0){
-            if (opc == 1) {
-                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaInicio ='" + parametro + "'");
-            } else if (opc == 2) {
-                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaConfirmacion ='" + parametro + "'");
+            if (opc2 == 0) {
+                if (opc == 1) {
+                    ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaInicio ='" + parametro + "'");
+                } else if (opc == 2) {
+                    ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaConfirmacion ='" + parametro + "'");
+                } else {
+                    ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaFin ='" + parametro + "'");
+                }
             } else {
-                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaFin ='" + parametro + "'");
-            }}else{
-                 if (opc == 1) {
-                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaInicio BETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
-            } else if (opc == 2) {
-                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaConfirmacionBETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
-            } else {
-                ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaFin BETWEEN '" + parametro +"'"+ "AND '"+ parametro2+"'");
+                if (opc == 1) {
+                    ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaInicio BETWEEN '" + parametro + "'" + "AND '" + parametro2 + "'");
+                } else if (opc == 2) {
+                    ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaConfirmacionBETWEEN '" + parametro + "'" + "AND '" + parametro2 + "'");
+                } else {
+                    ps = con.prepareStatement("select * from prog_av.proyecto WHERE proyecto.borrado = 0 AND proyecto.fechaFin BETWEEN '" + parametro + "'" + "AND '" + parametro2 + "'");
+                }
             }
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                //CADA REGISTRO QUE SE TRAE DE LA CONSULTA SE SETEA EN LA INSTANCIA CREADA
+                Proyecto p = new Proyecto();
+                p.setIdProyecto(rs.getInt(1));
+                p.setNombre(rs.getString(2));
+                p.setFechaInicio(rs.getDate(3));
+                p.setFechaConfirmacion(rs.getDate(4));
+                p.setFechaFin(rs.getDate(5));
+                p.setTipoProyecto(rs.getInt(6));
+                p.setCliente(rs.getInt(7));
+                p.setObservacion(rs.getString(8));
+                p.setMonto(rs.getDouble(9));
+
+                p.setUbicacion(rs.getInt(10));
+
+                //SE GUARDAN LOS DATOS DEL PROYECTO EN EL ARRAY CREADO
+                datos.add(p);
+            }
+        } catch (Exception e) {
+        }
+        //FINALMENTE SE DEVUELVE EL ARRAY DE PROYECTOS
+        return datos;
+    }
+
+    public ArrayList<Proyecto> filtroBusquedaFechasCombinada(java.sql.Date parametro, java.sql.Date parametro2, int opc, int opc2, String razonSocial,String parametro3) {
+        ArrayList<Proyecto> datos = new ArrayList<>();
+        try {
+            con = conectar.getConnection();
+            //SE EJECUTA LA CONSULTA A LA BD
+            if (opc2 == 0) {
+                if (opc == 1) {
+                    ps = con.prepareStatement("select * from prog_av.proyecto INNER JOIN prog_av.clientes ON (prog_av.proyecto.cliente = prog_av.clientes.idClientes) WHERE razonsocial ='"+razonSocial+"' AND proyecto.borrado = 0 AND proyecto.fechaInicio ='"+parametro+"'");
+                } else if (opc == 2) {
+                    System.out.println(razonSocial+"UNA");
+                    ps = con.prepareStatement("select * from prog_av.proyecto INNER JOIN prog_av.clientes ON (prog_av.proyecto.cliente = prog_av.clientes.idClientes) WHERE razonsocial ='"+razonSocial+"' AND proyecto.borrado = 0 AND proyecto.fechaConfirmacion ='"+parametro+"'");
+                } else if (opc == 3) {
+                    ps = con.prepareStatement("select * from prog_av.proyecto INNER JOIN prog_av.clientes ON (prog_av.proyecto.cliente = prog_av.clientes.idClientes) WHERE razonsocial ='"+razonSocial+"' AND proyecto.borrado = 0 AND proyecto.fechaFin ='"+parametro+"'");
+                }
+            } else if (opc2 == 1) {
+                if (opc == 1) {
+                    ps = con.prepareStatement("select * from prog_av.proyecto INNER JOIN prog_av.clientes ON (prog_av.proyecto.cliente = prog_av.clientes.idClientes) WHERE razonsocial ='"+razonSocial+"' AND proyecto.borrado = 0 AND proyecto.fechaInicio BETWEEN '" + parametro + "'" + "AND '" + parametro2 + "'");
+                } else if (opc == 2) {
+                    System.out.println(razonSocial);
+                    ps = con.prepareStatement("select * from prog_av.proyecto INNER JOIN prog_av.clientes ON (prog_av.proyecto.cliente = prog_av.clientes.idClientes) WHERE razonsocial ='"+razonSocial+"' AND proyecto.borrado = 0 AND proyecto.fechaConfirmacion BETWEEN '" + parametro + "'" + "AND '" + parametro2 + "'");
+             
+                } else if (opc == 3) {
+                    ps = con.prepareStatement("select * from prog_av.proyecto INNER JOIN prog_av.clientes ON (prog_av.proyecto.cliente = prog_av.clientes.idClientes) WHERE razonsocial ='"+razonSocial+"' AND proyecto.borrado = 0 AND proyecto.fechaFin BETWEEN '" + parametro + "'" + "AND '" + parametro2 + "'");
+                }
+            }else if (opc2 == 2) {
+                if (opc == 1) {
+                    ps = con.prepareStatement("select * from prog_av.proyecto INNER JOIN prog_av.clientes ON (prog_av.proyecto.cliente = prog_av.clientes.idClientes) WHERE razonsocial ='"+razonSocial+"' AND proyecto.borrado = 0 AND monto ='"+parametro3+"'");
+                }else{
+                    ps = con.prepareStatement("select * from prog_av.proyecto INNER JOIN prog_av.clientes ON (prog_av.proyecto.cliente = prog_av.clientes.idClientes) INNER JOIN prog_av.tipo_proyecto ON(prog_av.proyecto.tipoProyecto = prog_av.tipo_proyecto.idTipoProyecto) WHERE razonsocial ='"+razonSocial+"' AND proyecto.borrado = 0 AND tipo_proyecto.nombre='"+parametro3+"'");
+                }
+                
             }
 
             rs = ps.executeQuery();
@@ -202,11 +263,11 @@ public class ProyectoDAO {
         //SE RETORNA EL RESULTADO DE LA AGREGACION DEL REGISTRO A LA BD
         return r;
     }
-    
+
     //METODO PARA CONSULTAR ANTES DE ELIMINAR UN PROYECTO DE LA BD REFERIDO AL PERSONAL_PROYECTO
     public int consultaEliminacionPersonalProyecto(int id) {
         int consultaEliminacionPersonalProyecto = 0;
-        
+
         try {
             con = conectar.getConnection();
             ps = con.prepareStatement("SELECT COUNT(proyecto) as estaUtilizado FROM prog_av.personal_proyecto WHERE borrado = 0 AND proyecto =" + id);
@@ -218,11 +279,11 @@ public class ProyectoDAO {
         }
         return consultaEliminacionPersonalProyecto;
     }
-    
+
     //METODO PARA CONSULTAR ANTES DE ELIMINAR UN PROYECTO DE LA BD REFERIDO AL PROYECTO_PERFIL
     public int consultaEliminacionPerfilProyecto(int id) {
         int consultaEliminacionPerfilProyecto = 0;
-        
+
         try {
             con = conectar.getConnection();
             ps = con.prepareStatement("SELECT COUNT(proyecto) as estaUtilizado FROM prog_av.proyecto_perfil WHERE borrado = 0 AND proyecto =" + id);
