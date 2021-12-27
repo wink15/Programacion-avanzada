@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -35,6 +37,7 @@ public class ControladorTipoProyecto implements ActionListener {
     VistaTipoProyecto vista2 = new VistaTipoProyecto();
     DefaultTableModel modelo = new DefaultTableModel();
     TipoProyecto tipo = new TipoProyecto();
+    Controlador proyecto = new Controlador();
 
     public ControladorTipoProyecto(VistaTipoProyecto v) {
         this.vista2 = v;
@@ -83,6 +86,11 @@ public class ControladorTipoProyecto implements ActionListener {
                     buscarTipo(vista2.jtableTipo);
                     //SE PREPARA LA VISTA PARA UN NUEVO TIPO DE PROYECTO
                     nuevoTipoProyecto();
+                    try {
+                        proyecto.llenarTipoProyecto();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ControladorTipoProyecto.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 } else {
                     //EN CASO DE QUE QUIERA CANCELAR LA AGREGACION SE VACIAN LOS CAMPOS 
                     nuevoTipoProyecto();

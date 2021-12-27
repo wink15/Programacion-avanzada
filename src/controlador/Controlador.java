@@ -42,6 +42,7 @@ import modelo.TipoProyecto;
 import modelo.TipoProyectoDAO;
 
 import vista.VistaClientes;
+import vista.VistaTipoProyecto;
 
 public class Controlador implements ActionListener {
 
@@ -53,9 +54,12 @@ public class Controlador implements ActionListener {
     }
 
     //CREAMOS INSTANCIAS DE OTRAS CLASES
+    ClientesDAO cdao = new ClientesDAO();
+    TipoProyectoDAO tpdao = new TipoProyectoDAO();
     ProyectoDAO dao = new ProyectoDAO();
     Proyecto p = new Proyecto();
     VistaProyecto vista = new VistaProyecto();
+    VistaTipoProyecto vistatp = new VistaTipoProyecto();
     DefaultTableModel modelo = new DefaultTableModel();
     private String opcion;
     private int var;
@@ -77,6 +81,16 @@ public class Controlador implements ActionListener {
         this.vista.comboBusqueda.addActionListener(this);
         this.vista.comboFecha.addActionListener(this);
         this.vista.btnCancelar.addActionListener(this);
+        this.vista.btnAgregarTipoProyecto.addActionListener(this);
+        this.vista.btnRecargarTipoProyecto.addActionListener(this);
+        this.vista.tipoFiltro.addActionListener(this);
+        this.vista.tipoFiltro.setSelectedIndex(2);
+        this.vista.cboCombHijo.addActionListener(this);
+        this.vista.cboCombPadre.addActionListener(this);
+        vista.cboCombPadre.setVisible(false);
+        vista.cboCombHijo.setVisible(false);
+        vista.txtParametro2.setVisible(false);
+        
     }
 
     //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -85,8 +99,12 @@ public class Controlador implements ActionListener {
         if (e.getSource() == vista.btnBuscar) {
             //SE LIMPIA LA TABLA
             limpiarTabla();
-            //SE BUSCAN LOS PROYECTO
-            buscar(vista.tabla);
+            try {
+                //SE BUSCAN LOS PROYECTO
+                buscar(vista.tabla);
+            } catch (SQLException ex) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
             //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
             nuevo();
             this.vista.btnEliminar.setEnabled(true);
@@ -95,8 +113,12 @@ public class Controlador implements ActionListener {
         if (e.getSource() == vista.btnEliminar) {
             //SE ELIMINA UN PROYECTO TANTO DE LA TABLA COMO DE LA BD
             eliminar();
-            //SE BUSCA UN PROYECTO LOS PROYECTOS EXISTENTES
-            buscar(vista.tabla);
+            try {
+                //SE BUSCA UN PROYECTO LOS PROYECTOS EXISTENTES
+                buscar(vista.tabla);
+            } catch (SQLException ex) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
             //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
             nuevo();
         }
@@ -135,8 +157,12 @@ public class Controlador implements ActionListener {
                             int variable2 = JOptionPane.showOptionDialog(null, "¿Deseas agregar un proyecto?", "Agregacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
                             if (variable2 == 0) {
                                 agregar();
-                                //SE BUSCAN LOS NUEVOS PROYECTOS DE LA BD
-                                buscar(vista.tabla);
+                                try {
+                                    //SE BUSCAN LOS NUEVOS PROYECTOS DE LA BD
+                                    buscar(vista.tabla);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                                 //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
                                 nuevo();
                                 /* //SE VUELVEN A HABILITAR LOS BOTONES
@@ -180,8 +206,6 @@ public class Controlador implements ActionListener {
                 Date fechaInicio = (Date) vista.tabla.getValueAt(fila, 2);
                 Date fechaConfirmacion = (Date) vista.tabla.getValueAt(fila, 3);
                 Date fechaFin = (Date) vista.tabla.getValueAt(fila, 4);
-                int cliente = Integer.parseInt((String) vista.tabla.getValueAt(fila, 5).toString());
-                int tipoProyecto = Integer.parseInt((String) vista.tabla.getValueAt(fila, 6).toString());
 
                 String observacion = (String) vista.tabla.getValueAt(fila, 7);
 
@@ -194,8 +218,6 @@ public class Controlador implements ActionListener {
                 vista.txtFechaConfirmacion.setDate(fechaInicio);
                 vista.txtFechaInicio.setDate(fechaConfirmacion);
                 vista.txtFechaFin.setDate(fechaFin);
-                vista.cboCliente.setSelectedItem(cliente);
-                vista.cboTipoProyecto.setSelectedItem(tipoProyecto);
                 vista.txtObservacion.setText(observacion);
                 vista.txtMonto.setText("" + monto);
 
@@ -221,8 +243,12 @@ public class Controlador implements ActionListener {
                             this.var = JOptionPane.showOptionDialog(null, "¿Deseas actualizar un proyecto?", "Agregacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
                             if (this.var == 0) {
                                 actualizar();
-                                //SE BUSCAN LOS NUEVOS PROYECTOS DE LA BD
-                                buscar(vista.tabla);
+                                try {
+                                    //SE BUSCAN LOS NUEVOS PROYECTOS DE LA BD
+                                    buscar(vista.tabla);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                                 //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
                                 nuevo();
                                 //SE VUELVEN A HABILITAR LOS BOTONES
@@ -273,8 +299,11 @@ public class Controlador implements ActionListener {
             String seleccionado = vista.comboFecha.getSelectedItem().toString();
             if (seleccionado.equals("ENTRE FECHAS")) {
                 vista.fechaHasta.setVisible(true);
+                vista.fechaBusqueda.setVisible(true);
             } else {
                 vista.fechaHasta.setVisible(false);
+                vista.fechaBusqueda.setVisible(true);
+                
             }
         }
         if (e.getSource() == vista.btnCancelar) {
@@ -286,6 +315,57 @@ public class Controlador implements ActionListener {
             vista.btnActualizar.setEnabled(false);
             vista.btnModificar.setEnabled(false);
 
+        }
+        if (e.getSource() == vista.btnAgregarTipoProyecto) {
+            vistatp.inicializar();
+        }
+        if (e.getSource() == vista.btnRecargarTipoProyecto) {
+            try {
+                llenarTipoProyecto();
+            } catch (SQLException ex) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (e.getSource() == vista.tipoFiltro) {
+            if (vista.tipoFiltro.getSelectedIndex() == 0) {
+                vista.comboBusqueda.setVisible(true);
+                vista.comboBusqueda.setSelectedIndex(0);
+                vista.txtParametro.setVisible(true);
+                vista.cboCombHijo.setVisible(false);
+                vista.cboCombPadre.setVisible(false); 
+                vista.txtParametro2.setVisible(false);
+            } else if (vista.tipoFiltro.getSelectedIndex() == 1) {
+                vista.txtParametro.setVisible(true);
+                vista.fechaBusqueda.setVisible(false);
+                vista.comboFecha.setVisible(false);
+                vista.fechaHasta.setVisible(false);
+                vista.comboBusqueda.setVisible(false);
+                vista.cboCombPadre.setVisible(true);
+                vista.cboCombHijo.setVisible(true);
+            } else {
+                vista.txtParametro.setVisible(false);
+                vista.fechaBusqueda.setVisible(false);
+                vista.comboFecha.setVisible(false);
+                vista.fechaHasta.setVisible(false);
+                vista.comboBusqueda.setVisible(false);
+                vista.cboCombHijo.setVisible(false);
+                vista.cboCombPadre.setVisible(false); 
+            }
+        }
+        if (e.getSource() == vista.cboCombHijo) {
+            if (vista.cboCombHijo.getSelectedIndex() == 0 || vista.cboCombHijo.getSelectedIndex() == 1 || vista.cboCombHijo.getSelectedIndex() == 2) {
+                vista.comboFecha.setVisible(true);
+                vista.txtParametro2.setVisible(false);
+            }else{
+                vista.comboFecha.setVisible(false);
+                vista.fechaBusqueda.setVisible(false);
+                vista.fechaHasta.setVisible(false);
+                vista.txtParametro2.setVisible(true);
+            }
+        }
+        if (e.getSource() == vista.cboCombPadre) {
+            vista.txtParametro.setVisible(true);
+            vista.txtParametro.setEnabled(true);
         }
     }
     //METODO ACTUALIZAR 
@@ -451,133 +531,253 @@ public class Controlador implements ActionListener {
     }
 
     //METODO BUSCAR LOS PROYECTOS EXISTENTES EN LA BD
-    public void buscar(JTable tabla) {
+    public void buscar(JTable tabla) throws SQLException {
 
         //SE CENTRAN LAS CELDAS DE LA TABLA
         ArrayList<Proyecto> lista = new ArrayList<>();
         centrarCeldas(tabla);
-        this.opcion = vista.comboBusqueda.getSelectedItem().toString();
-        String selec = vista.comboFecha.getSelectedItem().toString();
         //AL MODELO CREADO SE LE PASA EL MODELA DE LA TABLA
         modelo = (DefaultTableModel) tabla.getModel();
         tabla.setModel(modelo);
         //SE COMPARA CON LAS OPCIONES QUE HAY EN EL COMBOX
-        if (opcion.equals("FECHA INICIO")) {
-            //SE TRAE LA FECHA QUE SE SELECCIONO EN EL JCALENDAR
 
-            java.util.Date parametro = vista.fechaBusqueda.getDate();
-            if (parametro != null) {
-                //SE TRANSFORMA A LONG PARA LUEGO PODER PASARLA A DATE
-                long aux1 = parametro.getTime();
-                java.sql.Date fecha = new java.sql.Date(aux1);
-                System.out.println(parametro);
+        switch (vista.tipoFiltro.getSelectedIndex()) {
+            case 0: {
+             
+                //INDIVIDUAL
+                this.opcion = vista.comboBusqueda.getSelectedItem().toString();
+                String selec = vista.comboFecha.getSelectedItem().toString();
+                if (opcion.equals("FECHA INICIO")) {
+                    //SE TRAE LA FECHA QUE SE SELECCIONO EN EL JCALENDAR
 
-                if (selec == "POR FECHA") {
-
-                    //SI SE SELECCIONA POR FECHA UNICA ENTONCES SE PASA UNA FECHA Y EL NUMERO 1 QUE ES LA OPCION DE BUSQUEDA POR FECHA DE INICIO
+                    java.util.Date parametro = vista.fechaBusqueda.getDate();
                     if (parametro != null) {
-                        lista = dao.filtroBusquedaFechas(fecha, null, 1, 0);
-                    }
-                } else {
-                    //SI NO SE HACE  LO MISMO PARA LA FECHA HASTA DONDE SE QUIERA BUSCAR Y LUEGO SE LE PASA OTRA OPCION 1 QUE INDICA QUE ES ENTRE FECHAS
-                    java.util.Date hasta = vista.fechaHasta.getDate();
-                    if (hasta != null) {
-                        long aux2 = hasta.getTime();
-                        java.sql.Date fechaHasta = new java.sql.Date(aux2);
-                        lista = dao.filtroBusquedaFechas(fecha, fechaHasta, 1, 1);
+                        //SE TRANSFORMA A LONG PARA LUEGO PODER PASARLA A DATE
+                        long aux1 = parametro.getTime();
+                        java.sql.Date fecha = new java.sql.Date(aux1);
+                        System.out.println(parametro);
+
+                        if (selec == "POR FECHA") {
+
+                            //SI SE SELECCIONA POR FECHA UNICA ENTONCES SE PASA UNA FECHA Y EL NUMERO 1 QUE ES LA OPCION DE BUSQUEDA POR FECHA DE INICIO
+                            if (parametro != null) {
+                                lista = dao.filtroBusquedaFechas(fecha, null, 1, 0);
+                            }
+                        } else {
+                            //SI NO SE HACE  LO MISMO PARA LA FECHA HASTA DONDE SE QUIERA BUSCAR Y LUEGO SE LE PASA OTRA OPCION 1 QUE INDICA QUE ES ENTRE FECHAS
+                            java.util.Date hasta = vista.fechaHasta.getDate();
+                            if (hasta != null) {
+                                long aux2 = hasta.getTime();
+                                java.sql.Date fechaHasta = new java.sql.Date(aux2);
+                                lista = dao.filtroBusquedaFechas(fecha, fechaHasta, 1, 1);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+
                     } else {
                         JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
                     }
-                }
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
-            }
-        } else if (opcion.equals("FECHA CONFIRMACION")) {
-            java.util.Date parametro = vista.fechaBusqueda.getDate();
-            if (parametro != null) {
-                long aux1 = parametro.getTime();
-                java.sql.Date fecha = new java.sql.Date(aux1);
-                if (selec == "POR FECHA") {
-                    //SI SE SELECCIONA POR FECHA UNICA ENTONCES SE PASA UNA FECHA Y EL NUMERO 2 QUE ES LA OPCION DE BUSQUEDA POR FECHA DE CONFIRMACION
-                    lista = dao.filtroBusquedaFechas(fecha, null, 2, 0);
-                } else {
-                    //SI NO SE HACE  LO MISMO PARA LA FECHA HASTA DONDE SE QUIERA BUSCAR Y LUEGO SE LE PASA OTRA OPCION 1 QUE INDICA QUE ES ENTRE FECHAS
-                    java.util.Date hasta = vista.fechaHasta.getDate();
-                    if (hasta != null) {
-                        long aux2 = hasta.getTime();
-                        java.sql.Date fechaHasta = new java.sql.Date(aux2);
-                        lista = dao.filtroBusquedaFechas(fecha, fechaHasta, 2, 1);
+                } else if (opcion.equals("FECHA CONFIRMACION")) {
+                    java.util.Date parametro = vista.fechaBusqueda.getDate();
+                    if (parametro != null) {
+                        long aux1 = parametro.getTime();
+                        java.sql.Date fecha = new java.sql.Date(aux1);
+                        if (selec == "POR FECHA") {
+                            //SI SE SELECCIONA POR FECHA UNICA ENTONCES SE PASA UNA FECHA Y EL NUMERO 2 QUE ES LA OPCION DE BUSQUEDA POR FECHA DE CONFIRMACION
+                            lista = dao.filtroBusquedaFechas(fecha, null, 2, 0);
+                        } else {
+                            //SI NO SE HACE  LO MISMO PARA LA FECHA HASTA DONDE SE QUIERA BUSCAR Y LUEGO SE LE PASA OTRA OPCION 1 QUE INDICA QUE ES ENTRE FECHAS
+                            java.util.Date hasta = vista.fechaHasta.getDate();
+                            if (hasta != null) {
+                                long aux2 = hasta.getTime();
+                                java.sql.Date fechaHasta = new java.sql.Date(aux2);
+                                lista = dao.filtroBusquedaFechas(fecha, fechaHasta, 2, 1);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
                     } else {
                         JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
                     }
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
-            }
-        } else if (opcion.equals("FECHA FIN")) {
-            java.util.Date parametro = vista.fechaBusqueda.getDate();
-            if (parametro != null) {
-                long aux1 = parametro.getTime();
+                } else if (opcion.equals("FECHA FIN")) {
+                    java.util.Date parametro = vista.fechaBusqueda.getDate();
+                    if (parametro != null) {
+                        long aux1 = parametro.getTime();
 
-                java.sql.Date fecha = new java.sql.Date(aux1);
-                if (selec == "POR FECHA") {
-                    //SI SE SELECCIONA POR FECHA UNICA ENTONCES SE PASA UNA FECHA Y EL NUMERO 2 QUE ES LA OPCION DE BUSQUEDA POR FECHA FIN
-                    lista = dao.filtroBusquedaFechas(fecha, null, 3, 0);
-                } else {
-                    //SI NO SE HACE  LO MISMO PARA LA FECHA HASTA DONDE SE QUIERA BUSCAR Y LUEGO SE LE PASA OTRA OPCION 1 QUE INDICA QUE ES ENTRE FECHAS
-                    java.util.Date hasta = vista.fechaHasta.getDate();
-                    if (hasta != null) {
-                        long aux2 = hasta.getTime();
-                        java.sql.Date fechaHasta = new java.sql.Date(aux2);
-                        lista = dao.filtroBusquedaFechas(fecha, fechaHasta, 3, 1);
+                        java.sql.Date fecha = new java.sql.Date(aux1);
+                        if (selec == "POR FECHA") {
+                            //SI SE SELECCIONA POR FECHA UNICA ENTONCES SE PASA UNA FECHA Y EL NUMERO 2 QUE ES LA OPCION DE BUSQUEDA POR FECHA FIN
+                            lista = dao.filtroBusquedaFechas(fecha, null, 3, 0);
+                        } else {
+                            //SI NO SE HACE  LO MISMO PARA LA FECHA HASTA DONDE SE QUIERA BUSCAR Y LUEGO SE LE PASA OTRA OPCION 1 QUE INDICA QUE ES ENTRE FECHAS
+                            java.util.Date hasta = vista.fechaHasta.getDate();
+                            if (hasta != null) {
+                                long aux2 = hasta.getTime();
+                                java.sql.Date fechaHasta = new java.sql.Date(aux2);
+                                lista = dao.filtroBusquedaFechas(fecha, fechaHasta, 3, 1);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+                        //EN CASO QUE LA BUSQUEDA NO ESTE RELACIONADA CON LAS FECHAS ENTONCES SE USA OTRO METODO DEL DAO QUE TIENE EL PARAMETRO Y UNA OPCION SEGUN LO QUE SE ELIJA
                     } else {
                         JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
                     }
+                } else if (opcion.equals("ID")) {
+
+                    String parametr = vista.txtParametro.getText();
+                    if (parametr.isEmpty() == false) {
+                        lista = dao.filtroBusqueda(parametr, 2);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Debe ingresar un valor", "Error", JOptionPane.WARNING_MESSAGE);
+                    }
+
+                } else if (opcion.equals("NOMBRE")) {
+                    String parametr = vista.txtParametro.getText();
+                    if (parametr.isEmpty() == false) {
+                        lista = dao.filtroBusqueda(parametr, 3);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Debe ingresar un valor", "Error", JOptionPane.WARNING_MESSAGE);
+                    }
                 }
-                //EN CASO QUE LA BUSQUEDA NO ESTE RELACIONADA CON LAS FECHAS ENTONCES SE USA OTRO METODO DEL DAO QUE TIENE EL PARAMETRO Y UNA OPCION SEGUN LO QUE SE ELIJA
-            } else {
-                JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
+                break;
             }
-        } else if (opcion.equals("ID")) {
+            case 1: {
+                //COMBINADO
+                switch(vista.cboCombHijo.getSelectedIndex()){
+                    case 0:{
+                        java.util.Date parametro = vista.fechaBusqueda.getDate();
+                        if (parametro != null) {
+                        long aux1 = parametro.getTime();
+                        java.sql.Date fecha = new java.sql.Date(aux1);
+                        if (vista.comboFecha.getSelectedIndex() == 0) {
+                            //SI SE SELECCIONA POR FECHA UNICA ENTONCES SE PASA UNA FECHA Y EL NUMERO 2 QUE ES LA OPCION DE BUSQUEDA POR FECHA DE CONFIRMACION
+                            String razonSocial = vista.txtParametro.getText();
+                            lista = dao.filtroBusquedaFechasCombinada(fecha, null, 2, 0, razonSocial,null);
+                        } else {
+                            //SI NO SE HACE  LO MISMO PARA LA FECHA HASTA DONDE SE QUIERA BUSCAR Y LUEGO SE LE PASA OTRA OPCION 1 QUE INDICA QUE ES ENTRE FECHAS
+                            java.util.Date hasta = vista.fechaHasta.getDate();
+                            if (hasta != null) {
+                                long aux2 = hasta.getTime();
+                                java.sql.Date fechaHasta = new java.sql.Date(aux2);
+                                String razonSocial = vista.txtParametro.getText();
+                                lista = dao.filtroBusquedaFechasCombinada(fecha, fechaHasta, 2, 1,razonSocial,null);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
+                    }
+                        break;
+                    }
+                    case 1:{
+                        java.util.Date parametro = vista.fechaBusqueda.getDate();
+                        if (parametro != null) {
+                        long aux1 = parametro.getTime();
+                        java.sql.Date fecha = new java.sql.Date(aux1);
+                        if (vista.comboFecha.getSelectedIndex() == 0) {
+                            //SI SE SELECCIONA POR FECHA UNICA ENTONCES SE PASA UNA FECHA Y EL NUMERO 2 QUE ES LA OPCION DE BUSQUEDA POR FECHA DE CONFIRMACION
+                            String razonSocial = vista.txtParametro.getText();
+                            lista = dao.filtroBusquedaFechasCombinada(fecha, null, 1, 0, razonSocial,null);
+                        } else {
+                            //SI NO SE HACE  LO MISMO PARA LA FECHA HASTA DONDE SE QUIERA BUSCAR Y LUEGO SE LE PASA OTRA OPCION 1 QUE INDICA QUE ES ENTRE FECHAS
+                            java.util.Date hasta = vista.fechaHasta.getDate();
+                            if (hasta != null) {
+                                long aux2 = hasta.getTime();
+                                java.sql.Date fechaHasta = new java.sql.Date(aux2);
+                                String razonSocial = vista.txtParametro.getText();
+                                lista = dao.filtroBusquedaFechasCombinada(fecha, fechaHasta, 1, 1,razonSocial,null);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
+                    }
+                        break;
+                    }
+                    case 2:{
+                        java.util.Date parametro = vista.fechaBusqueda.getDate();
+                        if (parametro != null) {
+                        long aux1 = parametro.getTime();
+                        java.sql.Date fecha = new java.sql.Date(aux1);
+                        if (vista.comboFecha.getSelectedIndex() == 0) {
+                            //SI SE SELECCIONA POR FECHA UNICA ENTONCES SE PASA UNA FECHA Y EL NUMERO 2 QUE ES LA OPCION DE BUSQUEDA POR FECHA DE CONFIRMACION
+                            String razonSocial = vista.txtParametro.getText();
+                            lista = dao.filtroBusquedaFechasCombinada(fecha, null, 3, 0, razonSocial,null);
+                        } else {
+                            //SI NO SE HACE  LO MISMO PARA LA FECHA HASTA DONDE SE QUIERA BUSCAR Y LUEGO SE LE PASA OTRA OPCION 1 QUE INDICA QUE ES ENTRE FECHAS
+                            java.util.Date hasta = vista.fechaHasta.getDate();
+                            if (hasta != null) {
+                                long aux2 = hasta.getTime();
+                                java.sql.Date fechaHasta = new java.sql.Date(aux2);
+                                String razonSocial = vista.txtParametro.getText();
+                                lista = dao.filtroBusquedaFechasCombinada(fecha, fechaHasta, 3, 1,razonSocial,null);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
+                    }
+                        break;
+                    }
+                    case 3:{
+                        String monto = vista.txtParametro2.getText();
+                        String razonSocial = vista.txtParametro.getText();
+                        lista = dao.filtroBusquedaFechasCombinada(null, null, 1, 2, razonSocial,monto);
+                        break;
+                    }
+                    case 4:{
+                        String tipoProyecto = vista.txtParametro2.getText();
+                        String razonSocial = vista.txtParametro.getText();
+                        lista = dao.filtroBusquedaFechasCombinada(null, null, 2, 2, razonSocial,tipoProyecto);
+                        break;
+                    }
+                }
+                break;
+                
+            }
+            case 2: {
+                //TODOS
+                lista = dao.filtroBusqueda(null, 1);
+                break;
+            }
 
-            String parametr = vista.txtParametro.getText();
-            if (parametr.isEmpty() == false) {
-                lista = dao.filtroBusqueda(parametr, 2);
-            } else {
-                JOptionPane.showMessageDialog(null, "Debe ingresar un valor", "Error", JOptionPane.WARNING_MESSAGE);
-            }
-
-        } else if (opcion.equals("NOMBRE")) {
-            String parametr = vista.txtParametro.getText();
-            if (parametr.isEmpty() == false) {
-                lista = dao.filtroBusqueda(parametr, 3);
-            } else {
-                JOptionPane.showMessageDialog(null, "Debe ingresar un valor", "Error", JOptionPane.WARNING_MESSAGE);
-            }
-        } else {
-            vista.txtParametro.setEnabled(false);
-            lista = dao.filtroBusqueda(null, 1);
         }
 
         //SE CREA UN VECTOR DE 8 OBJETOS Y EN CADA UNO SE GUARDAN LOS DATOS QUE COMPONEN A CADA PROYECTO
         Object[] objeto = new Object[10];
         // System.out.println(lista.size());
+        ArrayList<TipoProyecto> tipoList = new ArrayList<>();
+        ArrayList<Clientes> clienteList = new ArrayList<>();
+        tipoList = tpdao.getTipoProyecto();
+        clienteList = cdao.getClientes();
         for (int i = 0; i < lista.size(); i++) {
-
-            objeto[0] = lista.get(i).getIdProyecto();
-            objeto[1] = lista.get(i).getNombre();
-            objeto[2] = lista.get(i).getFechaInicio();
-            objeto[3] = lista.get(i).getFechaConfirmacion();
-            objeto[4] = lista.get(i).getFechaFin();
-            objeto[5] = lista.get(i).getTipoProyecto();
-            objeto[6] = lista.get(i).getCliente();
-            objeto[7] = lista.get(i).getObservacion();
-            objeto[8] = lista.get(i).getMonto();
-
-            objeto[9] = lista.get(i).getUbicacion();
-            //SE AGREGAN LOS DATOS AL MODELO 
-            modelo.addRow(objeto);
+            for (int j = 0; j < tipoList.size(); j++) {
+                for (int k = 0; k < clienteList.size(); k++) {
+                    if (lista.get(i).getTipoProyecto() == tipoList.get(j).getIdTipoProyecto() && lista.get(i).getCliente() == clienteList.get(k).getIdCliente()) {
+                        objeto[0] = lista.get(i).getIdProyecto();
+                        objeto[1] = lista.get(i).getNombre();
+                        objeto[2] = lista.get(i).getFechaInicio();
+                        objeto[3] = lista.get(i).getFechaConfirmacion();
+                        objeto[4] = lista.get(i).getFechaFin();
+                        objeto[5] = tipoList.get(j).getNombre();
+                        objeto[6] = clienteList.get(k).getRazonSocial();
+                        objeto[7] = lista.get(i).getObservacion();
+                        objeto[8] = lista.get(i).getMonto();
+                        if (lista.get(i).getUbicacion() == 1) {
+                            objeto[9] = "Nacional";
+                        } else {
+                            objeto[9] = "Interacional";
+                        }
+                        //SE AGREGAN LOS DATOS AL MODELO 
+                        modelo.addRow(objeto);
+                    }
+                }
+            }
         }
 
         //SE DEFINE EL NUMERO Y EL TAMAÑO DE CADA FILA
@@ -639,6 +839,7 @@ public class Controlador implements ActionListener {
         for (int i = 0; i < listaTipoProyecto.size(); i++) {
             //CADA TIPO DE PROYECTO DE LA LISTA SE AGREGA AL COMBO
             vista.cboTipoProyecto.addItem(new TipoProyecto(listaTipoProyecto.get(i).getIdTipoProyecto(), listaTipoProyecto.get(i).getNombre()));
+
         }
 
     }
