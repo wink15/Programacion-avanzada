@@ -142,6 +142,37 @@ public class PersonalDAO {
         return consultaEliminacionPersonalProyecto;
     }
     
+    //METODO PARA CONSULTAR ANTES DE AGREGAR UN PERSONAL REFERIDO A LA PERSONA
+    public int consultaAgregacion(int id) {
+        int consultaAgregacion = 0;
+        
+        try {
+            con = conectar.getConnection();
+            ps = con.prepareStatement("SELECT COUNT(persona) as yaExiste FROM prog_av.personal WHERE borrado = 0 AND persona =" + id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                consultaAgregacion = rs.getInt("yaExiste");
+            }
+        } catch (Exception e) {
+        }
+        return consultaAgregacion;
+    }
+    //METODO PARA CONSULTAR ANTES DE AGREGAR UN PERSONAL REFERIDO AL CUIT
+    public int consultaAgregacionCUIT(long id) {
+        int consultaAgregacionCUIT = 0;
+        
+        try {
+            con = conectar.getConnection();
+            ps = con.prepareStatement("SELECT COUNT(cuit) as yaExiste FROM prog_av.personal WHERE borrado = 0 AND cuit =" + id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                consultaAgregacionCUIT = rs.getInt("yaExiste");
+            }
+        } catch (Exception e) {
+        }
+        return consultaAgregacionCUIT;
+    }
+    
     public int actualizar(Personal pers) {
         int r = 0;
         //SE DEFINE LA CONSULTA
