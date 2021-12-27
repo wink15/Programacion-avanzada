@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -20,6 +22,8 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -54,6 +58,11 @@ public class Controlador implements ActionListener {
     VistaProyecto vista = new VistaProyecto();
     DefaultTableModel modelo = new DefaultTableModel();
     private String opcion;
+    private int var;
+
+    private java.util.Date fechaConfir;
+    private java.util.Date fechaIn;
+    private java.util.Date fechaFinf;
 
     //CREAMOS UN CONTROLADOR POR CADA VISTA EXISTENTE EN DONDE SE LES PASA EL ACTION PARA PODER UTILIZARLOS
     public Controlador(VistaProyecto v) {
@@ -67,6 +76,7 @@ public class Controlador implements ActionListener {
         this.vista.btnModificar.setEnabled(false);
         this.vista.comboBusqueda.addActionListener(this);
         this.vista.comboFecha.addActionListener(this);
+        this.vista.btnCancelar.addActionListener(this);
     }
 
     //EJECUCION DE CADA BOTON DENTRO DE CADA PANTALLA
@@ -93,30 +103,53 @@ public class Controlador implements ActionListener {
         if (e.getSource() == vista.btnAgregar) {
             if (vista.txtNombre.getText().equals("") || vista.txtFechaInicio.getDate() == null || vista.txtFechaConfirmacion.getDate() == null || vista.txtFechaFin.getDate() == null || vista.txtObservacion.getText().equals("") || vista.txtMonto.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
+            } else if (this.esSoloLetras(vista.txtNombre.getText()) == false) {
+
+                JOptionPane.showMessageDialog(null, "El nombre no puede contener numeros");
             } else if (this.esNumerico(vista.txtMonto.getText()) == false) {
                 JOptionPane.showMessageDialog(null, "El monto no debe contener letras");
             } else {
-                //SE VALIDAN LAS FECHA DEL PROYECTO
+                /* System.out.println("Fecha conf "+vista.txtFechaConfirmacion.getDate()) ;
+                      System.out.println("Fecha inicio "+vista.txtFechaInicio.getDate()) ;
+                        System.out.println("Fecha fin "+vista.txtFechaFin.getDate()) ;*/
                 LocalDate fechaActualLD = LocalDate.now();
-                java.util.Date fechaActual = Date.valueOf(fechaActualLD);
+                // java.util.Date fechaActual = Date.valueOf(vista.txtFechaInicio.getDate());
+                // int año= vista.txtFechaC
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                String fechaConf = dateFormat.format(vista.txtFechaConfirmacion.getDate());
+                String fechafin = dateFormat.format(vista.txtFechaFin.getDate());
+                String fechaInicio = dateFormat.format(vista.txtFechaInicio.getDate());
 
-                if (vista.txtFechaConfirmacion.getDate().equals(fechaActual) || vista.txtFechaConfirmacion.getDate().after(fechaActual)) {
+                try {
+                    this.fechaConfir = dateFormat.parse(fechaConf);
+                    this.fechaIn = dateFormat.parse(fechaInicio);
+                    this.fechaFinf = dateFormat.parse(fechafin);
+                    //System.out.println(dataFormateada);
+                } catch (ParseException ex) {
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                if (this.fechaConfir.before(this.fechaIn) || this.fechaConfir.before(this.fechaFinf)) {
                     if (vista.txtFechaInicio.getDate().after(vista.txtFechaConfirmacion.getDate())) {
                         if (vista.txtFechaFin.getDate().after(vista.txtFechaInicio.getDate())) {
-                            int variable = JOptionPane.showOptionDialog(null, "¿Deseas agregar un proyecto?", "Agregacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
-                            //EN CASO DE QUE EL USUARIO DESEA REALMENTE AGREGAR UN PROYECTO
-                            if (variable == 0) {
-                                //SE AGREGA EL PROYECTO
+                            int variable2 = JOptionPane.showOptionDialog(null, "¿Deseas agregar un proyecto?", "Agregacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
+                            if (variable2 == 0) {
                                 agregar();
                                 //SE BUSCAN LOS NUEVOS PROYECTOS DE LA BD
                                 buscar(vista.tabla);
                                 //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
                                 nuevo();
+                                /* //SE VUELVEN A HABILITAR LOS BOTONES
+                                vista.btnAgregar.setEnabled(true);
+                                vista.btnEliminar.setEnabled(true);
+                                vista.btnActualizar.setEnabled(false);
+                                vista.btnModificar.setEnabled(true);
+                                vista.btnCancelar.setVisible(false);*/
                             } else {
                                 //DE LO CONTRARIO SE PREPARA TAMBIEN LA VISTA PARA UN NUEVO PROYECTO
                                 nuevo();
-
                             }
+
                         } else {
                             JOptionPane.showMessageDialog(null, "La fecha de fin debe ser mayor a la fecha de inicio.");
                         }
@@ -124,8 +157,9 @@ public class Controlador implements ActionListener {
                         JOptionPane.showMessageDialog(null, "La fecha de inicio debe ser mayor a la fecha de confirmacion.");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "La fecha de confirmacion debe ser mayor o igual a la actual .");
+                    JOptionPane.showMessageDialog(null, "La fecha de confirmacion debe ser menor a la fecha de inicio y a la fecha de fin del proyecto");
                 }
+
             }
         }
         if (e.getSource() == vista.btnModificar) {
@@ -139,7 +173,7 @@ public class Controlador implements ActionListener {
                 vista.btnEliminar.setEnabled(false);
                 vista.btnActualizar.setEnabled(true);
                 vista.btnModificar.setEnabled(false);
-
+                vista.btnCancelar.setVisible(true);
                 //EN CASO QUE SE HAYA SELECCIONADO UN PROYECTO, SE GUARDAN LOS DATOS DE LA TABLA EN VARIABLES
                 int id = Integer.parseInt((String) vista.tabla.getValueAt(fila, 0).toString());
                 String nombre = (String) vista.tabla.getValueAt(fila, 1);
@@ -151,6 +185,9 @@ public class Controlador implements ActionListener {
 
                 String observacion = (String) vista.tabla.getValueAt(fila, 7);
 
+                double monto = Double.parseDouble(vista.tabla.getValueAt(fila, 8).toString());
+                //Integer.parseInt((String) vista.tabla.getValueAt(fila, 8).toString());
+
                 //SE PASAN LOS DATOS DE LAS VARIABLES A LOS CAMPOS
                 vista.txtId.setText("" + id);
                 vista.txtNombre.setText(nombre);
@@ -160,21 +197,56 @@ public class Controlador implements ActionListener {
                 vista.cboCliente.setSelectedItem(cliente);
                 vista.cboTipoProyecto.setSelectedItem(tipoProyecto);
                 vista.txtObservacion.setText(observacion);
+                vista.txtMonto.setText("" + monto);
+
             }
         }
 
         if (e.getSource() == vista.btnActualizar) {
             //SE ACTUALIZA UN PROYECTO
-            actualizar();
-            //SE BUSCAN LOS NUEVOS PROYECTOS DE LA BD
-            buscar(vista.tabla);
-            //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
-            nuevo();
-            //SE VUELVEN A HABILITAR LOS BOTONES
-            vista.btnAgregar.setEnabled(true);
-            vista.btnEliminar.setEnabled(true);
-            vista.btnActualizar.setEnabled(false);
-            vista.btnModificar.setEnabled(true);
+            if (vista.txtNombre.getText().equals("") || vista.txtFechaInicio.getDate() == null || vista.txtFechaConfirmacion.getDate() == null || vista.txtFechaFin.getDate() == null || vista.txtObservacion.getText().equals("") || vista.txtMonto.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
+            } else if (this.esSoloLetras(vista.txtNombre.getText()) == false) {
+
+                JOptionPane.showMessageDialog(null, "El nombre no puede contener numeros");
+            } else if (this.esNumerico(vista.txtMonto.getText()) == false) {
+                JOptionPane.showMessageDialog(null, "El monto no debe contener letras");
+            } else {
+                System.out.println("Fecha conf " + vista.txtFechaConfirmacion.getDate());
+                System.out.println("Fecha inicio " + vista.txtFechaInicio.getDate());
+                System.out.println("Fecha fin " + vista.txtFechaFin.getDate());
+                if (vista.txtFechaConfirmacion.getDate().before(vista.txtFechaInicio.getDate()) || vista.txtFechaConfirmacion.getDate().before(vista.txtFechaFin.getDate())) {
+                    if (vista.txtFechaInicio.getDate().after(vista.txtFechaConfirmacion.getDate())) {
+                        if (vista.txtFechaFin.getDate().after(vista.txtFechaInicio.getDate())) {
+                            this.var = JOptionPane.showOptionDialog(null, "¿Deseas actualizar un proyecto?", "Agregacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
+                            if (this.var == 0) {
+                                actualizar();
+                                //SE BUSCAN LOS NUEVOS PROYECTOS DE LA BD
+                                buscar(vista.tabla);
+                                //SE PREPARA LA VISTA PARA UN NUEVO PROYECTO
+                                nuevo();
+                                //SE VUELVEN A HABILITAR LOS BOTONES
+                                vista.btnAgregar.setEnabled(true);
+                                vista.btnEliminar.setEnabled(true);
+                                vista.btnActualizar.setEnabled(false);
+                                vista.btnModificar.setEnabled(true);
+                                vista.btnCancelar.setVisible(false);
+                            } else {
+                                //DE LO CONTRARIO SE PREPARA TAMBIEN LA VISTA PARA UN NUEVO PROYECTO
+                                nuevo();
+                            }
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "La fecha de fin debe ser mayor a la fecha de inicio.");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "La fecha de inicio debe ser mayor a la fecha de confirmacion.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "La fecha de confirmacion debe ser menor a la fecha de inicio y a la fecha de fin del proyecto");
+                }
+
+            }
         }
         if (e.getSource() == vista.comboBusqueda) {
             this.opcion = vista.comboBusqueda.getSelectedItem().toString();
@@ -183,9 +255,16 @@ public class Controlador implements ActionListener {
                 vista.txtParametro.setVisible(false);
                 vista.comboFecha.setVisible(true);
 
+            } else if (opcion.equals("TODOS")) {
+                vista.txtParametro.setEnabled(false);
+                vista.fechaBusqueda.setVisible(false);
+                vista.comboFecha.setVisible(false);
+                vista.fechaHasta.setVisible(false);
+                vista.txtParametro.setVisible(true);
             } else {
                 vista.fechaBusqueda.setVisible(false);
                 vista.txtParametro.setVisible(true);
+                vista.txtParametro.setEnabled(true);
                 vista.comboFecha.setVisible(false);
                 vista.fechaHasta.setVisible(false);
             }
@@ -198,9 +277,19 @@ public class Controlador implements ActionListener {
                 vista.fechaHasta.setVisible(false);
             }
         }
-    }
+        if (e.getSource() == vista.btnCancelar) {
+            nuevo();
+            limpiarTabla();
+            vista.btnCancelar.setVisible(false);
+            vista.btnAgregar.setEnabled(true);
+            vista.btnEliminar.setEnabled(false);
+            vista.btnActualizar.setEnabled(false);
+            vista.btnModificar.setEnabled(false);
 
+        }
+    }
     //METODO ACTUALIZAR 
+
     public void actualizar() {
         int ubi = 0;
         //VALIDACION DE CAMPOS VACIOS NECESARIOS PARA ACTUALIZAR EL REGISTRO EN LA BD.  
@@ -208,9 +297,9 @@ public class Controlador implements ActionListener {
             JOptionPane.showMessageDialog(vista, "Primero debe modificar un proyecto");
         } else {
             //EN CASO DE QUE TODOS LOS CAMPOS ESTAN COMPLETOS, SE LE CONSULTA AL CLIENTE SI ESTA SEGURO DE MODIFICAR EL PROYECTO
-            int variable = JOptionPane.showOptionDialog(null, "¿Deseas modificar un proyecto?", "Proyecto", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
+            // int variable = JOptionPane.showOptionDialog(null, "¿Deseas modificar un proyecto?", "Proyecto", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
             //SI LA RESPUESTA ES QUE SI DESEA MODIFICARLO
-            if (variable == 0) {
+            if (this.var == 0) {
                 //SE PASAN LOS DATOS DESDE LOS CAMPOS DE LA PANTALLA A VARIABLES
                 //COMENTAR!!!!!!!
                 String idAux = vista.txtId.getText();
@@ -225,11 +314,11 @@ public class Controlador implements ActionListener {
                 java.util.Date date3 = vista.txtFechaFin.getDate();
                 long aux3 = date3.getTime();
                 java.sql.Date fechaFin = new java.sql.Date(aux3);
-                int tipoProyecto = vista.cboTipoProyecto.getSelectedIndex();
-                Integer cliente = vista.cboCliente.getSelectedIndex();
+                Integer tipoProyecto = (vista.cboTipoProyecto.getItemAt(vista.cboTipoProyecto.getSelectedIndex()).getIdTipoProyecto());
+                Integer cliente = (vista.cboCliente.getItemAt(vista.cboCliente.getSelectedIndex()).getIdCliente());
                 String observacion = vista.txtObservacion.getText();
                 String ubicacion = vista.comboProyecto.getSelectedItem().toString();
-                double monto = Integer.parseInt(vista.txtMonto.getText());
+                double monto = Double.parseDouble(vista.txtMonto.getText());
                 if (ubicacion.equals("Nacional")) {
                     ubi = 1;
                 } else if (ubicacion.equals("Internacional")) {
@@ -289,7 +378,7 @@ public class Controlador implements ActionListener {
             Integer cliente = (vista.cboCliente.getItemAt(vista.cboCliente.getSelectedIndex()).getIdCliente());
             String observacion = vista.txtObservacion.getText();
             String ubicacion = vista.comboProyecto.getSelectedItem().toString();
-            double monto = Integer.parseInt(vista.txtMonto.getText());
+            double monto = Double.parseDouble(vista.txtMonto.getText());
             if (ubicacion.equals("Nacional")) {
                 ubi = 1;
             } else if (ubicacion.equals("Internacional")) {
@@ -332,13 +421,13 @@ public class Controlador implements ActionListener {
             if (variable == 0) {
                 //SE GUARDA EL ID DEL PROYECTO SELECCIONADO PARA PASARLO COMO PARAMETRO Y SER USADO EN LA CONSULTA A LA BD
                 int id = Integer.parseInt((String) vista.tabla.getValueAt(fila, 0).toString());
-                if(dao.consultaEliminacionPerfilProyecto(id) == 0 && dao.consultaEliminacionPersonalProyecto(id) == 0){
+                if (dao.consultaEliminacionPerfilProyecto(id) == 0 && dao.consultaEliminacionPersonalProyecto(id) == 0) {
                     dao.eliminar(id);
                     JOptionPane.showMessageDialog(vista, "Proyecto eliminado con exito");
-                }else if(dao.consultaEliminacionPerfilProyecto(id) > 0){
+                } else if (dao.consultaEliminacionPerfilProyecto(id) > 0) {
                     JOptionPane.showMessageDialog(vista, "El Proyecto no se puede eliminar debido a que se le ha asignado uno o más perfiles");
                     JOptionPane.showMessageDialog(vista, "Desasigne los perfiles de dicho proyecto para poder eliminarlo");
-                }else if(dao.consultaEliminacionPersonalProyecto(id) > 0){
+                } else if (dao.consultaEliminacionPersonalProyecto(id) > 0) {
                     JOptionPane.showMessageDialog(vista, "El Proyecto no se puede eliminar debido a que se le ha asignado uno o más personales");
                     JOptionPane.showMessageDialog(vista, "Desasigne los personales de dicho proyecto para poder eliminarlo");
                 }
@@ -451,16 +540,23 @@ public class Controlador implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Debe ingresar una fecha ", "Error", JOptionPane.WARNING_MESSAGE);
             }
         } else if (opcion.equals("ID")) {
-            
+
             String parametr = vista.txtParametro.getText();
-            if(parametr.isEmpty()==false){
-            lista = dao.filtroBusqueda(parametr, 2);} else{ JOptionPane.showMessageDialog(null, "Debe ingresar un valor", "Error", JOptionPane.WARNING_MESSAGE);}
+            if (parametr.isEmpty() == false) {
+                lista = dao.filtroBusqueda(parametr, 2);
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un valor", "Error", JOptionPane.WARNING_MESSAGE);
+            }
 
         } else if (opcion.equals("NOMBRE")) {
             String parametr = vista.txtParametro.getText();
-            if(parametr.isEmpty()==false){
-            lista = dao.filtroBusqueda(parametr, 3);}else{ JOptionPane.showMessageDialog(null, "Debe ingresar un valor", "Error", JOptionPane.WARNING_MESSAGE);}
+            if (parametr.isEmpty() == false) {
+                lista = dao.filtroBusqueda(parametr, 3);
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un valor", "Error", JOptionPane.WARNING_MESSAGE);
+            }
         } else {
+            vista.txtParametro.setEnabled(false);
             lista = dao.filtroBusqueda(null, 1);
         }
 
@@ -545,5 +641,32 @@ public class Controlador implements ActionListener {
             vista.cboTipoProyecto.addItem(new TipoProyecto(listaTipoProyecto.get(i).getIdTipoProyecto(), listaTipoProyecto.get(i).getNombre()));
         }
 
+    }
+
+    public boolean esSoloLetras(String cadena) {
+        //Recorremos cada caracter de la cadena y comprobamos si son letras.
+        //Para comprobarlo, lo pasamos a mayuscula y consultamos su numero ASCII.
+        //Si está fuera del rango 65 - 90, es que NO son letras.
+        //Para ser más exactos al tratarse del idioma español, tambien comprobamos
+        //el valor 165 equivalente a la Ñ
+
+        /* for (int i = 0; i < cadena.length(); i++) {
+            char caracter = cadena.toUpperCase().charAt(i);
+            int valorASCII = (int) caracter;
+            if (valorASCII != 165 && (valorASCII < 65 || valorASCII > 90)) {
+                return false; //Se ha encontrado un caracter que no es letra
+            }
+        }
+
+        //Terminado el bucle sin que se hay retornado false, es que todos los caracteres son letras
+        return true;*/
+        for (int x = 0; x < cadena.length(); x++) {
+            char c = cadena.charAt(x);
+            // Si no está entre a y z, ni entre A y Z, ni es un espacio
+            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == ' ')) {
+                return false;
+            }
+        }
+        return true;
     }
 }

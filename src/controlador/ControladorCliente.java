@@ -118,7 +118,11 @@ public class ControladorCliente implements ActionListener {
 
         //VISTA CLIENTE
         if (e.getSource() == vista3.btnActualizarClientes) {
+              if (vista3.txtRazonSocial.getText().equals("") || vista3.cboPersona.getSelectedItem().equals("")) {
+                JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
+            } else{
             //SE ACTUALIZA EL CLIENTE
+            
             actualizarCliente();
             //SE BUSCAN LOS NUEVOS CLIENTES
             buscarCliente(vista3.tablaClientes);
@@ -131,7 +135,7 @@ public class ControladorCliente implements ActionListener {
             vista3.btnActualizarClientes.setEnabled(false);
             vista3.btnModificarClientes.setEnabled(true);
         }
-    }
+    }}
 
     // METODOS DE LA VISTA DE CLIENTE
     public void buscarCliente(JTable tabla) {
@@ -160,7 +164,7 @@ public class ControladorCliente implements ActionListener {
     public void agregarCliente() {
         try {
             //SE PASAN LOS VALORES DE LOS CAMPOS DE LA VISTA CLIENTE A VARIABLES
-
+            if(this.esSoloLetras(vista3.txtRazonSocial.getText())==true){
             String razonSocial = vista3.txtRazonSocial.getText();
             Integer persona = (vista3.cboPersona.getItemAt(vista3.cboPersona.getSelectedIndex()).getIdPersona());
             //SE SETEAN ESOS DATOS EN LA INSTANCIA DE CLIENTE CREADA
@@ -177,7 +181,7 @@ public class ControladorCliente implements ActionListener {
                 JOptionPane.showMessageDialog(vista3, "Error al agregar un cliente");
             }
             //POR ULTIMO SE LIMPIA LA TABLA DE CLIENTES
-            limpiarTablaCliente();
+            limpiarTablaCliente();} else{JOptionPane.showMessageDialog(vista3, "Erro al agregar el cliente");}
         } catch (HeadlessException e) {
         }
     }
@@ -218,7 +222,7 @@ public class ControladorCliente implements ActionListener {
             int variable = JOptionPane.showOptionDialog(null, "¿Deseas modificar un cliente?", "Cliente", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
             //SI LA RESPUESTA ES QUE SI DESEA MODIFICARLO
             if (variable == 0) {
-
+                if(this.esSoloLetras(vista3.txtRazonSocial.getText())==true){
                 //EN CASO QUE SE HAYA SELECCIONADO UN CLIENTE, SE GUARDA CADA DATO DE LOS CAMPOS DE LA VISTA EN VARIABLES
                 String idAux = vista3.txtIdPersona.getText();
                 int id = Integer.valueOf(idAux);
@@ -236,7 +240,7 @@ public class ControladorCliente implements ActionListener {
                     JOptionPane.showMessageDialog(vista3, "Cliente modificado con exito");
                 } else {
                     JOptionPane.showMessageDialog(vista3, "Error al actualizar un cliente");
-                }
+                }}else{JOptionPane.showMessageDialog(vista3, "Error al actualizar un cliente");}
             }
         }
         //POR ULTIMO SE VACIA LA TABLA DE CLIENTES
@@ -271,5 +275,31 @@ public class ControladorCliente implements ActionListener {
         for (int i = 0; i < listaPersona.size(); i++) {
             vista3.cboPersona.addItem(new Persona(listaPersona.get(i).getIdPersona(), listaPersona.get(i).getNombre(), listaPersona.get(i).getApellido(), listaPersona.get(i).getFechaNacimiento(), listaPersona.get(i).getTelefono()));
         }
+    }
+        public boolean esNumerico(String num) {
+        if (num.matches("[+-]?\\d*(\\.\\d+)?")) {
+            return true;
+        }
+
+        return false;
+
+    }
+    public boolean esSoloLetras(String cadena) {
+        //Recorremos cada caracter de la cadena y comprobamos si son letras.
+        //Para comprobarlo, lo pasamos a mayuscula y consultamos su numero ASCII.
+        //Si está fuera del rango 65 - 90, es que NO son letras.
+        //Para ser más exactos al tratarse del idioma español, tambien comprobamos
+        //el valor 165 equivalente a la Ñ
+
+        for (int i = 0; i < cadena.length(); i++) {
+            char caracter = cadena.toUpperCase().charAt(i);
+            int valorASCII = (int) caracter;
+            if (valorASCII != 165 && (valorASCII < 65 || valorASCII > 90)) {
+                return false; //Se ha encontrado un caracter que no es letra
+            }
+        }
+
+        //Terminado el bucle sin que se hay retornado false, es que todos los caracteres son letras
+        return true;
     }
 }

@@ -139,6 +139,7 @@ public class ControlardorPerfil_Personal implements ActionListener {
             //SE VERIFICA SI SE SELECCIONO UN ELEMENTO DE LA LISTA
             if (vista3.detallePerfil.getSelectedIndex() < 0) {
                 //EN CASO DE QUE NO, SE INFORMA
+                System.out.println("entraaaaaaaaaaaa");
                 JOptionPane.showMessageDialog(null, "Debe seleccionar un elemento de la lista");
             } else {
                 //DE LO CONTRARIO 
@@ -286,5 +287,5 @@ public class ControlardorPerfil_Personal implements ActionListener {
             //DE LO CONTRARIO SE HABILITA LA AGREGACION
             vista3.btnAgregar.setEnabled(true);
         }
-    }
+    } 
 }

@@ -176,29 +176,36 @@ public class ControladorPersonal implements ActionListener {
     //METODO PARA AGREGAR UN NUEVO PERSONAL
     public void agregarPersonal() {
         try {
-            //SE PASAN LOS VALORES DE LOS CAMPOS DE LA VISTA personal A VARIABLE
 
-            long CUIT = Long.parseLong(vista3.txtCUIT.getText());
-            Integer persona = (vista3.cboPersona.getItemAt(vista3.cboPersona.getSelectedIndex()).getIdPersona());
-            //SE SETEAN ESOS DATOS EN LA INSTANCIA DE PERSONAL CREADA
-            String tamaño = Long.toString(CUIT);
-            if (tamaño.length() == 11) {
-                personal.setCUIT(CUIT);
-                personal.setPersona(persona);
+            if (this.esNumerico(vista3.txtCUIT.getText()) == true) {
+                //SE PASAN LOS VALORES DE LOS CAMPOS DE LA VISTA personal A VARIABLE
+                //Long CUIT = Long.parseLong(vista3.txtCUIT.getText());
+                //SE SETEAN ESOS DATOS EN LA INSTANCIA DE PERSONAL CREADA
+                Integer persona = (vista3.cboPersona.getItemAt(vista3.cboPersona.getSelectedIndex()).getIdPersona());
+                //String tamaño = Long.toString(CUIT);
+                String Cuit = vista3.txtCUIT.getText();
+                System.out.println(Cuit.length());
+                if (Cuit.length() == 11) {
+                    Long CUIT = Long.parseLong(Cuit);
+                    personal.setCUIT(CUIT);
+                    personal.setPersona(persona);
+                    int r = daoPersonal.agregar(personal);
+
+                    if (r == 1) {
+                        JOptionPane.showMessageDialog(vista3, "Personal agregado con exito");
+                    } else {
+                        JOptionPane.showMessageDialog(vista3, "Error al agregar un personal");
+                    }
+                    //POR ULTIMO SE LIMPIA LA TABLA DE PERSONAL
+                    limpiarTablaPersonal();
+                } else {
+                    JOptionPane.showMessageDialog(vista3, "CUIT incorrecto");
+                }
             } else {
                 JOptionPane.showMessageDialog(vista3, "CUIT incorrecto");
             }
-
             //SE TRAE EL RESULTADO DE LA AGREGACION A LA BD
-            int r = daoPersonal.agregar(personal);
 
-            if (r == 1) {
-                JOptionPane.showMessageDialog(vista3, "Personal agregado con exito");
-            } else {
-                JOptionPane.showMessageDialog(vista3, "Error al agregar un personal");
-            }
-            //POR ULTIMO SE LIMPIA LA TABLA DE PERSONAL
-            limpiarTablaPersonal();
         } catch (HeadlessException e) {
         }
     }
@@ -215,13 +222,13 @@ public class ControladorPersonal implements ActionListener {
             if (variable == 0) {
                 //SE GUARDA EL ID DEL PROYECTO SELECCIONADO PARA PASARLO COMO PARAMETRO Y SER USADO EN LA CONSULTA A LA BD
                 int id = Integer.parseInt((String) vista3.tablaPersonal.getValueAt(fila, 0).toString());
-                if(daoPersonal.consultaEliminacionPersonalPerfil(id) == 0 && daoPersonal.consultaEliminacionPersonalProyecto(id) == 0){
+                if (daoPersonal.consultaEliminacionPersonalPerfil(id) == 0 && daoPersonal.consultaEliminacionPersonalProyecto(id) == 0) {
                     daoPersonal.eliminar(id);
                     JOptionPane.showMessageDialog(vista3, "Personal eliminado con exito");
-                }else if(daoPersonal.consultaEliminacionPersonalPerfil(id) > 0){
+                } else if (daoPersonal.consultaEliminacionPersonalPerfil(id) > 0) {
                     JOptionPane.showMessageDialog(vista3, "El personal no se puede eliminar debido a que se la ha asignado a uno o más perfiles");
                     JOptionPane.showMessageDialog(vista3, "Desasigne el personal del o los perfiles para poder eliminarlo");
-                }else if(daoPersonal.consultaEliminacionPersonalProyecto(id) > 0){
+                } else if (daoPersonal.consultaEliminacionPersonalProyecto(id) > 0) {
                     JOptionPane.showMessageDialog(vista3, "El personal no se puede eliminar debido a que se la ha asignado a uno o más proyectos");
                     JOptionPane.showMessageDialog(vista3, "Desasigne el personal del o los proyectos para poder eliminarlo");
                 }
@@ -241,25 +248,29 @@ public class ControladorPersonal implements ActionListener {
             int variable = JOptionPane.showOptionDialog(null, "¿Deseas modificar un personal?", "Personal", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
             //SI LA RESPUESTA ES QUE SI DESEA MODIFICARLO
             if (variable == 0) {
+                if (this.esNumerico(vista3.txtCUIT.getText())) {
+                    //EN CASO QUE SE HAYA SELECCIONADO UN PERSONAL, SE GUARDA CADA DATO DE LOS CAMPOS DE LA VISTA EN VARIABLES
+                    String idAux = vista3.txtIdPersona.getText();
+                    int id = Integer.valueOf(idAux);
+                    //long CUIT = Long.parseLong(vista3.txtCUIT.getText());
+                    String Cuit = vista3.txtCUIT.getText();
+                    Integer persona = (vista3.cboPersona.getItemAt(vista3.cboPersona.getSelectedIndex()).getIdPersona());
+                    if (Cuit.length() == 11) {
+                        Long CUIT = Long.parseLong(Cuit);
+                        //SE SETEAN ESOS DATOS EN LA INSTANCIA DE PERSONAL CREADA
+                        personal.setIdPersonal(id);
+                        personal.setCUIT(CUIT);
+                        personal.setPersona(persona);
 
-                //EN CASO QUE SE HAYA SELECCIONADO UN PERSONAL, SE GUARDA CADA DATO DE LOS CAMPOS DE LA VISTA EN VARIABLES
-                String idAux = vista3.txtIdPersona.getText();
-                int id = Integer.valueOf(idAux);
-                long CUIT = Long.parseLong(vista3.txtCUIT.getText());
-                Integer persona = (vista3.cboPersona.getItemAt(vista3.cboPersona.getSelectedIndex()).getIdPersona());
-
-                //SE SETEAN ESOS DATOS EN LA INSTANCIA DE PERSONAL CREADA
-                personal.setIdPersonal(id);
-                personal.setCUIT(CUIT);
-                personal.setPersona(persona);
-
-                //SE GUARDA EL RESULTADO DE LA ACTUALIZACION
-                int r = daoPersonal.actualizar(personal);
-                if (r == 1) {
-                    JOptionPane.showMessageDialog(vista3, "Personal modificado con exito");
-                } else {
-                    JOptionPane.showMessageDialog(vista3, "Error al actualizar un personal");
-                }
+                        //SE GUARDA EL RESULTADO DE LA ACTUALIZACION
+                        int r = daoPersonal.actualizar(personal);
+                        if (r == 1) {
+                            JOptionPane.showMessageDialog(vista3, "Personal modificado con exito");
+                        } else {
+                            JOptionPane.showMessageDialog(vista3, "Error al actualizar un personal");
+                        }
+                    }else{ JOptionPane.showMessageDialog(vista3, "Cuit Incorrecto");}
+                }else{ JOptionPane.showMessageDialog(vista3, "Cuit Incorrecto");}
             }
         }
         //POR ULTIMO SE VACIA LA TABLA DE PERSONAL
@@ -292,8 +303,18 @@ public class ControladorPersonal implements ActionListener {
         //SE RECORRE LA LISTA TRAIDA DESDE LA BD Y SE AGREGA CADA REGISTRO AL COMBO
         for (int i = 0; i < listaPersona.size(); i++) {
             vista3.cboPersona.addItem(new Persona(listaPersona.get(i).getIdPersona(), listaPersona.get(i).getNombre(), listaPersona.get(i).getApellido(), listaPersona.get(i).getFechaNacimiento(), listaPersona.get(i).getTelefono()));
-            System.out.println(vista3.cboPersona.getItemAt(i));
+            // System.out.println(vista3.cboPersona.getItemAt(i));
         }
 
     }
+
+    public boolean esNumerico(String num) {
+        if (num.matches("[+-]?\\d*(\\.\\d+)?")) {
+            return true;
+        }
+
+        return false;
+
+    }
+
 }
