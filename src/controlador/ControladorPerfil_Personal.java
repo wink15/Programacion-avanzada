@@ -20,7 +20,7 @@ import vista.Perfil_Personal;
 import modelo.Perfil;
 import modelo.PerfilPersonal;
 import modelo.PerfilPersonalDAO;
-import controlador.ControladorPerfil_Personal;
+import controlador.ControlardorPerfil_Personal;
 import javax.swing.JList;
 import javax.swing.ListModel;
 
@@ -28,10 +28,10 @@ import javax.swing.ListModel;
  *
  * @author leone
  */
-public class ControladorPerfil_Personal implements ActionListener {
+public class ControlardorPerfil_Personal implements ActionListener {
 
     //Constructor sin parametros 
-    public ControladorPerfil_Personal() {
+    public ControlardorPerfil_Personal() {
     }
 
     //SE DEFINEN LAS VARIABLES Y VECTORES 
@@ -62,7 +62,7 @@ public class ControladorPerfil_Personal implements ActionListener {
     PerfilPersonalDAO daoPerfilPersonal = new PerfilPersonalDAO();
 
     //CREAMOS UN CONTROLADOR POR CADA VISTA EXISTENTE
-    public ControladorPerfil_Personal(Perfil_Personal v) {
+    public ControlardorPerfil_Personal(Perfil_Personal v) {
         this.vista3 = v;
         this.vista3.btnAgregar.addActionListener(this);
         this.vista3.btnCancelar.addActionListener(this);
@@ -137,14 +137,11 @@ public class ControladorPerfil_Personal implements ActionListener {
         }
         if (e.getSource() == vista3.btnEliminar) {
             //SE VERIFICA SI SE SELECCIONO UN ELEMENTO DE LA LISTA
-            System.out.print(vista3.detallePerfil.getSelectedIndex());
             if (vista3.detallePerfil.getSelectedIndex() < 0) {
                 //EN CASO DE QUE NO, SE INFORMA
+                System.out.println("entraaaaaaaaaaaa");
                 JOptionPane.showMessageDialog(null, "Debe seleccionar un elemento de la lista");
             } else {
-                //SE DESABILITAN LOS SIGUIENTES BOTONES
-                vista3.btnAgregar.setEnabled(false);
-                vista3.btnEliminar.setEnabled(false);
                 //DE LO CONTRARIO 
                 //SE DEFINE EL INDICE A BORRAR
                 indiceABorrar = vista3.detallePerfil.getSelectedIndex();
@@ -161,18 +158,12 @@ public class ControladorPerfil_Personal implements ActionListener {
                 //SE SETEA EL TIPO DE OPERACION COMO 0 (ELIMINACION)
                 operacion = 0;
             }
-             
         }
         if (e.getSource() == vista3.btnCancelar) {
             //SE VACIA EL TOTAL DE LOS DETALLES CORRESPONDIENTES AL PERSONAL 
             detallePerfil.clear();
             //SE VACIAN LOS PERFILES A MOSTRAR
             perfiles.clear();
-            //SE REMUEVE EL ACTION DE CADA BOTON DE LA PANTALLA
-            this.vista3.btnAgregar.removeActionListener(this);
-            this.vista3.btnCancelar.removeActionListener(this);
-            this.vista3.btnConfirmar.removeActionListener(this);
-            this.vista3.btnEliminar.removeActionListener(this);
             //SE CIERRA LA PANTALLA
             vista3.dispose();
         }
@@ -236,8 +227,6 @@ public class ControladorPerfil_Personal implements ActionListener {
 
     //METODO PARA QUITAR UN PERFIL DE LA BD
     public void quitarPerfil() {
-        //VACIAMOS EL ARRAY DE RESULTADOS
-        resultadoEliminacion.clear();
         //SE OBTIENE EL ID DEL PERSONAL A PARTIR DEL CAMPO DE LA PANTALLA
         this.idPersonal = Integer.valueOf(vista3.txtIdPerfil_Personal.getText());
         //SE ALMACENA EL PERFIL A BORRAR
@@ -249,7 +238,7 @@ public class ControladorPerfil_Personal implements ActionListener {
         //SE TRAE EL RESULTADO DE LA ELIMINACION A LA BD
         resultadoEliminacion.add(daoPerfilPersonal.eliminar(idPersonal, id));
         //SE VERIFICA SI SE ELIMINO CORRECTAMENTE EL PERFIL DE LA BD
-        for (int i = 0; i < resultadoEliminacion.size(); i++) {
+        for (int i = 0; i < resultado.size(); i++) {
             if (resultadoEliminacion.get(i) == 1) {
                 JOptionPane.showMessageDialog(vista3, "El perfil fue quitado");
             } else {
@@ -290,8 +279,6 @@ public class ControladorPerfil_Personal implements ActionListener {
     public void desabilitarBotones() {
         //SE DESABILITA LA CONFIRMACION
         vista3.btnConfirmar.setEnabled(false);
-        //SE HABILITA LA ELIMINACION
-        vista3.btnEliminar.setEnabled(true);
         //SE VERIFICA SI EL PERSONAL TIENE ASIGNADO TODOS LOS PERFILES DISPONIBLES
         if (vista3.cboPerfiles.getItemCount() == detallePerfil.size()) {
             //EN CASO DE QUE SI, SE DESABILITA LA AGREGACION
@@ -300,5 +287,5 @@ public class ControladorPerfil_Personal implements ActionListener {
             //DE LO CONTRARIO SE HABILITA LA AGREGACION
             vista3.btnAgregar.setEnabled(true);
         }
-    }
+    } 
 }
