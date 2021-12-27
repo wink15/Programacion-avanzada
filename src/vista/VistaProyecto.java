@@ -6,6 +6,9 @@
 package vista;
 
 import controlador.Controlador;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,21 +30,21 @@ public class VistaProyecto extends javax.swing.JFrame {
     /**
      * Creates new form pantalla
      */
-    public VistaProyecto() {   
+    public VistaProyecto() {
         initComponents();
         fechaBusqueda.setVisible(false);
         txtParametro.setEnabled(false);
         fechaHasta.setVisible(false);
         comboFecha.setVisible(false);
         btnCancelar.setVisible(false);
-        
+
     }
-    
-    public void inicializar () throws SQLException{
+
+    public void inicializar() throws SQLException {
         //SE CREA UNA INSTANCIA DE LA VISTA
-        VistaProyecto v=new VistaProyecto();
+        VistaProyecto v = new VistaProyecto();
         //SE CREA UNA INSTANCIA DEL CONTROLADOR
-        Controlador con=new Controlador(v);
+        Controlador con = new Controlador(v);
         //SE HACE VISIBLE LA VISTA
         v.setVisible(true);
         //SE DEFINE LA UBICACION DE LA VISTA
@@ -50,6 +53,7 @@ public class VistaProyecto extends javax.swing.JFrame {
         con.llenarClientes();
         con.llenarTipoProyecto();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -84,6 +88,8 @@ public class VistaProyecto extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         txtMonto = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
+        btnAgregarTipoProyecto = new javax.swing.JButton();
+        btnRecargarTipoProyecto = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
@@ -93,6 +99,10 @@ public class VistaProyecto extends javax.swing.JFrame {
         fechaBusqueda = new com.toedter.calendar.JDateChooser();
         comboFecha = new javax.swing.JComboBox<>();
         fechaHasta = new com.toedter.calendar.JDateChooser();
+        tipoFiltro = new javax.swing.JComboBox<>();
+        cboCombPadre = new javax.swing.JComboBox<>();
+        cboCombHijo = new javax.swing.JComboBox<>();
+        txtParametro2 = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         cboCliente = new javax.swing.JComboBox<>();
@@ -168,6 +178,20 @@ public class VistaProyecto extends javax.swing.JFrame {
 
         btnCancelar.setText("Cancelar");
 
+        btnAgregarTipoProyecto.setText("+");
+        btnAgregarTipoProyecto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarTipoProyectoActionPerformed(evt);
+            }
+        });
+
+        btnRecargarTipoProyecto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-actualizar-24.png"))); // NOI18N
+        btnRecargarTipoProyecto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecargarTipoProyectoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -192,10 +216,14 @@ public class VistaProyecto extends javax.swing.JFrame {
                                     .addComponent(cboTipoProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(comboProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAgregarTipoProyecto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRecargarTipoProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 373, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -257,11 +285,14 @@ public class VistaProyecto extends javax.swing.JFrame {
                         .addComponent(btnModificar)
                         .addComponent(jLabel5))
                     .addComponent(txtFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cboTipoProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(11, 11, 11)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cboTipoProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel8)
+                        .addComponent(btnAgregarTipoProyecto))
+                    .addComponent(btnRecargarTipoProyecto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
                 .addComponent(btnCancelar)
                 .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -297,15 +328,38 @@ public class VistaProyecto extends javax.swing.JFrame {
             }
         });
 
+        txtParametro.setToolTipText("Valor Unico");
         txtParametro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtParametroActionPerformed(evt);
             }
         });
 
-        comboBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "ID", "NOMBRE", "FECHA CONFIRMACION", "FECHA INICIO", "FECHA FIN" }));
+        comboBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "NOMBRE", "FECHA CONFIRMACION", "FECHA INICIO", "FECHA FIN" }));
+        comboBusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBusquedaActionPerformed(evt);
+            }
+        });
+
+        fechaBusqueda.setToolTipText("fecha Desde");
 
         comboFecha.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "POR FECHA", "ENTRE FECHAS" }));
+
+        fechaHasta.setToolTipText("fecha Hasta");
+
+        tipoFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INDIVIDUAL", "COMBINADO", "TODOS" }));
+
+        cboCombPadre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "RAZON SOCIAL" }));
+
+        cboCombHijo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FECHA CONFIRMACION", "FECHA INICIO", "FECHA FIN", "MONTO", "TIPO PROYECTO" }));
+
+        txtParametro2.setToolTipText("Valor Unico");
+        txtParametro2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtParametro2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -315,37 +369,52 @@ public class VistaProyecto extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnBuscar)
-                        .addGap(130, 130, 130)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(comboBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comboFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                            .addGap(8, 8, 8)
+                            .addComponent(fechaBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
                             .addComponent(fechaHasta, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(txtParametro, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(fechaBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(53, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtParametro, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(txtParametro2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(28, 28, 28))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                            .addComponent(btnBuscar)
+                            .addGap(18, 18, 18)
+                            .addComponent(tipoFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(comboBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(cboCombPadre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(cboCombHijo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(comboFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBuscar)
+                    .addComponent(tipoFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboCombPadre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboCombHijo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnBuscar)
-                            .addComponent(comboBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtParametro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(comboFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(fechaHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(fechaBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
+                            .addComponent(txtParametro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtParametro2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(fechaBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fechaHasta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -385,7 +454,7 @@ public class VistaProyecto extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -415,7 +484,7 @@ public class VistaProyecto extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void txtFechaConfirmacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtFechaConfirmacionMouseClicked
-        
+
     }//GEN-LAST:event_txtFechaConfirmacionMouseClicked
 
     private void cboTipoProyectoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTipoProyectoActionPerformed
@@ -429,24 +498,43 @@ public class VistaProyecto extends javax.swing.JFrame {
     private void txtParametroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtParametroActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtParametroActionPerformed
- 
-    
+
+    private void btnAgregarTipoProyectoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarTipoProyectoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarTipoProyectoActionPerformed
+
+    private void btnRecargarTipoProyectoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecargarTipoProyectoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRecargarTipoProyectoActionPerformed
+
+    private void comboBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBusquedaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBusquedaActionPerformed
+
+    private void txtParametro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtParametro2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtParametro2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) throws SQLException {
         /* Set the Nimbus look and feel */
-           
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnActualizar;
     public javax.swing.JButton btnAgregar;
+    public javax.swing.JButton btnAgregarTipoProyecto;
     public javax.swing.JButton btnBuscar;
     public javax.swing.JButton btnCancelar;
     public javax.swing.JButton btnEliminar;
     public javax.swing.JButton btnModificar;
+    public javax.swing.JButton btnRecargarTipoProyecto;
     public javax.swing.JComboBox<Clientes> cboCliente;
+    public javax.swing.JComboBox<String> cboCombHijo;
+    public javax.swing.JComboBox<String> cboCombPadre;
     public javax.swing.JComboBox<TipoProyecto> cboTipoProyecto;
     public javax.swing.JComboBox<String> comboBusqueda;
     public javax.swing.JComboBox<String> comboFecha;
@@ -469,6 +557,7 @@ public class VistaProyecto extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     public javax.swing.JTable tabla;
+    public javax.swing.JComboBox<String> tipoFiltro;
     public com.toedter.calendar.JDateChooser txtFechaConfirmacion;
     public com.toedter.calendar.JDateChooser txtFechaFin;
     public com.toedter.calendar.JDateChooser txtFechaInicio;
@@ -477,5 +566,6 @@ public class VistaProyecto extends javax.swing.JFrame {
     public javax.swing.JTextField txtNombre;
     public javax.swing.JTextArea txtObservacion;
     public javax.swing.JTextField txtParametro;
+    public javax.swing.JTextField txtParametro2;
     // End of variables declaration//GEN-END:variables
 }
