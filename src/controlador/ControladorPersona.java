@@ -239,11 +239,21 @@ public class ControladorPersona implements ActionListener {
             //EN CASO DE QUE SE HAYA SELECCIONADO UNA PERSONA, SE LE CONSULTA SI REALMENTE DESEA ELIMINARLO
             int variable = JOptionPane.showOptionDialog(null, "¿Deseas eliminar una persona?", "Eliminacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
             if (variable == 0) {
-                //SE LE PASA EL ID DE LA PERSONA SELECCIONADO PARA QUE SE UTILICE EN LA CONSULTA A LA BD
+                //SE GUARDA EL ID DEL PROYECTO SELECCIONADO PARA PASARLO COMO PARAMETRO Y SER USADO EN LA CONSULTA A LA BD
                 int id = Integer.parseInt((String) vista.tablaPersona.getValueAt(fila, 0).toString());
-                daoPersona.eliminar(id);
-                //SE LE INFORMA AL USUARIO QUE LA PERSONA FUE ELIMINADO
-                JOptionPane.showMessageDialog(vista, "Persona eliminada con exito");
+                if(daoPersona.consultaEliminacionCliente(id) == 0 && daoPersona.consultaEliminacionPersonal(id) == 0 && daoPersona.consultaEliminacionNoCliente(id) == 0){
+                    daoPersona.eliminar(id);
+                    JOptionPane.showMessageDialog(vista, "Persona eliminada con exito");
+                }else if(daoPersona.consultaEliminacionCliente(id) > 0){
+                    JOptionPane.showMessageDialog(vista, "La persona no se puede eliminar debido a que se la ha asignado a uno o más clientes");
+                    JOptionPane.showMessageDialog(vista, "Desasigne la persona del o los clientes para poder eliminarlo");
+                }else if(daoPersona.consultaEliminacionPersonal(id) > 0){
+                    JOptionPane.showMessageDialog(vista, "La persona no se puede eliminar debido a que se la ha asignado a uno o más personales");
+                    JOptionPane.showMessageDialog(vista, "Desasigne la persona del o los personales para poder eliminarlo");
+                }else if(daoPersona.consultaEliminacionNoCliente(id) > 0){
+                    JOptionPane.showMessageDialog(vista, "La persona no se puede eliminar debido a que se la ha asignado a uno o más no clientes");
+                    JOptionPane.showMessageDialog(vista, "Desasigne la persona del o los no clientes para poder eliminarlo");
+                }
             }
         }
         //POR ULTIMO SE LIMPIA LA TABLA PERSONAS

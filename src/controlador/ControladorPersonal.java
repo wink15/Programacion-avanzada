@@ -213,11 +213,18 @@ public class ControladorPersonal implements ActionListener {
             //EN CASO DE QUE SE HAYA SELECCIONADO UN PERSONAL, SE LE CONSULTA SI REALMENTE DESEA ELIMINARLO
             int variable = JOptionPane.showOptionDialog(null, "¿Deseas eliminar un personal?", "Eliminacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
             if (variable == 0) {
-                //SE LE PASA EL ID DEL PERSONAL SELECCIONADO PARA QUE SE UTILICE EN LA CONSULTA A LA BD
+                //SE GUARDA EL ID DEL PROYECTO SELECCIONADO PARA PASARLO COMO PARAMETRO Y SER USADO EN LA CONSULTA A LA BD
                 int id = Integer.parseInt((String) vista3.tablaPersonal.getValueAt(fila, 0).toString());
-                daoPersonal.eliminar(id);
-                //SE LE INFORMA AL USUARIO QUE EL PERSONAL FUE ELIMINADO
-                JOptionPane.showMessageDialog(vista3, "Personal eliminado con exito");
+                if(daoPersonal.consultaEliminacionPersonalPerfil(id) == 0 && daoPersonal.consultaEliminacionPersonalProyecto(id) == 0){
+                    daoPersonal.eliminar(id);
+                    JOptionPane.showMessageDialog(vista3, "Personal eliminado con exito");
+                }else if(daoPersonal.consultaEliminacionPersonalPerfil(id) > 0){
+                    JOptionPane.showMessageDialog(vista3, "El personal no se puede eliminar debido a que se la ha asignado a uno o más perfiles");
+                    JOptionPane.showMessageDialog(vista3, "Desasigne el personal del o los perfiles para poder eliminarlo");
+                }else if(daoPersonal.consultaEliminacionPersonalProyecto(id) > 0){
+                    JOptionPane.showMessageDialog(vista3, "El personal no se puede eliminar debido a que se la ha asignado a uno o más proyectos");
+                    JOptionPane.showMessageDialog(vista3, "Desasigne el personal del o los proyectos para poder eliminarlo");
+                }
             }
         }
         //POR ULTIMO SE LIMPIA LA TABLA PERSONAL

@@ -224,11 +224,18 @@ public class ControladorPerfil implements ActionListener {
             //EN CASO DE QUE SE HAYA SELECCIONADO UN PERFILES, SE LE CONSULTA SI REALMENTE DESEA ELIMINARLO
             int variable = JOptionPane.showOptionDialog(null, "¿Deseas eliminar un prefil?", "Eliminacion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null/*icono*/, botones, botones[0]);
             if (variable == 0) {
-                //SE LE PASA EL ID DEL PERFILE SELECCIONADO PARA QUE SE UTILICE EN LA CONSULTA A LA BD
+                //SE GUARDA EL ID DEL PROYECTO SELECCIONADO PARA PASARLO COMO PARAMETRO Y SER USADO EN LA CONSULTA A LA BD
                 int id = Integer.parseInt((String) vista3.tablaPerfil.getValueAt(fila, 0).toString());
-                daoPerfil.eliminar(id);
-                //SE LE INFORMA AL USUARIO QUE EL PERFILE FUE ELIMINADO
-                JOptionPane.showMessageDialog(vista3, "Perfil eliminado con exito");
+                if(daoPerfil.consultaEliminacionPersonalPerfil(id) == 0 && daoPerfil.consultaEliminacionProyectoPerfil(id) == 0){
+                    daoPerfil.eliminar(id);
+                    JOptionPane.showMessageDialog(vista3, "Perfil eliminado con exito");
+                }else if(daoPerfil.consultaEliminacionPersonalPerfil(id) > 0){
+                    JOptionPane.showMessageDialog(vista3, "El Perfil no se puede eliminar debido a que se le ha asignado a uno o más personales");
+                    JOptionPane.showMessageDialog(vista3, "Desasigne los perfiles del o los personales para poder eliminarlo");
+                }else if(daoPerfil.consultaEliminacionProyectoPerfil(id) > 0){
+                    JOptionPane.showMessageDialog(vista3, "El Perfil no se puede eliminar debido a que se le ha asignado a uno o más proyectos");
+                    JOptionPane.showMessageDialog(vista3, "Desasigne los perfiles del o los proyectos para poder eliminarlo");
+                }
             }
         }
         //POR ULTIMO SE LIMPIA LA TABLA PERFILES

@@ -194,14 +194,19 @@ public class ControladorCliente implements ActionListener {
             if (variable == 0) {
                 //SE LE PASA EL ID DEL CLIENTE SELECCIONADO PARA QUE SE UTILICE EN LA CONSULTA A LA BD
                 int id = Integer.parseInt((String) vista3.tablaClientes.getValueAt(fila, 0).toString());
-                daoCliente.eliminar(id);
-                //SE LE INFORMA AL USUARIO QUE EL CLIENTE FUE ELIMINADO
-                JOptionPane.showMessageDialog(vista3, "Cliente eliminado con exito");
+                if(daoCliente.consultaEliminacion(id) == 0){
+                    daoCliente.eliminar(id);
+                    JOptionPane.showMessageDialog(vista3, "Cliente eliminado con exito");
+                }else{
+                    JOptionPane.showMessageDialog(vista3, "El Cliente no se puede eliminar debido a que esta siendo utilizado en uno o más proyectos");
+                    JOptionPane.showMessageDialog(vista3, "Desasigne este cliente del o los proyectos para poder eliminarlo");
+                }
             }
         }
         //POR ULTIMO SE LIMPIA LA TABLA CLIENTE
         limpiarTablaCliente();
     }
+    
 
     //METODO PARA ACTUALIZAR UN CLIENTE
     public void actualizarCliente() {

@@ -332,10 +332,16 @@ public class Controlador implements ActionListener {
             if (variable == 0) {
                 //SE GUARDA EL ID DEL PROYECTO SELECCIONADO PARA PASARLO COMO PARAMETRO Y SER USADO EN LA CONSULTA A LA BD
                 int id = Integer.parseInt((String) vista.tabla.getValueAt(fila, 0).toString());
-                //SE EJECUTA LA ELIMINACION DEL REGISTRO EN LA BD
-                dao.eliminar(id);
-                //SE LE AVISA AL USUARIO QUE EL REGISTRO FUE ELIMINADO
-                JOptionPane.showMessageDialog(vista, "Proyecto eliminado");
+                if(dao.consultaEliminacionPerfilProyecto(id) == 0 && dao.consultaEliminacionPersonalProyecto(id) == 0){
+                    dao.eliminar(id);
+                    JOptionPane.showMessageDialog(vista, "Proyecto eliminado con exito");
+                }else if(dao.consultaEliminacionPerfilProyecto(id) > 0){
+                    JOptionPane.showMessageDialog(vista, "El Proyecto no se puede eliminar debido a que se le ha asignado uno o más perfiles");
+                    JOptionPane.showMessageDialog(vista, "Desasigne los perfiles de dicho proyecto para poder eliminarlo");
+                }else if(dao.consultaEliminacionPersonalProyecto(id) > 0){
+                    JOptionPane.showMessageDialog(vista, "El Proyecto no se puede eliminar debido a que se le ha asignado uno o más personales");
+                    JOptionPane.showMessageDialog(vista, "Desasigne los personales de dicho proyecto para poder eliminarlo");
+                }
             }
         }
         //POR ULTIMO SE LIMPIA LA TABLA PARA SACAR EL REGISTRO QUE FUE ELIMINADO

@@ -198,9 +198,16 @@ public class ControladorTipoProyecto implements ActionListener {
             if (variable == 0) {
                 //SE LE PASA EL ID DEL TIPO DE PROYECTO SELECCIONADO PARA QUE SE UTILICE EN LA CONSULTA A LA BD
                 int id = Integer.parseInt((String) vista2.jtableTipo.getValueAt(fila, 0).toString());
-                daoTipo.eliminar(id);
+                System.out.print(daoTipo.consultaEliminacion(id));
+                if(daoTipo.consultaEliminacion(id) == 0){
+                    daoTipo.eliminar(id);
+                    JOptionPane.showMessageDialog(vista2, "Tipo de proyecto eliminado con exito");
+                }else{
+                    JOptionPane.showMessageDialog(vista2, "El Tipo de proyecto no se puede eliminar debido a que esta siendo utilizado en uno o más proyectos");
+                    JOptionPane.showMessageDialog(vista2, "Desasigne este tipo de proyecto del o los proyectos para poder eliminarlo");
+                }
                 //SE LE INFORMA AL USUARIO QUE EL TIPO DE PROYECTO FUE ELIMINADO
-                JOptionPane.showMessageDialog(vista2, "Tipo de proyecto eliminado con exito");
+                
             }
         }
         //POR ULTIMO SE LIMPIA LA TABLA TIPO DE PROYECTO
