@@ -176,7 +176,6 @@ public class ControladorPersonal implements ActionListener {
     //METODO PARA AGREGAR UN NUEVO PERSONAL
     public void agregarPersonal() {
         try {
-
             if (this.esNumerico(vista3.txtCUIT.getText()) == true) {
                 //SE PASAN LOS VALORES DE LOS CAMPOS DE LA VISTA personal A VARIABLE
                 //Long CUIT = Long.parseLong(vista3.txtCUIT.getText());
@@ -185,7 +184,9 @@ public class ControladorPersonal implements ActionListener {
                 //String tamaño = Long.toString(CUIT);
                 String Cuit = vista3.txtCUIT.getText();
                 System.out.println(Cuit.length());
-                if (Cuit.length() == 11) {
+                if (daoPersonal.consultaAgregacion(persona) > 0) {
+                    JOptionPane.showMessageDialog(vista3, "Esta persona ya es un personal");
+                } else if (Cuit.length() == 11 && daoPersonal.consultaAgregacionCUIT(Long.parseLong(Cuit)) == 0) {
                     Long CUIT = Long.parseLong(Cuit);
                     personal.setCUIT(CUIT);
                     personal.setPersona(persona);
@@ -198,8 +199,10 @@ public class ControladorPersonal implements ActionListener {
                     }
                     //POR ULTIMO SE LIMPIA LA TABLA DE PERSONAL
                     limpiarTablaPersonal();
-                } else {
+                } else if (Cuit.length() != 11) {
                     JOptionPane.showMessageDialog(vista3, "CUIT incorrecto");
+                } else if (daoPersonal.consultaAgregacionCUIT(Long.parseLong(Cuit)) > 0) {
+                    JOptionPane.showMessageDialog(vista3, "CUIT ya asignado");
                 }
             } else {
                 JOptionPane.showMessageDialog(vista3, "CUIT incorrecto");
@@ -255,7 +258,9 @@ public class ControladorPersonal implements ActionListener {
                     //long CUIT = Long.parseLong(vista3.txtCUIT.getText());
                     String Cuit = vista3.txtCUIT.getText();
                     Integer persona = (vista3.cboPersona.getItemAt(vista3.cboPersona.getSelectedIndex()).getIdPersona());
-                    if (Cuit.length() == 11) {
+                    if (daoPersonal.consultaAgregacion(persona) > 0) {
+                        JOptionPane.showMessageDialog(vista3, "Esta persona ya es un personal");
+                    } else if (Cuit.length() == 11 && daoPersonal.consultaAgregacionCUIT(Long.parseLong(Cuit)) == 0) {
                         Long CUIT = Long.parseLong(Cuit);
                         //SE SETEAN ESOS DATOS EN LA INSTANCIA DE PERSONAL CREADA
                         personal.setIdPersonal(id);
@@ -269,8 +274,14 @@ public class ControladorPersonal implements ActionListener {
                         } else {
                             JOptionPane.showMessageDialog(vista3, "Error al actualizar un personal");
                         }
-                    }else{ JOptionPane.showMessageDialog(vista3, "Cuit Incorrecto");}
-                }else{ JOptionPane.showMessageDialog(vista3, "Cuit Incorrecto");}
+                    } else if (Cuit.length() != 11) {
+                        JOptionPane.showMessageDialog(vista3, "CUIT incorrecto");
+                    } else if (daoPersonal.consultaAgregacionCUIT(Long.parseLong(Cuit)) > 0) {
+                        JOptionPane.showMessageDialog(vista3, "CUIT ya asignado");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(vista3, "Cuit Incorrecto");
+                }
             }
         }
         //POR ULTIMO SE VACIA LA TABLA DE PERSONAL
