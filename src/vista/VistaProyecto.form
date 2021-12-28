@@ -408,11 +408,6 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnRecargarTipoProyecto">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/img/icons8-actualizar-24.png"/>
-            </Property>
-          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRecargarTipoProyectoActionPerformed"/>
           </Events>
@@ -438,31 +433,28 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jScrollPane1" min="-2" pref="870" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                              <Component id="fechaBusqueda" min="-2" pref="166" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="fechaHasta" min="-2" pref="140" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="txtParametro" min="-2" pref="134" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="txtParametro2" min="-2" pref="134" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnBuscar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="tipoFiltro" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="comboBusqueda" min="-2" pref="96" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="cboCombPadre" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="cboCombHijo" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="comboFecha" min="-2" pref="100" max="-2" attributes="0"/>
-                          </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                          <Component id="fechaBusqueda" min="-2" pref="166" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="fechaHasta" min="-2" pref="140" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="txtParametro" min="-2" pref="140" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="txtParametro2" min="-2" pref="140" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="btnBuscar" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="tipoFiltro" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="comboBusqueda" min="-2" pref="96" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="cboCombPadre" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="cboCombHijo" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="comboFecha" min="-2" pref="100" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace pref="72" max="32767" attributes="0"/>
@@ -483,17 +475,14 @@
                   </Group>
                   <EmptySpace pref="29" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="txtParametro" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtParametro2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
                       <Component id="fechaBusqueda" min="-2" pref="25" max="-2" attributes="0"/>
-                      <Component id="fechaHasta" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="fechaHasta" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="txtParametro" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="txtParametro2" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="145" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -604,6 +593,7 @@
             <Property name="toolTipText" type="java.lang.String" value="Valor Unico"/>
           </Properties>
           <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="txtParametroMouseClicked"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtParametroActionPerformed"/>
           </Events>
           <AuxValues>
@@ -706,11 +696,8 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtParametro2">
-          <Properties>
-            <Property name="toolTipText" type="java.lang.String" value="Valor Unico"/>
-          </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtParametro2ActionPerformed"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="txtParametro2MouseClicked"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
